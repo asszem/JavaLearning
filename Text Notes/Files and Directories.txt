@@ -1,0 +1,89 @@
+FileSystem objects
+	The starting point for working with files and directories is a java.nio.file.FileSystem object
+	It encapsulates the file storage system on your computer. You can use this object to access the files and directories within the file system.
+	The FileSystem class has no public constructors, the java.nio.file.FileSystems [note the FileSystemS] class defines static factory methods for file systems. 
+	You can obtain the FileSystem object that encapsulates the storage system on your machine by calling the getDefault() method that is defined in the FileSystems class
+		FileSystem fileSystem = FileSystems.getDefault();
+
+FileStore objects
+	After you have a FileSystem object representing the file system on your machine, you can identify the devices and partitions within it as java.nio.FileStore objects. 
+	To obtain the file stores on your computer, you call getFileStores() for the FileSystem object:
+		Iterable<FileStore> stores = fileSystem.getFileStores();
+
+Path objects
+	Sources:
+		https://docs.oracle.com/javase/tutorial/essential/io/pathOps.html
+	A java.nio.file.Path object encapsulates a system-dependent file path to a file or directory. 
+	Path is an interface type so you cannot create Path objects directly.
+	Methods to create Path objects:	
+		(1) using the getPath method on a FileSystem object
+			FileSystem fileSystem = FileSystems.getDefault();
+			Path path = fileSystem.getPath("garbage.java");
+		(2) using the java.nio.file.Paths helper class (needs to be imported)
+			Path path = Paths.get(System.getProperty("user.dir"));
+			path = fileSystem.getPath("E:", "javaTest", "subdirectory", "test.txt");
+	Relative vs. Absolute Path
+		A path that includes a prefix is an absolute path: E:\GitHub\
+		A path without a prefix is a relative path: \GitHub\Java
+	The last name in a path can be a directory name or a file name. All other names must be directory names.
+	Resolve and Relativize
+		To resolve: 
+			to combine different paths together
+			to pass in a partial path (does not include a root element), and that partial path is appended to the original path.
+			Examples:
+				p1=E:\\javaFileOp\\test
+				p2=secondTest
+				p1.resolve(p2) --> E:\\javaFileOp\\test\\secondtest
+		To relativize:
+			to construct a path from one location in the file system to another location. 
+			Constructs a path originating from the original path and ending at the location specified by the passed-in path. The new path is relative to the original path. 
+			Examples:
+				Path p1 = Paths.get("joe");
+				Path p2 = Paths.get("sally");
+				// Result is ../sally
+				Path p1_to_p2 = p1.relativize(p2);
+				// Result is ../joe
+				Path p2_to_p1 = p2.relativize(p1);
+
+System Properties
+	A system property specifies values for parameters related to the system environment in which your program is executing. 
+	Each system property is identified by a unique name and has a value associated with the name that is defined as a string
+	Examples:
+		Get all properties to one object
+			Properties sys = System.getProperties();
+		List all properties:
+			sys.list(System.out);
+		Get specific properties only
+			System.out.println("user.name:\t"+sys.getProperty("user.name"));
+			String currentDir = System.getProperty(“user.dir”);
+			String separator = System.getProperty(“file.separator”);
+
+Querying Files and Directories - java.nio.file.attribute.BasicFileAttributes
+	java.nio.file.Files class defines static methods that provide a wide range of operations with paths, files and directories
+	Examples
+		Test if a path object points to an existing file:
+			Files.exists(path)
+	The BasicFilesAttributes interface defines methods to get information about a directory or file path.
+		import required:
+			import java.nio.file.attribute.BasicFileAttributes;
+		example (must be in a try block):
+			try{
+				BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
+				} catch(IOException e) {
+				System.err.println(e);
+				}
+
+Create Directories - java.nio.file.Files method
+	Create Singel Directory - must by in a try-catch block
+		Files.createDirectory(path)
+	Create Multiple Directories
+		Files.createDirectories(path);
+		If any of the subdirectories of the final directory do not exist, they are created. 
+		When you are creating a new directory that you specify by an absolute path, using the createDirectories() method obviates the need to verify that the parent exists
+
+
+Sources
+	Books
+		Ivor Norton - Beginning Java - Chapter 9 - Accessing Files and Directories
+		Ivor Norton - Beginning Java - Chapter 
+		Ivor Norton - Beginning Java - Chapter 

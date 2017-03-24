@@ -5,11 +5,12 @@ import java.io.IOException;
 
 public class CreatingDirectories {
   public static void main(String[] args) {
-    Path relPath = Paths.get("junkDir");
+	String pathString="E:\\javaFileOpTest";
+    Path relPath = Paths.get(pathString);
     createSingleDirectory(relPath);                                    // Create directory in current
     createSingleDirectory(relPath);                                    // then try it again...
 
-    Path absPath = Paths.get("D:/Garbage/dir1/dir2/dir3");
+    Path absPath = Paths.get(pathString, "test1", "test2");
     createSingleDirectory(absPath);                                    // Try creating as single directory
     createMultipleDirectories(absPath);                                // Now do it right
     createMultipleDirectories(absPath);                                // then try it again...

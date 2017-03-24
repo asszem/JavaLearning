@@ -9,7 +9,7 @@ import java.io.IOException;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class GetFileStores {
+public class FileSystemObject {
 
 	public static void main(String[] args) {
 		FileSystem fileSystem = FileSystems.getDefault();
