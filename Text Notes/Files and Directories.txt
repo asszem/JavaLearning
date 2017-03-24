@@ -79,7 +79,10 @@ DirectoryStream<Path> - java.nio.file.Files class
 	DirectoryStream<Path> is a generic type, which is a parameterized type where the type parameter appears between the angled brackets
 	so this is a DirectoryStream type customized to work with Path objects
 	Because the DirectoryStream<Path> type implements Iterable<Path>, you can use the collection-based for loop to access the Path objects in the stream.
-
+	Can be used in a try-with-resources block
+	Example:
+		try (DirectoryStream<Path> mappaStream = (filter == null ?  Files.newDirectoryStream(dirPath) : Files.newDirectoryStream(dirPath, filter))) {
+		....} catch (IOException e) {...}
 
 
 
