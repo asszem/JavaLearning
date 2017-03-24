@@ -1,4 +1,4 @@
-package FilesAndDirectories.Practice;
+package FilesAndDirectories.H_Ch9_FilesAndDirectories;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

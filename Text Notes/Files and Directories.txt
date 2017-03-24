@@ -73,6 +73,17 @@ Querying Files and Directories - java.nio.file.attribute.BasicFileAttributes
 				System.err.println(e);
 				}
 
+DirectoryStream<Path> - java.nio.file.Files class
+	The newDirectoryStream() method in the Files class provides you with the means to access the contents of a directory as a stream of Path objects. 
+	The method returns a reference of type java.nio.file.DirectoryStream<Path>, which is an interface type.
+	DirectoryStream<Path> is a generic type, which is a parameterized type where the type parameter appears between the angled brackets
+	so this is a DirectoryStream type customized to work with Path objects
+	Because the DirectoryStream<Path> type implements Iterable<Path>, you can use the collection-based for loop to access the Path objects in the stream.
+
+
+
+
+
 Create Directories - java.nio.file.Files class
 	Create Single Directory - must by in a try-catch block
 		Files.createDirectory(path)
