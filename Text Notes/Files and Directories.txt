@@ -73,14 +73,30 @@ Querying Files and Directories - java.nio.file.attribute.BasicFileAttributes
 				System.err.println(e);
 				}
 
-Create Directories - java.nio.file.Files method
-	Create Singel Directory - must by in a try-catch block
+Create Directories - java.nio.file.Files class
+	Create Single Directory - must by in a try-catch block
 		Files.createDirectory(path)
 	Create Multiple Directories
 		Files.createDirectories(path);
 		If any of the subdirectories of the final directory do not exist, they are created. 
 		When you are creating a new directory that you specify by an absolute path, using the createDirectories() method obviates the need to verify that the parent exists
 
+Create files - java.nio.file.Files clas
+	Files.createFile(path)
+	Possible Exceptions
+		FileAlreadyExistsException - if the file already exists
+		IOException - if an I/O error occurs. 
+		NoSuchFileException - if the parent directory does not exist.
+	Tipp: use the createDirectories on path.GetParent() to make sure the parent dir exists
+		Files.createDirectories(path.getParent()); 
+		Files.createFile(path);k
+
+Delete files/directory - java.nio.file.Files clas
+	Files.delete()
+	Note: A directory has to be empty before it can be deleted
+	Tipp: first delete the file, and then the directory
+		Files.delete(path); // Delete file
+		Files.delete(path.getParent()); // Delete parent directory
 
 Sources
 	Books
