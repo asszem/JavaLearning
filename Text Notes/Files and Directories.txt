@@ -113,6 +113,7 @@ Delete files/directory - java.nio.file.Files class
 		Files.delete(path.getParent()); // Delete parent directory
 
 Copy/Move files/directories - java.nio.file.Files class
+	Use a DirectoryStream<Path> object to get all files in a directory for copy/move operations
 	move(Path Source, Path Target, [CopyOption])
 		The static move() method in the Files class enables you to move/rename a file or directory. 
 		A directory can only be moved if either it is empty, or if the operation does not require that its contents be moved — that is, essentially renaming the directory.
@@ -123,6 +124,60 @@ Copy/Move files/directories - java.nio.file.Files class
 				ATOMIC_MOVE, which specifies that the move is executed as an atomic operation, which is an operation that cannot be interrupted by another thread of execution.
 	rename
 		A move() operation renames a file or directory if the parent paths of the source and destination paths are the same, and both reference a file or both reference a directory
+
+Walking the FileTree - java.nio.file.FileVisitor<Path>
+	Description
+		The fileVisitor<Path> is an interface
+		SimpleFileVisitor<Path> -  class provides default implementations of all the methods declared in the FileVisitor<Path> interface so you can implement a subset if you want
+		The methods that are declared in the FileVisitor<Path> interface are called by walkFileTree() method that you call to initiate the process of walking the file tree;
+	Overview:
+		1. Class must extend to SimpleFileVisitor<Path>
+			public class WalkFileTreeTemplate extends SimpleFileVisitor<Path>
+		3. FileVisitor<Path> object to be created
+			FileVisitor<Path> fileBejaro = new WalkFileTreeTemplate();
+		4. walkFileTree method called in a try block
+			try {
+				Files.walkFileTree(utvonal, EnumSet.of(FOLLOW_LINKS), bejarasiMelyseg, fileBejaro);
+			} catch (IOException e) {
+				System.out.println("IOException\n" + e);
+			}	
+	Methods to override (not necessarily, as the SimpleFileVisitor already implements them)
+		FileVisitResult preVisitDirectory
+		FileVisitResult visitFile
+		FileVisitResult postVisitDirectory
+		FileVisitResult visitFileFailed
+	FileVisitResults Return Options: 
+		You should return one of the following constants defined by the FileVisitResult enum that is in the java.nio.file package.
+			FileVisitResult.CONTINUE;
+			FileVisitResult.SKIP_SIBLINGS;
+			FileVisitResult.SKIP_SUBTREE;
+			FileVisitResult.TERMINATE
+	EnumSet.of
+		The class java.util.EnumSet defines an object that can store a set of enumeration constants. 
+		To specify an EnumSet containing FOLLOW_LINKS you can use the expression EnumSet.of(FOLLOW_LINKS). 
+		To define an empty EnumSet of FileVisitOption constants you use the expression EnumSet.noneOf(FileVisitOption.class). 
+		The expressions assume that you have imported the constants from the enumeration and you have an import statement for EnumSet.
+	Examples
+		1. Define and override the FileVisitResult methods
+			SimpleFileVisitor is a class with default implementation to visit all files and on error it will re-throw errors. 
+			Instead of implementing FileVisitor we can choose to extend SimpleFileVisitor and override ONLY methods of our need.
+		2. Create a new FileVisitor<Path> type reference to the instance of the class that defined the overwriting methods. Example:
+					FileVisitor<Path> fileBejaro = new WalkFileTree();
+		3. In a try-catch block call the Files.walkFileTree method, using the ref. variable created in step #2.
+			Path: the starting Path
+			EnumSet.of(FOLLOW_LINKS): parameter for symlinks
+			Depth: int, define the depth of directories to be walked
+			fileBejaro: the FileVisitor<Path> type variable referencing the class with FileResults methods
+					try {
+						Files.walkFileTree(Path, EnumSet.of(FOLLOW_LINKS), depth, fileBejaro);
+					} catch (IOException e) {
+						System.out.println("IOException\n"+e);
+					}
+	Useful links
+	https://docs.oracle.com/javase/tutorial/essential/io/walk.html
+	http://javapapers.com/java/walk-file-tree-with-java-nio/
+
+
 
 Sources
 	Books

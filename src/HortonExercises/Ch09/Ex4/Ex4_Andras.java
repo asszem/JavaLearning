@@ -42,7 +42,8 @@ public class Ex4_Andras {
 	}
 
 	public static void main(String[] args) {
-		getFileCount("E:\\javaTest\\ex4test");
-		getFileCount("E:\\javaTest");
+//		getFileCount("E:\\javaTest\\ex4test");
+//		getFileCount("E:\\javaTest");
+		getFileCount("E:\\javaFileOpTest");
 	}
 }
