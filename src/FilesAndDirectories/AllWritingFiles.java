@@ -1,33 +1,44 @@
-/*
-Enumerations to import for Open Options (multiple or no options can be used)
-	import static java.nio.file.StandardOpenOption.*; //to import all available options
-	Default Options:
-	-WRITE (open the file for writing)
-	-CREATE (create the file if doesnt exists)
-	-TRUNCATE_EXISTING (new data is overwriting existing data)
-
-Writing Bytes by creating OutputStream object - Files.newOutputStream
-	OutputStream fileOut = Files.newOutputStream(path, CREATE, APPEND);
-	BufferedOutputStream fileOutBuffered = new BufferedOutputStream(fileOut);
-
-Writing Characters by creating BufferedWriter object - Files.newBufferedWriter
-	BufferedWriter fileOut = Files.newBufferedWriter(filePath, Charset.forName("UTF-16"), CREATE, APPEND);
-
-Files.newByteChannel()
-	Writing files through a Channel. See Channel & Buffers
- */
 package FilesAndDirectories;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.nio.*;
+import java.nio.file.Files;
 import java.nio.file.*;
-import static java.nio.file.StandardOpenOption.APPEND; //Enumerations
-import static java.nio.file.StandardOpenOption.CREATE;
-
+import static java.nio.file.StandardOpenOption.*;
 /**
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
 public class AllWritingFiles {
 
+	static boolean writingWithOutputStream(Path file, int content) {
+		System.out.println("Writing binary data to file with default Standard Open Options.");
+		System.out.println("Target file: " + file);
+		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file))) {
+			bos.write(content);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	static boolean writingWithOutputStreamWithOptions(Path file, int content) {
+		System.out.println("Writing binary data to file with APPEND, CREATE Standard Open Option.");
+		System.out.println("Target file: " + file);
+		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file, APPEND, CREATE))) {
+			bos.write(content);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public static void waitForEnter() {
+		try {
+			System.out.println("Press Enter");
+			System.in.read();
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+	}
 }

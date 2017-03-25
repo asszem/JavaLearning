@@ -1,0 +1,40 @@
+File I/O Basics
+	After you have written data to a file, what you have is just a linear sequence of bytes. 
+	The bytes in a file are referenced by their offset from the beginning, so the first byte is byte 0, the next byte is byte 1, the third byte is byte 2, and so on through to the end of the file.
+	If there are n bytes in a file, the last byte is at offset n-1
+
+Imports
+	import java.nio.file.Files	
+	import static java.nio.file.StandardOpenOption.*
+
+3 ways in the Files class to access files defined in Path:
+	1. newOutputStream() - file opened for writing bytes
+	2. BufferedWriter() - file opened for writing characters
+	3. newByteChannel() - file opended for random access for writing binary or textual data.
+
+2 write() methods
+	The Files class also defines two static write() methods that can write either a byte[] array to a file or an Iterable set of lines as characters.	
+	
+Standard Open Options	
+	Enumerations to import for Standard Open Options (multiple or no options can be used)
+		import static java.nio.file.StandardOpenOption.*; //to import all available options
+	Default Options:
+	-WRITE (open the file for writing)
+	-CREATE (create the file if doesnt exists)
+	-TRUNCATE_EXISTING (new data is overwriting existing data)
+
+Writing Bytes by creating OutputStream object - Files.newOutputStream
+	Open it in a try-with-resources block
+	try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file, APPEND, CREATE))) {....
+
+Writing Characters by creating BufferedWriter object - Files.newBufferedWriter
+	BufferedWriter fileOut = Files.newBufferedWriter(filePath, Charset.forName("UTF-16"), CREATE, APPEND);
+
+Files.newByteChannel()
+	Writing files through a Channel. See Channel & Buffers
+
+-------
+Sources:
+	Ivor Horton: Beginning Java, Chapter 10 - Writing files
+	Ron Hitchens: Java NIO
+		https://books.google.hu/books?id=z7TQ8NSooS4C&pg=PT59&lpg=PT59&dq=view+buffers+explained+java&source=bl&ots=SXyDoN31xI&sig=Ap5rNfDH1cJab6D0bIa6amQ3vZQ&hl=hu&sa=X&ved=0ahUKEwilzMWj3cTRAhUlJpoKHQ8GCLU4ChDoAQhAMAU#v=onepage&q=view%20buffers%20explained%20java&f=false
