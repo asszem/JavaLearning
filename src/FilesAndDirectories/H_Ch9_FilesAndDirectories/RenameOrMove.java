@@ -1,5 +1,6 @@
-package FilesAndDirectories.Practice;
+package FilesAndDirectories.H_Ch9_FilesAndDirectories;
 
+import FilesAndDirectories.H_Ch9_FilesAndDirectories.CreatingFiles;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.NoSuchFileException;
 import java.io.IOException;
@@ -12,7 +13,14 @@ import java.nio.file.attribute.BasicFileAttributes; //Interface - cannot be inst
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class MoveAndRename {
+public class RenameOrMove {
+
+	public static void main(String[] args) {
+		Path renameFrom = Paths.get("E:\\javaFileOpTest\\renameTest.txt");
+		Path renameTo = Paths.get("E:\\javaFileOpTest\\renameSuccess.txt");
+		CreatingFiles.createFile(renameFrom);
+		moveSingleFile(renameFrom, renameTo);
+	}
 
 //Returns true if p is a Directory
 	public static boolean isDirectory(Path p) {
@@ -24,6 +32,7 @@ public class MoveAndRename {
 		}
 		return false;
 	}
+
 //Returns true if moving completed successfully
 	public static boolean moveSingleDirectory(Path source, Path target, String options) {
 		System.out.printf("Source: %s%nTarget: %s%nOptions: %s%n", source, target, options);
@@ -39,10 +48,10 @@ public class MoveAndRename {
 //Returns true if moving a single file completed successfully
 	public static boolean moveSingleFile(Path source, Path target) {
 		System.out.printf("Moving a file.%nSource: %s%nTarget: %s%n", source, target);
-		if (isDirectory(source)){
+		if (isDirectory(source)) {
 			System.out.println("Source is not a file!");
 			return false;
-		} else if (isDirectory(target)){
+		} else if (isDirectory(target)) {
 			System.out.println("Target is not a file!");
 			return false;
 		}
@@ -67,10 +76,4 @@ public class MoveAndRename {
 	ATOMIC_MOVE - that the move is executed as an atomic operation.  
 	
 	An atomic operation is an operation that cannot be interrupted by another thread of execution. If you specify ATOMIC_MOVE, any other CopyOption values that you specify are ignored, so essentially you specify the optional third argument to the move() method as either REPLACE_EXISTING or ATOMIC_MOVE.  */
-	public static void main(String[] args) {
-		Path forras = Paths.get("E:\\javaTest\\moveTest.txt");
-		Path cel = Paths.get("E:\\javaTest\\masolasCel\\moveTest.txt");
-		Path rename = Paths.get("E:\\javaTest\\masolasCel\\moveTestRenamed.txt");
-		System.out.println(rename.resolveSibling("alma"));
-	}
 }
