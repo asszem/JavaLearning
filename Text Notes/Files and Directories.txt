@@ -44,6 +44,9 @@ Path objects
 				Path p1_to_p2 = p1.relativize(p2);
 				// Result is ../joe
 				Path p2_to_p1 = p2.relativize(p1);
+		Resolve + relatív path = a forrás végéhez teszi hozzá
+		ResolveSibling + relatív path = a forrás szülőmappájával egy szintre teszi
+		Resolve + absolute = lecseréli az abszolút útvonalra
 
 System Properties
 	A system property specifies values for parameters related to the system environment in which your program is executing. 
