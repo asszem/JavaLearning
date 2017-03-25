@@ -15,20 +15,36 @@ Imports
 2 write() methods
 	The Files class also defines two static write() methods that can write either a byte[] array to a file or an Iterable set of lines as characters.	
 	
-Standard Open Options	
-	Enumerations to import for Standard Open Options (multiple or no options can be used)
-		import static java.nio.file.StandardOpenOption.*; //to import all available options
-	Default Options:
-	-WRITE (open the file for writing)
-	-CREATE (create the file if doesnt exists)
-	-TRUNCATE_EXISTING (new data is overwriting existing data)
 
-Writing Bytes by creating OutputStream object - Files.newOutputStream
-	Open it in a try-with-resources block
-	try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file, APPEND, CREATE))) {....
+newOutputStream() - Writing Bytes by creating OutputStream object - Files.newOutputStream
+	Description
+		Wrap to a BufferedOutPutStream object, provide a Path for the target file and optional Standard Open Options.
+	Standard Open Options	
+		Enumerations to import for Standard Open Options (multiple or no options can be used)
+			import static java.nio.file.StandardOpenOption.*; //to import all available options
+		Default Options (when no option provided)
+			-WRITE (open the file for writing)
+			-CREATE (create the file if doesnt exists)
+			-TRUNCATE_EXISTING (new data is overwriting existing data)
+	Usage
+		Open it in a try-with-resources block
+		Example:
+		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file, APPEND, CREATE))) {....
 
-Writing Characters by creating BufferedWriter object - Files.newBufferedWriter
-	BufferedWriter fileOut = Files.newBufferedWriter(filePath, Charset.forName("UTF-16"), CREATE, APPEND);
+newBufferedWriter() - Writing Characters by creating BufferedWriter object - Files.newBufferedWriter
+	Description
+		The static newBufferedWriter() method in the Files class returns a java.io.BufferedWriter object that you can use to write to a file. 
+		A BufferedWriter can only write character data to a file. A BufferedWriter has an internal buffer that ensures that strings and even single characters can be written efficiently.
+	Charset
+		A java.nio.charset.Charset object determines how Unicode characters are mapped to the sequences of bytes that are written to the file
+		Ultimately you are always writing bytes to a file, whatever the type of the original data 
+		The charset used to write a file determines what bytes are written for each Unicode character and for reading the same charset that was used when the file was written must be used
+	Standard Open Options 
+		The same as with OutputStream
+	Usage:
+		Open it ina try-with-resources block
+	Example:
+		try (BufferedWriter fileOut = Files.newBufferedWriter(filePath, Charset.forName("UTF-16"), CREATE, APPEND)) {...
 
 Files.newByteChannel()
 	Writing files through a Channel. See Channel & Buffers
