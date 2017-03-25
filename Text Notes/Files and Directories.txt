@@ -87,9 +87,6 @@ DirectoryStream<Path> - java.nio.file.Files class
 		try (DirectoryStream<Path> mappaStream = (filter == null ?  Files.newDirectoryStream(dirPath) : Files.newDirectoryStream(dirPath, filter))) {
 		....} catch (IOException e) {...}
 
-
-
-
 Create Directories - java.nio.file.Files class
 	Create Single Directory - must by in a try-catch block
 		Files.createDirectory(path)
@@ -98,7 +95,7 @@ Create Directories - java.nio.file.Files class
 		If any of the subdirectories of the final directory do not exist, they are created. 
 		When you are creating a new directory that you specify by an absolute path, using the createDirectories() method obviates the need to verify that the parent exists
 
-Create files - java.nio.file.Files clas
+Create files - java.nio.file.Files class
 	Files.createFile(path)
 	Possible Exceptions
 		FileAlreadyExistsException - if the file already exists
@@ -108,12 +105,24 @@ Create files - java.nio.file.Files clas
 		Files.createDirectories(path.getParent()); 
 		Files.createFile(path);k
 
-Delete files/directory - java.nio.file.Files clas
+Delete files/directory - java.nio.file.Files class
 	Files.delete()
 	Note: A directory has to be empty before it can be deleted
 	Tipp: first delete the file, and then the directory
 		Files.delete(path); // Delete file
 		Files.delete(path.getParent()); // Delete parent directory
+
+Copy/Move files/directories - java.nio.file.Files class
+	move(Path Source, Path Target, [CopyOption])
+		The static move() method in the Files class enables you to move/rename a file or directory. 
+		A directory can only be moved if either it is empty, or if the operation does not require that its contents be moved — that is, essentially renaming the directory.
+		Target path - It is not the path for the directory that contains the item after the move operation, but the path specification for the item after it has been moved. 
+		CopyOptions
+			Defined in java.nio .file.StandardCopyOption 
+				REPLACE_EXISTING, which indicates the target file specified by the first argument should be replaced if it exists and is not a non-empty directory
+				ATOMIC_MOVE, which specifies that the move is executed as an atomic operation, which is an operation that cannot be interrupted by another thread of execution.
+	rename
+		A move() operation renames a file or directory if the parent paths of the source and destination paths are the same, and both reference a file or both reference a directory
 
 Sources
 	Books
