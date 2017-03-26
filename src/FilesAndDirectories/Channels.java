@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=2LJ6YSwAH6Y
  */
 package FilesAndDirectories;
 
-import static FilesAndDirectories.Buffers.bufTrace;
+import static FilesAndDirectories.BuffersTD.bufTrace;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;

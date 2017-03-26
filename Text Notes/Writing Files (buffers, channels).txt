@@ -49,7 +49,110 @@ newBufferedWriter() - Writing Characters by creating BufferedWriter object - Fil
 Files.newByteChannel()
 	Writing files through a Channel. See Channel & Buffers
 
--------
+****************************************************************************************************
+Buffers
+	Overview
+		A channel is a mechanism for transferring data to and from an external source using buffers. 
+		Using a channel is considerably more powerful and flexible than using an output stream or a writer.
+		All the data that you write (read) to a file using a channel starts out in one or more buffers in memory.
+		All the classes that define buffers have the abstract java.nio.Buffer class as a base
+	ByteBuffer	
+		A buffer that stores values of type byte or the binary values of any of the other primitive types, except for boolean. 
+		Each binary value stored occupies a number of bytes in the buffer determined by the type: Variable Size
+			Type	Byte	Bit     Mnemo
+			byte	1		8	
+			short	2		16		R2D2 was a short droid	
+			char	2		16		charTwodeeTwoo	
+			float	4		32		[F]our-[F]loat
+			int		4		32		Forint
+			long	8		64		LOng   - LODO8
+			double	8		64		DOuble - LODO8	
+			boolean	n/a		n/a
+
+To create a new buffer, you must use typeBuffer.allocate(capacity)
+
+	CAPACITY - the total number of types the buffer can hold. Fixed if not ViewBuffer
+	POSITION - index position of the next buffer element that is available to be read or written
+	LIMIT - index position in a buffer of the first value that should not be read or written
+
+	0 <= position <= limit <= capacity
+	Elements can be read or written starting with the element at POSITION and up to and including the element at LIMIT-1
+	Use the POSITION and LIMIT for a ByteBuffer to determine what bytes in the buffer are involved in a read or write operation executed by a channel 
+
+Methods
+	allocate() - create buffer
+	remaining() - returns the number of elements between POSITION and LIMIT
+	position() - returns the position
+	position(int newPosition) - sets the new position
+	limit(int newLimit) - sets the new limit
+	duplicate() - new buffer with initial capacity, position, limit, content shared, pos/limit independent
+	slice() - new buffer from original buffers position to limit. The two buffer's content are shared, but pos/limit/mark remain independent.
+		- Capacity of new slice = remaining of original (orig: p30, l:90, rem:90-30=60, new slice buffer: poz:0, limit, cap=60) 
+	wrap() -creates a buffer that already contains the data in the array.
+		The buffer is backed by the array that you have used to define it, so modifications to the values in the buffer alters the array, and vice versa
+		hasArray() will only be true if a buffer was created with a wrap
+	hasArray() - true if there is a backing array
+	mark() / reset() / rewind () - marks a position in a buffer
+	put() / get() - transfer data to / from  a buffer
+	flip() - setup the buffer to be written. Does: buf.limit(buf.position()).rewind(0);
+	clear() -  sets the limit to the capacity and the position to zero. Doesnt reset data!
+	array() - returns the backing array of the buffer
+
+ViewBuffers - TypeBuffer referenceVariable = byteBufferObject.asTypeBuffer();
+	A view buffer has two primary uses
+		- for loading data items that are not of type byte into a ByteBuffer prior to writing it to a file
+		- for accessing data that has been read from a file as values that are other than type byte.
+
+	Data is always transferred to or from a file as a series of bytes, but it typically consists of data values of a mix of types other than type byte
+	A view buffer always maps to bytes in the byte buffer starting at the current position.
+	The parent ByteBuffer's position must be updated after put/get data in the ViewBuffer
+
+	Example:
+		Create a ViewBuffer for int's in a ByteBuffer
+			ByteBuffer buf = ByteBuffer.allocate(1024); // Buffer of 1024 bytes capacity
+			IntBuffer intBuf = buf.asIntBuffer(); 		// Now create a view buffer
+		The content of the view buffer, intBuf, that you create here start at the byte buffer’s current position, which in this case is zero because it is newly created. 
+		The remaining bytes in buf are effectively shared with the view buffer. 
+		The view buffer has an initial position of 0 and has a capacity and limit of 256. 
+		The capacity of this viewBuffer is a multiple of 4, because intBuf stores elements of type int that require 4 bytes each. 
+		This is because 256 elements of type int completely fill the 1024 bytes remaining in buf. 
+		If you had allocated buf with 1023 bytes, then intBuf would have mapped to 1020 bytes of buf and would have a capacity and limit of 255.
+
+		You could now use this view buffer to load the original buffer with values of type int. 
+		You could then use the original byte buffer to write the int values to a file. As I said at the outset, view buffers have
+		a similar role when you are reading a file. You would have a primary buffer of type ByteBuffer into
+		which you read bytes from a file, and then you might access the contents of the ByteBuffer through a
+		view buffer of type DoubleBuffer to enable you to retrieve the data that is read from the file as values of
+		type double.
+
+Duplicate Buffers
+	A duplicate buffer is not really a new buffer in memory. It is just a new object that provides an alternative route to accessing the same block of memory that is being used to buffer the data. 
+	The duplicate() method returns a reference of a new object of the same type as the original, but has no independent data storage. 
+	It merely shares the memory that belongs to the original buffer object but with independent position and limit values.
+
+Writing from a Buffers to a file
+	1. Create Buffer
+	2. Put values to Buffer
+	3. Flip() buffer - makes the current position as limit and sets position to 0
+	4. Write buffer - writing updates the buffer position
+	5. Clear() buffer
+
+Other sources on Buffers
+	Java NIO by Ron Hitchen
+		https://books.google.hu/books?id=z7TQ8NSooS4C&pg=PT18&hl=hu&source=gbs_toc_r&cad=4#v=onepage&q&f=false
+
+
+
+
+
+
+
+
+
+
+
+
+****************************************************************************************************
 Sources:
 	Ivor Horton: Beginning Java, Chapter 10 - Writing files
 	Ron Hitchens: Java NIO
