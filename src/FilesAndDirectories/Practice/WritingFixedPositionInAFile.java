@@ -1,6 +1,6 @@
 package FilesAndDirectories.Practice;
 
-import FilesAndDirectories.Buffers;
+import FilesAndDirectories.BuffersTD;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
