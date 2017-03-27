@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=2LJ6YSwAH6Y
  */
 package FilesAndDirectories;
 
-import static FilesAndDirectories.BuffersTD.bufTrace;
+//import static FilesAndDirectories.BuffersTD.bufTrace;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
@@ -41,7 +41,7 @@ public class Channels {
 //<editor-fold desc="Prepare data">
 		ByteBuffer bb = ByteBuffer.allocate(1024);
 		System.out.println("Byte Buffer bb created");
-		System.out.println("bb:\t\t" + bufTrace(bb));
+//		System.out.println("bb:\t\t" + bufTrace(bb));
 		Charset charset = Charset.defaultCharset();
 		String[] str = {"AA aa", "Árvíztűrő tükörfúrógép", "Raxacoricofallapatorius", "123"};
 		String separator = System.lineSeparator();
@@ -62,7 +62,7 @@ public class Channels {
 		}
 		System.out.println("\nBuffer after put");
 		bb.put(byteArray);
-		System.out.println("bb:\t\t" + bufTrace(bb));
+//		System.out.println("bb:\t\t" + bufTrace(bb));
 
 		//to make sure byteArray is wiped
 		for (int i = 0; i < byteArray.length; i++) {
@@ -105,23 +105,23 @@ System.out.println("Testin Gathering write method");
 		buffers[0] = bb; //reference the original bb
 		buffers[1] = ByteBuffer.allocate(2); //Allocate 2 bytes for a Char
 		buffers[2] = ByteBuffer.allocate(8); //Allocate 8 bytes for a Double
-		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
-		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
-		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
+//		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
+//		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
+//		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
 		buffers[0].put("Gathering test".getBytes());
 		buffers[1].putChar('X');
 		buffers[2].putDouble(1234);
 		System.out.println("After putting data to buffers");
-		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
-		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
-		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
+//		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
+//		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
+//		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
 		buffers[0].flip();
 		buffers[1].flip();
 		buffers[2].flip();
 		System.out.println("After flipping buffers");
-		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
-		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
-		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
+//		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
+//		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
+//		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
 		Path p2 = Paths.get("E:\\javaTest", "gatheringWrite.txt");
 		//Files method opens a SeekableByteChannel, so it must to be casted to FileChannel
 		try (FileChannel gatheringOutput = (FileChannel) Files.newByteChannel(p2,EnumSet.of(WRITE, CREATE, TRUNCATE_EXISTING))){

@@ -125,6 +125,11 @@ ViewBuffers - TypeBuffer referenceVariable = byteBufferObject.asTypeBuffer();
 		view buffer of type DoubleBuffer to enable you to retrieve the data that is read from the file as values of
 		type double.
 
+	ViewBuffers can be chained:
+		ByteBuffer byteBuffer=ByteBuffer.allocate(1024);
+		byteBuffer.asDoubleBuffer().put(42.41).position()
+
+
 Duplicate Buffers
 	A duplicate buffer is not really a new buffer in memory. It is just a new object that provides an alternative route to accessing the same block of memory that is being used to buffer the data. 
 	The duplicate() method returns a reference of a new object of the same type as the original, but has no independent data storage. 

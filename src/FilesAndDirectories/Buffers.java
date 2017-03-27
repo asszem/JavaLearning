@@ -27,6 +27,9 @@ public class Buffers {
 		}
 	}
 
+	static void putDoubleToByteBufferThroughChainedIntViewBuffer(ByteBuffer buff, double doubleToPut){
+		buff.asDoubleBuffer().put(doubleToPut);
+	}
 	static IntBuffer createViewBufferForInt(ByteBuffer buff) {
 		IntBuffer intView = buff.asIntBuffer();
 		return intView;
