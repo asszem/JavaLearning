@@ -27,6 +27,9 @@ public class Buffers {
 		}
 	}
 
+	static void putDoubleToByteBufferThroughChainedIntViewBuffer(ByteBuffer buff, double doubleToPut){
+		buff.asDoubleBuffer().put(doubleToPut);
+	}
 	static IntBuffer createViewBufferForInt(ByteBuffer buff) {
 		IntBuffer intView = buff.asIntBuffer();
 		return intView;
@@ -48,15 +51,45 @@ public class Buffers {
 		buff.put(input);
 	}
 
-	static String getStringFromByteBuffer(ByteBuffer buff) {
+	static String getStringFromByteBufferWithDecode(ByteBuffer buff) {
 		return Charset.forName("UTF-8").decode(buff).toString();
 		//Source:
 		//http://stackoverflow.com/questions/17354891/java-bytebuffer-to-string
 	}
 
+	static String getStringFromByteBufferWithGetBytes(ByteBuffer buff) {
+		byte[] bytesRead = new byte[buff.capacity()];
+		if (false) {
+			System.out.println("Byte array length: " + bytesRead.length);
+		}
+		buff.get(bytesRead);
+		//for debug
+		if (false) {
+			for (byte b : bytesRead) {
+				System.out.printf("[%d]-", b);
+			}
+		}
+//		Charset utf16 = Charset.forName("UTF-16");
+		Charset utf8 = Charset.forName("UTF-8");
+		String output = new String(bytesRead, Charset.defaultCharset());
+		return output;
+	}
+
+	static String getStringFromByteBufferWithGetChar(ByteBuffer buff) {
+		String output = null;
+		char result;
+		while (buff.hasRemaining()) {
+			result = buff.getChar();
+			if (true) {
+				System.out.printf("[%s]", result);
+			}
+			output += result;
+		}
+		return output;
+	}
+
 	/**
 	 * This metod puts int to the viewbuffer and increments with 4 bytes the parent bytebuffer's position
-	 *
 	 */
 	static void putIntToIntBuffer(IntBuffer ib, ByteBuffer bb, int input) {
 		ib.put(input);
@@ -65,6 +98,13 @@ public class Buffers {
 
 	static int getIntFromIntBuffer(IntBuffer buff) {
 		return buff.get();
+	}
+
+	static byte[] getByteArrayFromByteBuffer(ByteBuffer buff) {
+		//the array must be the exact size of data to be read: limit-position
+		byte[] resultArray = new byte[buff.limit()-buff.position()];
+		buff.get(resultArray);
+		return resultArray;
 	}
 
 	static int getIntFromIntBuffer(IntBuffer buff, int position) {
@@ -83,6 +123,6 @@ public class Buffers {
 		int remaining = buff.remaining();
 		int capacity = buff.capacity();
 		boolean hasArray = buff.hasArray();
-		System.out.printf("**[%s] trace:%n  pos:%d, lim:%d, rem:%d, cap:%d array:%b%n", buffName, position, limit, remaining, capacity, hasArray);
+		System.out.printf("**[%s]%n  pos:%d, lim:%d, rem:%d, cap:%d array:%b%n", buffName, position, limit, remaining, capacity, hasArray);
 	}
 }

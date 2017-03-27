@@ -25,7 +25,7 @@ public class BuffersTD {
 		double testDouble = 456.789;
 		char testChr = 'A';
 		//</editor-fold>
-		int testCase = 1;
+		int testCase = 5;
 		System.out.println("Test case: " + testCase);
 		switch (testCase) {
 			case 0:
@@ -51,207 +51,191 @@ public class BuffersTD {
 				break;
 
 			case 1:
-//<editor-fold desc="Test buffer position after put">
+//<editor-fold desc="Test buffer status after various put operations">
 				ByteBuffer bbTc1 = ByteBuffer.allocate(1030); //1 kbyte
 				System.out.println("Test case: 1.1");
-				System.out.println("Adding a STRING with getBytes");
-				System.out.printf("String:[%s]%nStr.length:%d%n", testString, testString.length());
-				System.out.println("Pass condition: buffer position equals length of test string");
+				System.out.println("Adding a STRING with .put(input.getBytes)");
+				System.out.printf("String:[%s]%nTest string length:%d%n", testString, testString.length());
+				System.out.println("Pass condition:\nBuffer position equals length of test string");
 				Buffers.putStringToByteBuffer(bbTc1, testString);
-				Buffers.bufferStatus(bbTc1, "ByteBuffer");
+				Buffers.bufferStatus(bbTc1, "ByteBuffer after put");
 				if (bbTc1.position() == testString.length()) {
 					System.out.println("Success.");
 				} else {
 					System.out.println("Fail!");
 				}
 				System.out.println("\nTest case: 1.2");
-				System.out.println("Create a SLICE buffer from current position");
-				System.out.println("Pass condition:\n - Slice capacity == remaining of byte buffer\n - Slice content = byte content");
-				bbTc1.position(0).limit(99);
+				System.out.println("Create a SLICE buffer from current position up to limit 99");
+				System.out.println("Pass condition:\nSlice capacity == remaining of byte buffer");
+				bbTc1.limit(99);
+				Buffers.bufferStatus(bbTc1, "ByteBuffer before slice");
 				ByteBuffer bbSliceTc1 = bbTc1.slice();
-				Buffers.bufferStatus(bbTc1, "ByteBuffer");
 				Buffers.bufferStatus(bbSliceTc1, "SliceBuffer");
 				if (bbSliceTc1.capacity() == bbTc1.remaining()) {
-					bbTc1.position(0).limit(30);
-					Buffers.bufferStatus(bbTc1, "ByteBuffer");
-					System.out.println("ByteB: " + Buffers.getStringFromByteBuffer(bbTc1));
-					bbTc1.position(0).limit(30);
-//					System.out.println("Result lenght: " + Buffers.getStringFromByteBuffer(bbTc1).length());
-					bbSliceTc1.limit(30);
-					System.out.println("SliceB: " + Buffers.getStringFromByteBuffer(bbSliceTc1));
-					System.out.println("Success!");
+					System.out.println("Success.");
 				} else {
 					System.out.println("Failure!");
 				}
-				System.exit(0);
-				System.out.println("\nCreate a DUPLICATE from bb");
-				ByteBuffer bbDuplicate = bbTc1.duplicate();
-				System.out.println("bbDuplicate:\t" + bufTrace(bbDuplicate));
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-
-				System.out.println("\nAdding a STRING as CHAR ARRAY");
-				System.out.print("  [");
+				System.out.println("\nTest case: 1.3");
+				System.out.println("Create a DUPLICATE from original byte buffer");
+				Buffers.bufferStatus(bbTc1, "original byte buffer ");
+				ByteBuffer bbDuplicateTc1 = bbTc1.duplicate();
+				Buffers.bufferStatus(bbDuplicateTc1, "Duplicate buffer status");
+				System.out.println("\nTest case: 1.4");
+				bbTc1.limit(bbTc1.capacity());
+				System.out.println("Adding a STRING as CHAR ARRAY with putChar()");
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE chars added");
+				System.out.print("Char array:\n[");
 				int counter = 0;
 				for (char c : testString.toCharArray()) {
 					counter++;
 					System.out.print(c);
 					bbTc1.putChar(c);
 				}
-				System.out.println("]\nChars added:\t" + counter);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
+				System.out.printf("]%nNumber of chars:%d%n", counter);
+				Buffers.bufferStatus(bbTc1, "byte buffer after chars added");
 
+				System.out.println("\nTest case: 1.5");
+				bbTc1.rewind().limit(bbTc1.capacity());
 				System.out.println("Adding a STRING ARRAY with getBytes");
 				counter = 0;
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE chars added");
 				for (String s : testStringArray) {
 					counter += s.length(); //Add to the counter the lenght of the current string 
-					System.out.printf("  [%s]%n", s);
+//					System.out.printf("  [%s]%n", s);
+					bbTc1.put(s.getBytes());
 					bbTc1.put(s.getBytes());
 				}
-				System.out.println("Total lenght: " + counter);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
+				Buffers.bufferStatus(bbTc1, "byte buffer AFTER chars added");
 
-				System.out.println("\nAdding INT bb.putInt (+4 bytes)");
-				System.out.printf("  Int: %d%n", testInt);
+				System.out.println("\nTest case: 1.6");
+				System.out.println("Adding INT bb.putInt (+4 bytes)");
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE int added");
 				bbTc1.putInt(testInt);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-				System.out.println("\nAdding DOUBLE to the buffer (+8 bytes)");
-				System.out.printf("  Double:%f%n", testDouble);
+				Buffers.bufferStatus(bbTc1, "byte buffer AFTER int added");
+				System.out.println("\nTest case: 1.7");
+				System.out.println("Adding DOUBLE to the buffer (+8 bytes)");
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE double added");
 				bbTc1.putDouble(testDouble);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-				System.out.println("\nAdding CHAR to the buffer (+2 bytes)");
-				System.out.printf("  Char:'%c'%n", testChr);
+				Buffers.bufferStatus(bbTc1, "byte buffer AFTER double added");
+				System.out.println("\nTest case: 1.8");
+				System.out.println("Adding CHAR to the buffer (+2 bytes)");
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE double added");
 				bbTc1.putChar(testChr);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
+				Buffers.bufferStatus(bbTc1, "byte buffer AFTER char added");
 
-				System.out.println("\nCreate a INT ViewBuffer (bb remaining/4)");
-				System.out.printf("bb.remaining[%d]/4 =%d%n", bbTc1.remaining(), bbTc1.remaining() / 4);
-				IntBuffer intB = bbTc1.asIntBuffer();
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-				System.out.println("intB:\t\t" + bufTrace(intB));
-				System.out.printf("Put one int value [%d] to IntBuffer:%n", testInt);
-				intB.put(testInt);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-				System.out.println("intB:\t\t" + bufTrace(intB));
-				System.out.println("Update bb postition with 4 because of new int (4 bytes)");
-				bbTc1.position(bbTc1.position() + 4);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
 //</editor-fold>
 				break;
 			case 2:
-//<editor-fold desc="Reading from Byte buffers">
-				System.out.println("Reading from Byte Buffers");
+//<editor-fold desc="Reading String from Byte buffers with getBytes, Decode, GetChar">
+				System.out.println("Reading a wrapped string from Byte Buffers");
 				System.out.println("Input string:");
-				System.out.printf("\t[%s]%n\tlength=%d%n", testString, testString.length());
-				System.out.println("\nInitialize bbw (byte buffer with WRAP)");
-				ByteBuffer bbw = ByteBuffer.wrap(testString.getBytes(charset));
-				System.out.println("bbw:\t\t" + bufTrace(bbw));
-				System.out.println("\nRead the content with getChar");
-				String output = null;
-				char readAsChar;
-				while (bbw.hasRemaining()) {
-//					System.out.println("Position before read: " + bbw.position());
-					readAsChar = bbw.getChar();
-//					System.out.println("Read value: " + readAsChar);
-					output += Character.toString(readAsChar);
-				}
-				System.out.printf("  [%s]%n", output);
-				System.out.println("bbw:\t\t" + bufTrace(bbw));
+				System.out.printf("[%s]%nlength=%d%n", testString, testString.length());
+				ByteBuffer bbTc2 = ByteBuffer.wrap(testString.getBytes(charset));
 
-				System.out.println("\nFlip the buffer and read again with getBytes");
-				bbw.flip();
-				byte[] bytesRead = new byte[bbw.capacity()];
-				bbw.get(bytesRead);
-				System.out.println("Reading as byte values:");
-				for (byte b : bytesRead) {
-					System.out.printf("[%d]-", b);
-				}
-				System.out.println("\nConverting to string");
-				output = new String(bytesRead, charset);
-				System.out.printf("  [%s]", output);
-				System.out.println("\nbbw:\t\t" + bufTrace(bbw));
+				System.out.println("\nTest case 2.1");
+				System.out.println("GET with getStringFromByteBufferWithGetBytes");
+				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
+				System.out.printf("Get results:%n[%s]%n", Buffers.getStringFromByteBufferWithGetBytes(bbTc2));
+				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
 
-				System.out.println("\nCreate a CharBuffer for bbw");
-				bbw.flip();
-				CharBuffer cbuf = bbw.asCharBuffer();
-				System.out.println("cbuf:\t\t" + bufTrace(cbuf));
+				System.out.println("\nTest case 2.2");
+				System.out.println("GET with getStringFromByteBufferWithDecode");
+				bbTc2.flip();
+				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
+				System.out.printf("Get results:%n[%s]%n", Buffers.getStringFromByteBufferWithDecode(bbTc2));
+				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
 
-				char[] charRead = new char[cbuf.capacity()];
-				System.out.println("Reading from char buffer");
-				cbuf.get(charRead);
-				for (char c : charRead) {
-					System.out.printf("[%c]", c);
-				}
-				System.out.println("");
-				System.out.println("\nRead from underlying byte buffer with getChar");
-				System.out.println("bbw:\t\t" + bufTrace(bbw));
-				while (bbw.hasRemaining()) {
-					System.out.printf("[%c]", bbw.getChar());
-				}
-				System.out.println("\nbbw:\t\t" + bufTrace(bbw));
+				System.out.println("\nTest case 2.3");
+				System.out.println("GET with getStringFromByteBufferWithGetChar");
+				bbTc2.flip();
+				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
+				System.out.printf("Get results:%n[%s]%n", Buffers.getStringFromByteBufferWithGetChar(bbTc2));
+				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
+
 //</editor-fold>
 				break;
 			case 3:
-//<editor-fold desc="Put data from mixed type buffers">
-				System.out.println("Put data from CHAR and INT ViewBuffer to a byte buffer");
-				System.out.println("Allocate 1024 bytes to bytebuffer bb3");
-				ByteBuffer bb3 = ByteBuffer.allocate(1024);
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
-				IntBuffer bb3Int = bb3.asIntBuffer();
-				CharBuffer bb3Char = bb3.asCharBuffer();
-				System.out.println("Create Int buffer capacity: " + (bb3.capacity() / 4));
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
-				System.out.println("Create Char buffer capacity: " + (bb3.capacity() / 2));
-				System.out.println("bb3Char:\t" + bufTrace(bb3Char));
+//<editor-fold desc="Reading INT from ByteBuffer and Int ViewBuffers">
+				System.out.println("ReadingINT from ViewBuffers");
+				System.out.println("\nTest case 3.1 - initialization");
+				ByteBuffer bbTc3 = ByteBuffer.allocate(1024);
+				IntBuffer bb3Int = bbTc3.asIntBuffer();
+//				CharBuffer bb3Char = bbTc3.asCharBuffer();
+				Buffers.bufferStatus(bbTc3, "1024 bytes allocated for byte buffer");
+				Buffers.bufferStatus(bb3Int, "Int Buffer created, capacity should be 256");
+//				Buffers.bufferStatus(bb3Char, "Char Buffer created, capacity should be 512");
 
-				System.out.printf("\nPut data [%d] to Int buffer%n", testInt);
+				System.out.println("\nTest case 3.2");
+				System.out.printf("Put test data [%d] to IntBuffer with put%n", testInt);
+				System.out.println("With updating original ByteBuffer's position");
+				Buffers.putIntToIntBuffer(bb3Int, bbTc3, testInt);
+				Buffers.bufferStatus(bbTc3, "Byte buf after put");
+				Buffers.bufferStatus(bb3Int, "Int buf after put");
+				System.out.println("Without updating original ByteBuffer's position");
 				bb3Int.put(testInt);
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
+				Buffers.bufferStatus(bbTc3, "Byte buf after put");
+				Buffers.bufferStatus(bb3Int, "Int buf after put");
 
-				System.out.printf("\nPut data [%d] to ByteBuffer with .putIn%n", testInt);
-				bb3.position(4);
-				bb3.putInt(testInt);
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
+				System.out.println("\nTest case 3.3");
+				System.out.printf("Put data [%d] to ByteBuffer with .putIn%n", testInt);
+				Buffers.bufferStatus(bbTc3, "Byte buf before put");
+				bbTc3.putInt(testInt);
+				Buffers.bufferStatus(bbTc3, "Byte buf after put");
 
-				System.out.println("\nRead 8 bytes from ByteBuffer as bytes");
+				System.out.println("\nTest case 3.4.1");
+				System.out.println("Read from Byte Buffer to a byte[] array with .get");
+				bbTc3.position(0);
+				Buffers.bufferStatus(bbTc3, "Byte buf before read");
 				byte[] bytesRead3 = new byte[8]; //going to read only four bytes
-				bb3.position(0);
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
-				bb3.get(bytesRead3, 0, 8); //OFFSET not INDEX! Starts from current position!
-				System.out.print("Read bytes: ");
+				bbTc3.get(bytesRead3, 0, 8); //OFFSET not INDEX! Starts from current position!
 				for (byte b : bytesRead3) {
-					System.out.printf("[%s]-", b);
+					System.out.printf("[%s]", b);
 				}
 				System.out.println("");
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
+				Buffers.bufferStatus(bbTc3, "Byte buf after read");
 
-				System.out.println("\nRead from IntBuffer as Int");
-				System.out.println("bb3Int position needs to reset");
+				System.out.println("\nTest case 3.4.2");
+				System.out.println("Same operation with method in Buffers class");
+				bbTc3.position(0).limit(8);
+				byte[] tc3 = Buffers.getByteArrayFromByteBuffer(bbTc3);
+				for (byte b : tc3) {
+					System.out.printf("[%s]", b);
+				}
+				System.out.println("");
+				Buffers.bufferStatus(bbTc3, "Byte buf after read");
+
+				System.out.println("\nTest case 3.5");
+				System.out.println("Read from IntBuffer with .get");
 				bb3Int.position(0);
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
 				System.out.printf("Read value: [%d]%n", bb3Int.get());
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
+				Buffers.bufferStatus(bb3Int, "Int buf after read");
+				System.out.printf("Read value: [%d]%n", bb3Int.get());
+				Buffers.bufferStatus(bb3Int, "Int buf after read");
+				System.out.printf("Read value: [%d]%n", bb3Int.get());
+				Buffers.bufferStatus(bb3Int, "Int buf after read");
 				//</editor-fold>
 				break;
 			case 4:
 //<editor-fold desc="Chaining methods">
-				ByteBuffer bb4 = ByteBuffer.allocate(1024);
-				System.out.println("bb4:\t\t" + bufTrace(bb4));
-				System.out.println("Value of command\n\tbb4.asCharBuffer().put(\"ABCD\").position();");
-				System.out.println("\t" + bb4.asCharBuffer().put("ABCD").position());
-				System.out.println("bb4:\t\t" + bufTrace(bb4));
-				CharBuffer bb4C = bb4.asCharBuffer();
-				bb4C.put("ABCD").position();
-				System.out.println("bb4C:\t\t" + bufTrace(bb4C));
-				System.out.println("\n Put Double (8 bytes) to bytebuffer\n and update bytebuffer's position\n with one command chaining");
-				System.out.println("Double to put: " + testDouble);
-				bb4.position(bb4.position() + 8 * bb4.asDoubleBuffer().put(testDouble).position());
-				System.out.println("ByteBuffer after put");
-				System.out.println("bb4:\t\t" + bufTrace(bb4));
-				bb4.rewind();
+				ByteBuffer bbTc4 = ByteBuffer.allocate(1024);
+				System.out.println("Test case 4.1");
+				System.out.println("Chaining buffer creation and .position(), returns the .position()");
+				System.out.println("Command:\n\bbTc4.asCharBuffer().put(\"ABCD\").position();");
+				System.out.println(bbTc4.asCharBuffer().put("ABCD").position());
+				System.out.println("Command:\n\bbTc4.asCharBuffer().put(\"AB\").position();");
+				System.out.println(bbTc4.asCharBuffer().put("AB").position());
+
+				System.out.println("\nTest case 4.2");
+				System.out.println("Put a Double (8 bytes) to bytebuffer and update bytebuffer's position\n with one command chaining");
+				Buffers.bufferStatus(bbTc4, "bbTc4 before");
+				int Tc42Int = bbTc4.position(bbTc4.position() + 8 * bbTc4.asDoubleBuffer().put(testDouble).position()).position();
+				System.out.println("Position chain result: " + Tc42Int);
+				Buffers.bufferStatus(bbTc4, "bbTc4 after");
+				System.exit(0);
+				bbTc4.rewind();
 				byte[] bc4test = new byte[8];
-				bb4.get(bc4test);
+				bbTc4.get(bc4test);
 				System.out.println("Reading from byte buffer as bytes");
 				for (byte b : bc4test) {
 					System.out.printf("[%d]", b);
@@ -259,44 +243,85 @@ public class BuffersTD {
 				System.out.println("");
 
 				System.out.println("Reading from byte buffer as double");
-				bb4.rewind();
-				System.out.println("Read number: " + bb4.getDouble());
+				bbTc4.rewind();
+				System.out.println("Read number: " + bbTc4.getDouble());
 //</editor-fold>
 				break;
 			case 5:
-//<editor-fold desc="Simple put / get">
-				ByteBuffer bb5 = ByteBuffer.allocate(1024);
-				System.out.println("bb5:\t\t" + bufTrace(bb5));
+//<editor-fold desc="Put char/int to byteuffer and get with various methods">
+				ByteBuffer bbTc5 = ByteBuffer.allocate(1024);
+				System.out.println("Test case 5.1");
 				System.out.println("Put char 'A' to bb with putChar method");
-				bb5.putChar('A').rewind();
-				System.out.println("Char read: " + bb5.getChar());
-				bb5.rewind();
-				System.out.println("Byte read: " + bb5.get());
-				System.out.println("Byte read: " + bb5.get());
-				bb5.rewind();
+				bbTc5.putChar('A').rewind();
+				System.out.println("Char read: " + bbTc5.getChar());
+				bbTc5.rewind();
+				System.out.println("Byte read: " + bbTc5.get());
+				System.out.println("Byte read: " + bbTc5.get());
+				bbTc5.rewind();
+				System.out.println("\nTest case 5.2");
 				System.out.println("Put int 123456 to bb with putInt method");
-				bb5.putInt(123456).rewind();
-				System.out.println("Int read: " + bb5.getInt());
-				bb5.rewind();
-				System.out.println("Byte read: " + bb5.get());
-				System.out.println("Byte read: " + bb5.get());
-				System.out.println("Byte read: " + bb5.get());
-				System.out.println("Byte read: " + bb5.get());
-				System.out.println("Byte read: " + bb5.get());
-				System.out.println("Byte read: " + bb5.get());
-				System.out.println("Byte read: " + bb5.get());
-				System.out.println("bb5 position: " + bb5.position());
-				bb5.position(0).limit(10);
-				byte[] backingArray = bb5.array();
+				bbTc5.putInt(123456).rewind();
+				System.out.println("Int read: " + bbTc5.getInt());
+				bbTc5.rewind();
+				System.out.println("Byte read: " + bbTc5.get());
+				System.out.println("Byte read: " + bbTc5.get());
+				System.out.println("Byte read: " + bbTc5.get());
+				System.out.println("Byte read: " + bbTc5.get());
+				System.out.println("Byte read: " + bbTc5.get());
+				System.out.println("Byte read: " + bbTc5.get());
+				System.out.println("Byte read: " + bbTc5.get());
+				System.out.println("bb5 position: " + bbTc5.position());
+				bbTc5.position(0).limit(20);
+				Buffers.bufferStatus(bbTc5, "bbTc5");
+				bbTc5.putInt(544321);
+				Buffers.bufferStatus(bbTc5, "bbTc5 after putInt");
+				bbTc5.position(0).limit(20);
+				Buffers.bufferStatus(bbTc5, "bbTc5 after pos0 lim 20");
+				System.out.println("Byte read: " + bbTc5.getInt());
+				bbTc5.position(0).limit(20);
+				Buffers.bufferStatus(bbTc5, "bbTc5 after pos0 lim 20");
+				System.out.println("\nTest case 5.3");
+				System.out.println("Get the Byte Array");
+				byte[] backingArray = new byte[bbTc5.remaining()];
+				bbTc5.get(backingArray);
 				for (byte b : backingArray) {
-					System.out.printf("[%d]-", b);
+					System.out.printf("[%d]", b);
+				}
+				System.out.println("");
+				System.out.println("Get the same byte array with Method");
+				bbTc5.position(0).limit(20);
+				byte[] bbTc5Array=Buffers.getByteArrayFromByteBuffer(bbTc5);
+				for (byte b : bbTc5Array) {
+					System.out.printf("[%d]", b);
 				}
 //</editor-fold>
+				break;
+			case 6:
+//<editor-fold desc="Put data to viewBuffers with chaining">
+				ByteBuffer bbTc6 = ByteBuffer.allocate(1024);
+				System.out.println("Test case 6.1");
+				System.out.println("Adding Double with chaining DoubleViewBuffer");
+				bbTc6.asDoubleBuffer().put(testDouble);
+				System.out.println(bbTc6.asDoubleBuffer().get());
+				Buffers.putDoubleToByteBufferThroughChainedIntViewBuffer(bbTc6, 54321);
+				System.out.println("Validation: read from buffer");
+				System.out.println(bbTc6.asDoubleBuffer().get());
+				System.out.println(bbTc6.asDoubleBuffer().get());
+				System.out.println(bbTc6.asDoubleBuffer().get());
+				System.out.println(bbTc6.asDoubleBuffer().get());
+				Buffers.bufferStatus(bbTc6, "ByteBuffer status after read");
+				bbTc6.putDouble(testDouble);
+				Buffers.bufferStatus(bbTc6, "ByteBuffer status after put");
+				System.out.println(bbTc6.asDoubleBuffer().get());
+				bbTc6.rewind();
+				System.out.println(bbTc6.asDoubleBuffer().get());
+				System.out.println(bbTc6.getDouble());
+				//</editor-fold>
 				break;
 		}//end Switch
 
 	} //End Main
-
+/*
 	public static String bufTrace(Buffer buf) { //Don't need to create method for all buffer types
 		int p = buf.position();
 		int c = buf.capacity();
@@ -306,4 +331,6 @@ public class BuffersTD {
 		String returnStr = String.format("Pos:%02d Rem:%d Lim:%d Cap:%d", p, r, l, c);
 		return returnStr;
 	}
+*/
 } //end class BuffersTD
+
