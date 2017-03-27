@@ -51,90 +51,80 @@ public class BuffersTD {
 				break;
 
 			case 1:
-//<editor-fold desc="Test buffer position after put">
+//<editor-fold desc="Test buffer status after various put operations">
 				ByteBuffer bbTc1 = ByteBuffer.allocate(1030); //1 kbyte
 				System.out.println("Test case: 1.1");
-				System.out.println("Adding a STRING with getBytes");
-				System.out.printf("String:[%s]%nStr.length:%d%n", testString, testString.length());
-				System.out.println("Pass condition: buffer position equals length of test string");
+				System.out.println("Adding a STRING with .put(input.getBytes)");
+				System.out.printf("String:[%s]%nTest string length:%d%n", testString, testString.length());
+				System.out.println("Pass condition:\nBuffer position equals length of test string");
 				Buffers.putStringToByteBuffer(bbTc1, testString);
-				Buffers.bufferStatus(bbTc1, "ByteBuffer");
+				Buffers.bufferStatus(bbTc1, "ByteBuffer after put");
 				if (bbTc1.position() == testString.length()) {
 					System.out.println("Success.");
 				} else {
 					System.out.println("Fail!");
 				}
 				System.out.println("\nTest case: 1.2");
-				System.out.println("Create a SLICE buffer from current position");
-				System.out.println("Pass condition:\n - Slice capacity == remaining of byte buffer\n - Slice content = byte content");
-				bbTc1.position(0).limit(99);
+				System.out.println("Create a SLICE buffer from current position up to limit 99");
+				System.out.println("Pass condition:\nSlice capacity == remaining of byte buffer");
+				bbTc1.limit(99);
+				Buffers.bufferStatus(bbTc1, "ByteBuffer before slice");
 				ByteBuffer bbSliceTc1 = bbTc1.slice();
-				Buffers.bufferStatus(bbTc1, "ByteBuffer");
 				Buffers.bufferStatus(bbSliceTc1, "SliceBuffer");
 				if (bbSliceTc1.capacity() == bbTc1.remaining()) {
-					bbTc1.position(0).limit(30);
-					Buffers.bufferStatus(bbTc1, "ByteBuffer");
-					System.out.println("ByteB: " + Buffers.getStringFromByteBuffer(bbTc1));
-					bbTc1.position(0).limit(30);
-//					System.out.println("Result lenght: " + Buffers.getStringFromByteBuffer(bbTc1).length());
-					bbSliceTc1.limit(30);
-					System.out.println("SliceB: " + Buffers.getStringFromByteBuffer(bbSliceTc1));
-					System.out.println("Success!");
+					System.out.println("Success.");
 				} else {
 					System.out.println("Failure!");
 				}
-				System.exit(0);
-				System.out.println("\nCreate a DUPLICATE from bb");
-				ByteBuffer bbDuplicate = bbTc1.duplicate();
-				System.out.println("bbDuplicate:\t" + bufTrace(bbDuplicate));
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-
-				System.out.println("\nAdding a STRING as CHAR ARRAY");
-				System.out.print("  [");
+				System.out.println("\nTest case: 1.3");
+				System.out.println("Create a DUPLICATE from original byte buffer");
+				Buffers.bufferStatus(bbTc1, "original byte buffer ");
+				ByteBuffer bbDuplicateTc1 = bbTc1.duplicate();
+				Buffers.bufferStatus(bbDuplicateTc1, "Duplicate buffer status");
+				System.out.println("\nTest case: 1.4");
+				bbTc1.limit(bbTc1.capacity());
+				System.out.println("Adding a STRING as CHAR ARRAY with putChar()");
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE chars added");
+				System.out.print("Char array:\n[");
 				int counter = 0;
 				for (char c : testString.toCharArray()) {
 					counter++;
 					System.out.print(c);
 					bbTc1.putChar(c);
 				}
-				System.out.println("]\nChars added:\t" + counter);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
+				System.out.printf("]%nNumber of chars:%d%n" , counter);
+				Buffers.bufferStatus(bbTc1, "byte buffer after chars added");
 
+				System.out.println("\nTest case: 1.5");
+				bbTc1.rewind().limit(bbTc1.capacity());
 				System.out.println("Adding a STRING ARRAY with getBytes");
 				counter = 0;
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE chars added");
 				for (String s : testStringArray) {
 					counter += s.length(); //Add to the counter the lenght of the current string 
-					System.out.printf("  [%s]%n", s);
+//					System.out.printf("  [%s]%n", s);
+					bbTc1.put(s.getBytes());
 					bbTc1.put(s.getBytes());
 				}
-				System.out.println("Total lenght: " + counter);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
+				Buffers.bufferStatus(bbTc1, "byte buffer AFTER chars added");
 
-				System.out.println("\nAdding INT bb.putInt (+4 bytes)");
-				System.out.printf("  Int: %d%n", testInt);
+
+				System.out.println("\nTest case: 1.6");
+				System.out.println("Adding INT bb.putInt (+4 bytes)");
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE int added");
 				bbTc1.putInt(testInt);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-				System.out.println("\nAdding DOUBLE to the buffer (+8 bytes)");
-				System.out.printf("  Double:%f%n", testDouble);
+				Buffers.bufferStatus(bbTc1, "byte buffer AFTER int added");
+				System.out.println("\nTest case: 1.7");
+				System.out.println("Adding DOUBLE to the buffer (+8 bytes)");
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE double added");
 				bbTc1.putDouble(testDouble);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-				System.out.println("\nAdding CHAR to the buffer (+2 bytes)");
-				System.out.printf("  Char:'%c'%n", testChr);
+				Buffers.bufferStatus(bbTc1, "byte buffer AFTER double added");
+				System.out.println("\nTest case: 1.8");
+				System.out.println("Adding CHAR to the buffer (+2 bytes)");
+				Buffers.bufferStatus(bbTc1, "byte buffer BEFORE double added");
 				bbTc1.putChar(testChr);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
+				Buffers.bufferStatus(bbTc1, "byte buffer AFTER char added");
 
-				System.out.println("\nCreate a INT ViewBuffer (bb remaining/4)");
-				System.out.printf("bb.remaining[%d]/4 =%d%n", bbTc1.remaining(), bbTc1.remaining() / 4);
-				IntBuffer intB = bbTc1.asIntBuffer();
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-				System.out.println("intB:\t\t" + bufTrace(intB));
-				System.out.printf("Put one int value [%d] to IntBuffer:%n", testInt);
-				intB.put(testInt);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
-				System.out.println("intB:\t\t" + bufTrace(intB));
-				System.out.println("Update bb postition with 4 because of new int (4 bytes)");
-				bbTc1.position(bbTc1.position() + 4);
-				System.out.println("bb:\t\t" + bufTrace(bbTc1));
 //</editor-fold>
 				break;
 			case 2:
