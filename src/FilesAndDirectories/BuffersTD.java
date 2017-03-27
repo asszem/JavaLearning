@@ -25,7 +25,7 @@ public class BuffersTD {
 		double testDouble = 456.789;
 		char testChr = 'A';
 		//</editor-fold>
-		int testCase = 2;
+		int testCase = 3;
 		System.out.println("Test case: " + testCase);
 		switch (testCase) {
 			case 0:
@@ -127,7 +127,7 @@ public class BuffersTD {
 //</editor-fold>
 				break;
 			case 2:
-//<editor-fold desc="Reading from Byte buffers with getBytes, Decode, GetChar">
+//<editor-fold desc="Reading String from Byte buffers with getBytes, Decode, GetChar">
 				System.out.println("Reading a wrapped string from Byte Buffers");
 				System.out.println("Input string:");
 				System.out.printf("[%s]%nlength=%d%n", testString, testString.length());
@@ -136,68 +136,84 @@ public class BuffersTD {
 				System.out.println("\nTest case 2.1");
 				System.out.println("GET with getStringFromByteBufferWithGetBytes");
 				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
-				System.out.printf("Get results:%n[%s]%n",Buffers.getStringFromByteBufferWithGetBytes(bbTc2));
+				System.out.printf("Get results:%n[%s]%n", Buffers.getStringFromByteBufferWithGetBytes(bbTc2));
 				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
 
 				System.out.println("\nTest case 2.2");
 				System.out.println("GET with getStringFromByteBufferWithDecode");
 				bbTc2.flip();
 				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
-				System.out.printf("Get results:%n[%s]%n",Buffers.getStringFromByteBufferWithDecode(bbTc2));
+				System.out.printf("Get results:%n[%s]%n", Buffers.getStringFromByteBufferWithDecode(bbTc2));
 				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
-
 
 				System.out.println("\nTest case 2.3");
 				System.out.println("GET with getStringFromByteBufferWithGetChar");
 				bbTc2.flip();
 				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
-				System.out.printf("Get results:%n[%s]%n",Buffers.getStringFromByteBufferWithGetChar(bbTc2));
+				System.out.printf("Get results:%n[%s]%n", Buffers.getStringFromByteBufferWithGetChar(bbTc2));
 				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
 
 //</editor-fold>
 				break;
 			case 3:
-//<editor-fold desc="Reading String from a Char View Buffer">
-				System.out.println("Put data from CHAR and INT ViewBuffer to a byte buffer");
-				System.out.println("Allocate 1024 bytes to bytebuffer bb3");
-				ByteBuffer bb3 = ByteBuffer.allocate(1024);
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
-				IntBuffer bb3Int = bb3.asIntBuffer();
-				CharBuffer bb3Char = bb3.asCharBuffer();
-				System.out.println("Create Int buffer capacity: " + (bb3.capacity() / 4));
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
-				System.out.println("Create Char buffer capacity: " + (bb3.capacity() / 2));
-				System.out.println("bb3Char:\t" + bufTrace(bb3Char));
+//<editor-fold desc="Reading INT from ByteBuffer and Int ViewBuffers">
+				System.out.println("ReadingINT from ViewBuffers");
+				System.out.println("\nTest case 3.1 - initialization");
+				ByteBuffer bbTc3 = ByteBuffer.allocate(1024);
+				IntBuffer bb3Int = bbTc3.asIntBuffer();
+//				CharBuffer bb3Char = bbTc3.asCharBuffer();
+				Buffers.bufferStatus(bbTc3, "1024 bytes allocated for byte buffer");
+				Buffers.bufferStatus(bb3Int, "Int Buffer created, capacity should be 256");
+//				Buffers.bufferStatus(bb3Char, "Char Buffer created, capacity should be 512");
 
-				System.out.printf("\nPut data [%d] to Int buffer%n", testInt);
+				System.out.println("\nTest case 3.2");
+				System.out.printf("Put test data [%d] to IntBuffer with put%n", testInt);
+				System.out.println("With updating original ByteBuffer's position");
+				Buffers.putIntToIntBuffer(bb3Int, bbTc3, testInt);
+				Buffers.bufferStatus(bbTc3, "Byte buf after put");
+				Buffers.bufferStatus(bb3Int, "Int buf after put");
+				System.out.println("Without updating original ByteBuffer's position");
 				bb3Int.put(testInt);
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
+				Buffers.bufferStatus(bbTc3, "Byte buf after put");
+				Buffers.bufferStatus(bb3Int, "Int buf after put");
 
-				System.out.printf("\nPut data [%d] to ByteBuffer with .putIn%n", testInt);
-				bb3.position(4);
-				bb3.putInt(testInt);
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
+				System.out.println("\nTest case 3.3");
+				System.out.printf("Put data [%d] to ByteBuffer with .putIn%n", testInt);
+				Buffers.bufferStatus(bbTc3, "Byte buf before put");
+				bbTc3.putInt(testInt);
+				Buffers.bufferStatus(bbTc3, "Byte buf after put");
 
-				System.out.println("\nRead 8 bytes from ByteBuffer as bytes");
+				System.out.println("\nTest case 3.4.1");
+				System.out.println("Read from Byte Buffer to a byte[] array with .get");
+				bbTc3.position(0);
+				Buffers.bufferStatus(bbTc3, "Byte buf before read");
 				byte[] bytesRead3 = new byte[8]; //going to read only four bytes
-				bb3.position(0);
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
-				bb3.get(bytesRead3, 0, 8); //OFFSET not INDEX! Starts from current position!
-				System.out.print("Read bytes: ");
+				bbTc3.get(bytesRead3, 0, 8); //OFFSET not INDEX! Starts from current position!
 				for (byte b : bytesRead3) {
-					System.out.printf("[%s]-", b);
+					System.out.printf("[%s]", b);
 				}
 				System.out.println("");
-				System.out.println("bb3:\t\t" + bufTrace(bb3));
+				Buffers.bufferStatus(bbTc3, "Byte buf after read");
 
-				System.out.println("\nRead from IntBuffer as Int");
-				System.out.println("bb3Int position needs to reset");
+				System.out.println("\nTest case 3.4.2");
+				System.out.println("Same operation with method in Buffers class");
+				bbTc3.position(0).limit(8);
+				byte[] tc3 = Buffers.getByteArrayFromByteBuffer(bbTc3);
+				for (byte b : tc3) {
+					System.out.printf("[%s]", b);
+				}
+				System.out.println("");
+				Buffers.bufferStatus(bbTc3, "Byte buf after read");
+
+				System.out.println("\nTest case 3.5");
+				System.out.println("Read from IntBuffer with .get");
 				bb3Int.position(0);
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
 				System.out.printf("Read value: [%d]%n", bb3Int.get());
-				System.out.println("bb3Int:\t\t" + bufTrace(bb3Int));
+				Buffers.bufferStatus(bb3Int, "Int buf after read");
+				System.out.printf("Read value: [%d]%n", bb3Int.get());
+				Buffers.bufferStatus(bb3Int, "Int buf after read");
+				System.out.printf("Read value: [%d]%n", bb3Int.get());
+				Buffers.bufferStatus(bb3Int, "Int buf after read");
 				//</editor-fold>
 				break;
 			case 4:

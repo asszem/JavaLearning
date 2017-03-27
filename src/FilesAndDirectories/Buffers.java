@@ -87,7 +87,6 @@ public class Buffers {
 
 	/**
 	 * This metod puts int to the viewbuffer and increments with 4 bytes the parent bytebuffer's position
-	 *
 	 */
 	static void putIntToIntBuffer(IntBuffer ib, ByteBuffer bb, int input) {
 		ib.put(input);
@@ -96,6 +95,13 @@ public class Buffers {
 
 	static int getIntFromIntBuffer(IntBuffer buff) {
 		return buff.get();
+	}
+
+	static byte[] getByteArrayFromByteBuffer(ByteBuffer buff) {
+		//the array must be the exact size of data to be read: limit-position
+		byte[] resultArray = new byte[buff.limit()-buff.position()];
+		buff.get(resultArray);
+		return resultArray;
 	}
 
 	static int getIntFromIntBuffer(IntBuffer buff, int position) {
@@ -114,6 +120,6 @@ public class Buffers {
 		int remaining = buff.remaining();
 		int capacity = buff.capacity();
 		boolean hasArray = buff.hasArray();
-		System.out.printf("**[%s] trace:%n  pos:%d, lim:%d, rem:%d, cap:%d array:%b%n", buffName, position, limit, remaining, capacity, hasArray);
+		System.out.printf("**[%s]%n  pos:%d, lim:%d, rem:%d, cap:%d array:%b%n", buffName, position, limit, remaining, capacity, hasArray);
 	}
 }
