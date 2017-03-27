@@ -48,10 +48,41 @@ public class Buffers {
 		buff.put(input);
 	}
 
-	static String getStringFromByteBuffer(ByteBuffer buff) {
+	static String getStringFromByteBufferWithDecode(ByteBuffer buff) {
 		return Charset.forName("UTF-8").decode(buff).toString();
 		//Source:
 		//http://stackoverflow.com/questions/17354891/java-bytebuffer-to-string
+	}
+
+	static String getStringFromByteBufferWithGetBytes(ByteBuffer buff) {
+		byte[] bytesRead = new byte[buff.capacity()];
+		if (false) {
+			System.out.println("Byte array length: " + bytesRead.length);
+		}
+		buff.get(bytesRead);
+		//for debug
+		if (false) {
+			for (byte b : bytesRead) {
+				System.out.printf("[%d]-", b);
+			}
+		}
+//		Charset utf16 = Charset.forName("UTF-16");
+		Charset utf8 = Charset.forName("UTF-8");
+		String output = new String(bytesRead, Charset.defaultCharset());
+		return output;
+	}
+
+	static String getStringFromByteBufferWithGetChar(ByteBuffer buff) {
+		String output = null;
+		char result;
+		while (buff.hasRemaining()) {
+			result = buff.getChar();
+			if (true) {
+				System.out.printf("[%s]", result);
+			}
+			output += result;
+		}
+		return output;
 	}
 
 	/**

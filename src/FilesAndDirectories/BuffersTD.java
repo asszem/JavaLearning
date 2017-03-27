@@ -25,7 +25,7 @@ public class BuffersTD {
 		double testDouble = 456.789;
 		char testChr = 'A';
 		//</editor-fold>
-		int testCase = 1;
+		int testCase = 2;
 		System.out.println("Test case: " + testCase);
 		switch (testCase) {
 			case 0:
@@ -92,7 +92,7 @@ public class BuffersTD {
 					System.out.print(c);
 					bbTc1.putChar(c);
 				}
-				System.out.printf("]%nNumber of chars:%d%n" , counter);
+				System.out.printf("]%nNumber of chars:%d%n", counter);
 				Buffers.bufferStatus(bbTc1, "byte buffer after chars added");
 
 				System.out.println("\nTest case: 1.5");
@@ -107,7 +107,6 @@ public class BuffersTD {
 					bbTc1.put(s.getBytes());
 				}
 				Buffers.bufferStatus(bbTc1, "byte buffer AFTER chars added");
-
 
 				System.out.println("\nTest case: 1.6");
 				System.out.println("Adding INT bb.putInt (+4 bytes)");
@@ -128,60 +127,37 @@ public class BuffersTD {
 //</editor-fold>
 				break;
 			case 2:
-//<editor-fold desc="Reading from Byte buffers">
-				System.out.println("Reading from Byte Buffers");
+//<editor-fold desc="Reading from Byte buffers with getBytes, Decode, GetChar">
+				System.out.println("Reading a wrapped string from Byte Buffers");
 				System.out.println("Input string:");
-				System.out.printf("\t[%s]%n\tlength=%d%n", testString, testString.length());
-				System.out.println("\nInitialize bbw (byte buffer with WRAP)");
-				ByteBuffer bbw = ByteBuffer.wrap(testString.getBytes(charset));
-				System.out.println("bbw:\t\t" + bufTrace(bbw));
-				System.out.println("\nRead the content with getChar");
-				String output = null;
-				char readAsChar;
-				while (bbw.hasRemaining()) {
-//					System.out.println("Position before read: " + bbw.position());
-					readAsChar = bbw.getChar();
-//					System.out.println("Read value: " + readAsChar);
-					output += Character.toString(readAsChar);
-				}
-				System.out.printf("  [%s]%n", output);
-				System.out.println("bbw:\t\t" + bufTrace(bbw));
+				System.out.printf("[%s]%nlength=%d%n", testString, testString.length());
+				ByteBuffer bbTc2 = ByteBuffer.wrap(testString.getBytes(charset));
 
-				System.out.println("\nFlip the buffer and read again with getBytes");
-				bbw.flip();
-				byte[] bytesRead = new byte[bbw.capacity()];
-				bbw.get(bytesRead);
-				System.out.println("Reading as byte values:");
-				for (byte b : bytesRead) {
-					System.out.printf("[%d]-", b);
-				}
-				System.out.println("\nConverting to string");
-				output = new String(bytesRead, charset);
-				System.out.printf("  [%s]", output);
-				System.out.println("\nbbw:\t\t" + bufTrace(bbw));
+				System.out.println("\nTest case 2.1");
+				System.out.println("GET with getStringFromByteBufferWithGetBytes");
+				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
+				System.out.printf("Get results:%n[%s]%n",Buffers.getStringFromByteBufferWithGetBytes(bbTc2));
+				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
 
-				System.out.println("\nCreate a CharBuffer for bbw");
-				bbw.flip();
-				CharBuffer cbuf = bbw.asCharBuffer();
-				System.out.println("cbuf:\t\t" + bufTrace(cbuf));
+				System.out.println("\nTest case 2.2");
+				System.out.println("GET with getStringFromByteBufferWithDecode");
+				bbTc2.flip();
+				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
+				System.out.printf("Get results:%n[%s]%n",Buffers.getStringFromByteBufferWithDecode(bbTc2));
+				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
 
-				char[] charRead = new char[cbuf.capacity()];
-				System.out.println("Reading from char buffer");
-				cbuf.get(charRead);
-				for (char c : charRead) {
-					System.out.printf("[%c]", c);
-				}
-				System.out.println("");
-				System.out.println("\nRead from underlying byte buffer with getChar");
-				System.out.println("bbw:\t\t" + bufTrace(bbw));
-				while (bbw.hasRemaining()) {
-					System.out.printf("[%c]", bbw.getChar());
-				}
-				System.out.println("\nbbw:\t\t" + bufTrace(bbw));
+
+				System.out.println("\nTest case 2.3");
+				System.out.println("GET with getStringFromByteBufferWithGetChar");
+				bbTc2.flip();
+				Buffers.bufferStatus(bbTc2, "bbTc2 before get");
+				System.out.printf("Get results:%n[%s]%n",Buffers.getStringFromByteBufferWithGetChar(bbTc2));
+				Buffers.bufferStatus(bbTc2, "bbTc2 after get");
+
 //</editor-fold>
 				break;
 			case 3:
-//<editor-fold desc="Put data from mixed type buffers">
+//<editor-fold desc="Reading String from a Char View Buffer">
 				System.out.println("Put data from CHAR and INT ViewBuffer to a byte buffer");
 				System.out.println("Allocate 1024 bytes to bytebuffer bb3");
 				ByteBuffer bb3 = ByteBuffer.allocate(1024);
