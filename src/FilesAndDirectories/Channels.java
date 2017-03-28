@@ -24,6 +24,7 @@ public class Channels {
 		}
 		//Write the content of buffer to the file
 		try (WritableByteChannel channel = Files.newByteChannel(path, EnumSet.of(CREATE, WRITE))) {
+			buf.flip();
 			channel.write(buf);
 		} catch (IOException e) {
 			e.printStackTrace();

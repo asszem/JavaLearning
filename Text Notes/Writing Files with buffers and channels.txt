@@ -179,26 +179,17 @@ Channels
 		int write(ByteBuffer output)
 			Writes bytes from the output buffer to the channel and returns the number of bytes written. [Not the content written, but the AMount)
 
-
-
-
-
-
-
-Don’t confuse the file position with the position for a buffer  the two are quite independent.
-When writing, the byte at the buffer’s current position is written to the file at the file’s current position.
-
-The file channel object keeps track of the current position in the file 
-The file position is generally incremented by the number of bytes written each time you write to the file 
-
-Bytes from the buﬀer are written starting at the buﬀer’s current position, and buf.remaining() bytes are written.
-
-remaining() = limit - position         AND NOT capacity-position!
-
-writing also updates the buffer position
+	Position in file vs. Position in Buffer
+		Don’t confuse the file position with the position for a buffer  the two are quite independent.
+		When writing, the byte at the buffer’s current position is written to the file at the file’s current position.
+		The file channel object keeps track of the current position in the file 
+		The file position is generally incremented by the number of bytes written each time you write to the file 
+		Bytes from the buffer are written starting at the buffer’s current position, and buf.remaining() bytes are written. 
+			remaining() = limit - position         AND NOT capacity-position!
+	Writing also updates the buffer position
 
 Force to write a channel:
-channelReference.force(true);
+	channelReference.force(true);
 
 Sources:
 https://www.youtube.com/watch?v=2LJ6YSwAH6Y

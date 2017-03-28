@@ -18,29 +18,51 @@ import static java.nio.file.StandardOpenOption.*;
 public class ChannelsTD {
 
 	public static void main(String[] args) {
-		int testCase = 1;
+		int testCase = 2;
 		System.out.println("Test Case " + testCase);
-		Path path = Paths.get("E:\\javaFileOpTest");
+		Path path = Paths.get("E:\\javaFileOpTest\\Channels");
 		String testString = "Árvíztűrő tükörfúrógép";
 		System.out.println("Default charset: " + Charset.defaultCharset());
 		int testInt = 12345;
 		double testDouble = 12345.6789;
 		switch (testCase) {
 			case 1:
-				//<editor-fold desc="Writing byte buffer to WritableByteChannel">
-				Path pathTc1=path.resolve("TC1\\testfile.txt");
-//				System.out.println(pathTc1.getParent());
-//				System.out.println("Path: " + pathTc1);
+				//<editor-fold desc="Writing byte buffer created with .put to WritableByteChannel">
+				Path pathTc1 = path.resolve("TC1\\testfile.txt");
+//				System.out.println(pathTc2.getParent());
+//				System.out.println("Path: " + pathTc2);
 				ByteBuffer bbufTc1 = ByteBuffer.allocate(1024);
 				bbufTc1.put(testString.getBytes(Charset.defaultCharset()));
 				Channels.writeToWritableByteChannel(bbufTc1, pathTc1);
 				System.out.println("File written. Please verify");
-
-
-
-
-
-
+				//</editor-fold>
+				break;
+			case 2:
+				//<editor-fold desc="Writing byte buffer created with .wrap to WritableByteChannel">
+				Path pathTc2 = path.resolve("TC2\\testfile.txt");
+				ByteBuffer bbufTc2 = ByteBuffer.wrap(testString.getBytes(Charset.defaultCharset()));
+				Buffers.bufferStatus(bbufTc2, "Before write");
+				System.out.println("Manaully set position for the flip in the method...");
+				bbufTc2.position(bbufTc2.limit());
+				Buffers.bufferStatus(bbufTc2, "New position");
+				Channels.writeToWritableByteChannel(bbufTc2, pathTc2);
+				System.out.println("File written. Please verify");
+				System.out.println("The result file should be readable");
+				//</editor-fold>
+				break;
+			case 3:
+				//<editor-fold desc="Writing byte buffer created with .putChar to WritableByteChannel">
+				Path pathTc3 = path.resolve("TC3\\testfile.txt");
+				ByteBuffer bbufTc3 = ByteBuffer.allocate(1024);
+//				bbufTc3.put(testString.getBytes(Charset.defaultCharset()));
+				for (char c : testString.toCharArray()) {
+					System.out.println(c);
+					bbufTc3.putChar(c);
+				}
+				Buffers.bufferStatus(bbufTc3, "Before writing");
+				Channels.writeToWritableByteChannel(bbufTc3, pathTc3);
+				System.out.println("File written. Please verify");
+				System.out.println("The result file should be readable");
 				//</editor-fold>
 				break;
 
