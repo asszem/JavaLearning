@@ -6,6 +6,7 @@ import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.charset.Charset;
+import java.util.Formatter;
 
 /**
  *
@@ -27,9 +28,10 @@ public class Buffers {
 		}
 	}
 
-	static void putDoubleToByteBufferThroughChainedIntViewBuffer(ByteBuffer buff, double doubleToPut){
+	static void putDoubleToByteBufferThroughChainedIntViewBuffer(ByteBuffer buff, double doubleToPut) {
 		buff.asDoubleBuffer().put(doubleToPut);
 	}
+
 	static IntBuffer createViewBufferForInt(ByteBuffer buff) {
 		IntBuffer intView = buff.asIntBuffer();
 		return intView;
@@ -45,6 +47,26 @@ public class Buffers {
 
 	static void putStringToByteBuffer(ByteBuffer buff, String input) {
 		buff.put(input.getBytes());
+	}
+
+	static void putStringToCharBufferWithFormatter(ByteBuffer buf, CharBuffer cbuf, String input) {
+		boolean debug = false;
+		if (debug){
+			bufferStatus(buf, "ByteBuffer before using formatter on CharBuff");
+			bufferStatus(cbuf, "CharBuffer before formatting");
+			System.out.println("CharBuf length: " +cbuf.length());
+		}
+		Formatter formatter = new Formatter(cbuf);
+		formatter.format("String [%s] used.", input);
+		//Flip charbuffer: sets limit=pos, pos=0; - narrow it to the content only
+		cbuf.flip();
+		//Increment bytebuffer's LIMIT with length of charbuffer
+		buf.limit(cbuf.length()*2);
+		if (debug) {
+			bufferStatus(buf, "ByteBuffer after incrementing");
+			bufferStatus(cbuf, "CharBuffer after formatting");
+		}
+
 	}
 
 	static void putIntToIntBuffer(IntBuffer buff, int input) {
@@ -81,16 +103,13 @@ public class Buffers {
 		while (buff.hasRemaining()) {
 			result = buff.getChar();
 			if (true) {
-				System.out.printf("[%s]", result);
+				System.out.printf("%s", result);
 			}
 			output += result;
 		}
 		return output;
 	}
 
-	/**
-	 * This metod puts int to the viewbuffer and increments with 4 bytes the parent bytebuffer's position
-	 */
 	static void putIntToIntBuffer(IntBuffer ib, ByteBuffer bb, int input) {
 		ib.put(input);
 		bb.position(bb.position() + 4);
@@ -102,7 +121,7 @@ public class Buffers {
 
 	static byte[] getByteArrayFromByteBuffer(ByteBuffer buff) {
 		//the array must be the exact size of data to be read: limit-position
-		byte[] resultArray = new byte[buff.limit()-buff.position()];
+		byte[] resultArray = new byte[buff.limit() - buff.position()];
 		buff.get(resultArray);
 		return resultArray;
 	}

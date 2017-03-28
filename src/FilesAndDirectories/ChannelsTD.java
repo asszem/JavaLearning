@@ -2,6 +2,7 @@ package FilesAndDirectories;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.channels.FileChannel;
@@ -10,6 +11,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.EnumSet;
 import static java.nio.file.StandardOpenOption.*;
+import java.util.Formatter;
 
 /**
  *
@@ -18,7 +20,7 @@ import static java.nio.file.StandardOpenOption.*;
 public class ChannelsTD {
 
 	public static void main(String[] args) {
-		int testCase = 5;
+		int testCase = 6;
 		System.out.println("Test Case " + testCase);
 		Path path = Paths.get("E:\\javaFileOpTest\\Channels");
 		String testString = "Árvíztűrő tükörfúrógép";
@@ -93,6 +95,25 @@ public class ChannelsTD {
 				Channels.writeToGatheringByteChannel(bbTc5array, pathTc5, false);
 				Channels.writeToGatheringByteChannel(bbTc5array, pathTc5, false);
 			//</editor-fold>
+			case 6:
+				//<editor-fold desc="Formatter used to load a CharBuffer">
+				System.out.println("Using a Formatter to write multiple lines ");
+				Path pathTc6 = path.resolve("TC6\\testfile.txt");
+				ByteBuffer bbTc6 = ByteBuffer.allocate(1024);
+				CharBuffer bbTc6cb = bbTc6.asCharBuffer();
+				Formatter formatter = new Formatter(bbTc6cb);
+				String testStringTc6 = "Árvíztűrő tükörfúrógép";
+				int testIntTc6 = 12345;
+				boolean testBooleanTc6 = true;
+				formatter.format("Test %s%d%b", testStringTc6, testIntTc6, testBooleanTc6);
+				System.out.printf("CharBuf position = %2d Limit = %4d capacity = %4d%n", bbTc6cb.position(), bbTc6cb.limit(), bbTc6cb.capacity());
+				bbTc6cb.flip(); // Flip the view buffer
+				System.out.printf("CharBuf position = %2d Limit = %4d capacity = %4d%n", bbTc6cb.position(), bbTc6cb.limit(), bbTc6cb.capacity());
+				System.out.println("Charbuf length + " + bbTc6cb.length());
+				bbTc6.position(2*bbTc6cb.length());
+				Channels.writeToWritableByteChannel(bbTc6, pathTc6);
+				//</editor-fold>
+				break;
 		}
 	}//main
 }//class

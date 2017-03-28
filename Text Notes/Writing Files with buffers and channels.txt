@@ -200,6 +200,19 @@ Channels
 			channel.position(position);
 			channel.write(buf);
 
+Using a Formatter
+	Description
+		A formater (like in printf()) can also be used to store string to a Charbuffer. 
+		The charbuffer needs to be flipped before reading (so the limit will be the current position and position will be zero)
+		The bytebuffer LIMIT needs to be set to the the length of charbuffer * 2 (because a char takes 2 bytes in the buffer).
+	Example
+		ByteBuffer buf = ByteBuffer.allocate(1024); 
+		CharBuffer charBuf = buf.asCharBuffer(); 
+		Formatter formatter = new Formatter(charBuf); 
+		formatter.format("This [%s] is a formatted text", testString);
+		charBuf.flip();
+		buf.limit(2*charBuf.length);
+
 Force to write a channel:
 	channelReference.force(true);
 
