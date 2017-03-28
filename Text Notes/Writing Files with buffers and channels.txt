@@ -186,7 +186,19 @@ Channels
 		The file position is generally incremented by the number of bytes written each time you write to the file 
 		Bytes from the buffer are written starting at the buffer’s current position, and buf.remaining() bytes are written. 
 			remaining() = limit - position         AND NOT capacity-position!
-	Writing also updates the buffer position
+	Writing to file also updates the buffer position
+
+	SeekableFileChannel to write to specific position in a file
+		Channel must be open  to WRITE to be able to write to specific position, if APPEND is open, the file will be written to the end.
+		channel.position() 
+			returns the position as LONG (as it can grow big)
+		channel.position(long position)
+			sets the channel's position
+		Example
+			try (SeekableByteChannel channel = Files.newByteChannel(path, EnumSet.of(CREATE, WRITE))) {...
+			buf.flip();
+			channel.position(position);
+			channel.write(buf);
 
 Force to write a channel:
 	channelReference.force(true);

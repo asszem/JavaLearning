@@ -18,7 +18,7 @@ import static java.nio.file.StandardOpenOption.*;
 public class ChannelsTD {
 
 	public static void main(String[] args) {
-		int testCase = 2;
+		int testCase = 5;
 		System.out.println("Test Case " + testCase);
 		Path path = Paths.get("E:\\javaFileOpTest\\Channels");
 		String testString = "Árvíztűrő tükörfúrógép";
@@ -65,103 +65,34 @@ public class ChannelsTD {
 				System.out.println("The result file should be readable");
 				//</editor-fold>
 				break;
-
+			case 4:
+				//<editor-fold desc="Write to a specific position in a file using SeekableFileChannel">
+				System.out.println("Writes to a specific position provded as an argument of the method");
+				Path pathTc4 = path.resolve("TC4\\testfile.txt");
+				ByteBuffer bbufTc4 = ByteBuffer.allocate(1024);
+				bbufTc4.put("Ez egy másik teszt".getBytes(Charset.defaultCharset()));
+				Channels.writeToSeekableByteChannel(bbufTc4, 0, pathTc4);
+				Channels.writeToSeekableByteChannel(bbufTc4, 20, pathTc4);
+				Channels.writeToSeekableByteChannel(bbufTc4, 30, pathTc4);
+				Channels.writeToSeekableByteChannel(bbufTc4, 40, pathTc4);
+				System.out.println("Check " + pathTc4);
+				//</editor-fold>
+				break;
+			case 5:
+				//<editor-fold desc="Write to a GatheringFileChannel from multiple buffers">
+				System.out.println("Writes to a file from multiple arrays");
+				Path pathTc5 = path.resolve("TC5\\testfile.txt");
+				ByteBuffer[] bbTc5array = new ByteBuffer[5];
+				bbTc5array[0] = ByteBuffer.wrap("ByteBuffer test0\n".getBytes(Charset.defaultCharset()));
+				bbTc5array[1] = ByteBuffer.wrap("ByteBuffer test1\n".getBytes(Charset.defaultCharset()));
+				bbTc5array[2] = ByteBuffer.wrap("ByteBuffer test2\n".getBytes(Charset.defaultCharset()));
+				bbTc5array[3] = ByteBuffer.wrap("ByteBuffer test3\n".getBytes(Charset.defaultCharset()));
+				bbTc5array[4] = ByteBuffer.wrap("ByteBuffer test4\n".getBytes(Charset.defaultCharset()));
+				Channels.writeToGatheringByteChannel(bbTc5array, pathTc5, false);
+				Channels.writeToGatheringByteChannel(bbTc5array, pathTc5, false);
+				Channels.writeToGatheringByteChannel(bbTc5array, pathTc5, false);
+				Channels.writeToGatheringByteChannel(bbTc5array, pathTc5, false);
+			//</editor-fold>
 		}
-		/*		
-//<editor-fold desc="Prepare data">
-		ByteBuffer bb = ByteBuffer.allocate(1024);
-		System.out.println("Byte Buffer bb created");
-//		System.out.println("bb:\t\t" + bufTrace(bb));
-		Charset charset = Charset.defaultCharset();
-		String[] str = {"AA aa", "Árvíztűrő tükörfúrógép", "Raxacoricofallapatorius", "123"};
-		String separator = System.lineSeparator();
-		String concatenatedOutputString;
-		byte[] byteArray;
-		Path p = Paths.get("E:\\javaTest", "channelsTest.txt");
-//</editor-fold>
-//<editor-fold desc="Concatenate strings and ints to a byte[] array and PUT it to bb">
-		concatenatedOutputString = str[0].length() + str[0] + separator + str[1].length() + str[1];
-		byteArray = new byte[concatenatedOutputString.length()];
-		byteArray = concatenatedOutputString.getBytes(charset);
-		System.out.println("---- Start of String to write:");
-		System.out.println(concatenatedOutputString);
-		System.out.println("---- end of String to write:");
-		System.out.println("Byte array to write:");
-		for (byte b : byteArray) {
-			System.out.printf("[%s]", b);
-		}
-		System.out.println("\nBuffer after put");
-		bb.put(byteArray);
-//		System.out.println("bb:\t\t" + bufTrace(bb));
-
-		//to make sure byteArray is wiped
-		for (int i = 0; i < byteArray.length; i++) {
-			byteArray[i] = 0;
-		}
-		bb.rewind();
-		bb.get(byteArray);
-		System.out.println("Byte Array values retrieved");
-		for (byte b : byteArray) {
-			System.out.printf("[%s]", b);
-		}
-//</editor-fold>
-//<editor-fold desc="Create a Channel and write bb">
-//Flip buffer
-		System.out.println("");
-		System.out.println("\nCreating a channel and writing bb to it");
-		System.out.println("Filename: " + p.getFileName());
-		System.out.println("Bytebuffer: bb");
-		System.out.println("bb position BEFORE flip: " + bb.position());
-		bb.flip();
-		System.out.println("bb position AFTER flip: " + bb.position());
-//Create channel using try-with-resources
-		try (SeekableByteChannel fileOutChannel = Files.newByteChannel(p, EnumSet.of(WRITE, CREATE, TRUNCATE_EXISTING))) {
-			System.out.println("\bBefore writing");
-			System.out.println("File position:\t\t" + ((FileChannel) fileOutChannel).position());
-			System.out.println("Buffer bb position\t" + bb.position());
-			System.out.println("\nAfter writing completed");
-			fileOutChannel.write(bb);
-			System.out.println("File position:\t\t" + ((FileChannel) fileOutChannel).position());
-			System.out.println("Buffer bb position\t" + bb.position());
-			System.out.println("The file contains " + ((FileChannel) fileOutChannel).size() + " bytes.");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-//</editor-fold>
-//<editor-fold desc="Create a Gathering file channel to write from multiple buffers">
-System.out.println("Testin Gathering write method");
-		ByteBuffer[] buffers = new ByteBuffer[3]; //Create the ByteBuffer Arrays to be written
-		bb.clear();
-		buffers[0] = bb; //reference the original bb
-		buffers[1] = ByteBuffer.allocate(2); //Allocate 2 bytes for a Char
-		buffers[2] = ByteBuffer.allocate(8); //Allocate 8 bytes for a Double
-//		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
-//		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
-//		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
-		buffers[0].put("Gathering test".getBytes());
-		buffers[1].putChar('X');
-		buffers[2].putDouble(1234);
-		System.out.println("After putting data to buffers");
-//		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
-//		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
-//		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
-		buffers[0].flip();
-		buffers[1].flip();
-		buffers[2].flip();
-		System.out.println("After flipping buffers");
-//		System.out.println("buffers[0]:\t\t" + bufTrace(buffers[0]));
-//		System.out.println("buffers[1]:\t\t" + bufTrace(buffers[1]));
-//		System.out.println("buffers[2]:\t\t" + bufTrace(buffers[2]));
-		Path p2 = Paths.get("E:\\javaTest", "gatheringWrite.txt");
-		//Files method opens a SeekableByteChannel, so it must to be casted to FileChannel
-		try (FileChannel gatheringOutput = (FileChannel) Files.newByteChannel(p2,EnumSet.of(WRITE, CREATE, TRUNCATE_EXISTING))){
-			gatheringOutput.force(true);
-			gatheringOutput.write(buffers);
-			System.out.println("Buffers written");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-//</editor-fold>
-		 */
 	}//main
 }//class
