@@ -136,7 +136,7 @@ public class Buffers {
 		}
 	}
 
-	static void bufferStatus(Buffer buff, String buffName) {
+	public static void bufferStatus(Buffer buff, String buffName) {
 		int position = buff.position();
 		int limit = buff.limit();
 		int remaining = buff.remaining();

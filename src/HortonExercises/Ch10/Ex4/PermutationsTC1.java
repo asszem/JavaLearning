@@ -1,7 +1,17 @@
 package HortonExercises.Ch10.Ex4;
 
+import FilesAndDirectories.Buffers;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.channels.WritableByteChannel;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static java.nio.file.StandardOpenOption.*;
+import java.util.EnumSet;
+import java.util.Formatter;
 
 /**
  * To calculate permutations of list with 3 items only
@@ -77,7 +87,7 @@ public class PermutationsTC1 {
 		if (msg != null) {
 			switch (listStyle) {
 				case 3:
-					System.out.print(msg+" ");
+					System.out.print(msg + " ");
 					break;
 				default:
 					System.out.println(msg);
@@ -118,12 +128,43 @@ public class PermutationsTC1 {
 		}
 	}
 
+	public static void writeResultsToFile(String[][] result, Path file) {
+		boolean debug = false;
+		try {
+			Files.createDirectories(file.getParent());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ByteBuffer buf = ByteBuffer.allocate(1024);
+		String separator = System.getProperty("line.separator");
+		try (WritableByteChannel channel = Files.newByteChannel(file, EnumSet.of(CREATE, WRITE))) {
+			int counter = 0;
+			for (String[] currentArray : result) {
+				Formatter toBuffer = new Formatter();
+				//the strBuild method creates a String from the input Array
+				String toBufferString = toBuffer.format("[%02d] %s%s", counter++, strBuild(currentArray), separator).toString();
+				//wrap the content of currentArray as a string to a ByteBuffer
+				buf = ByteBuffer.wrap(toBufferString.getBytes(Charset.defaultCharset()));
+//				buf.flip();
+				if (false) {
+					Buffers.bufferStatus(buf, "Buffer before writing");
+				}
+				channel.write(buf);
+				if (false) {
+					System.out.println("File written is " + ((FileChannel) channel).size() + " bytes.");
+				}
+			}//end for
+		} catch (IOException e) {
+			e.printStackTrace();
+		}//end catch
+	} //end method
+
 	public static void main(String[] args) {
-		String[] inputArray = {"A", "B", "C", "D"};
+		String[] inputArray = {"A", "B", "C", "D", "E"};
 //		String[] inputArray = {"A", "B", "C","D", "E"};
 		String[][] resultArray = new String[maxResults(inputArray)][1];
-//		Path path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC1");
-//		Path file = path.resolve("TC1-results.txt");
+		Path path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC1");
+		Path file = path.resolve("TC1-results.txt");
 //		System.out.println(file);
 //		System.out.println(maxResults(inputArray));
 
@@ -139,7 +180,7 @@ public class PermutationsTC1 {
 			}
 //			resultArray[i] = swapArrayItems(inputArray, swapPosition);
 			resultArray[i] = swapArrayItems(resultArray[i - 1], swapPosition);
-			if (true) {
+			if (false) {
 				System.out.printf("iteration:[%d], swap pos:[%d], array:", i, swapPosition);
 				System.out.println("");
 				System.out.print("\t");
@@ -152,6 +193,7 @@ public class PermutationsTC1 {
 		}
 		System.out.println("Test Case 1 results");
 		printEndResult(resultArray);
+		writeResultsToFile(resultArray, file);
 
 	}//main
 }//class
