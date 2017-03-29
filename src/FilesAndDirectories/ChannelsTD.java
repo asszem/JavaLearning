@@ -21,12 +21,14 @@ public class ChannelsTD {
 
 	public static void main(String[] args) {
 		int testCase = 6;
+		//<editor-fold desc="Initializing test variables">
 		System.out.println("Test Case " + testCase);
 		Path path = Paths.get("E:\\javaFileOpTest\\Channels");
 		String testString = "Árvíztűrő tükörfúrógép";
 		System.out.println("Default charset: " + Charset.defaultCharset());
 		int testInt = 12345;
 		double testDouble = 12345.6789;
+		//</editor-fold>
 		switch (testCase) {
 			case 1:
 				//<editor-fold desc="Writing byte buffer created with .put to WritableByteChannel">
