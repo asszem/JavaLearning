@@ -75,7 +75,13 @@ public class PermutationsTC1 {
 	public static void printArray(String[] inputArray, String msg, int listStyle) {
 		int counter = 0;
 		if (msg != null) {
-			System.out.println(msg);
+			switch (listStyle) {
+				case 3:
+					System.out.print(msg+" ");
+					break;
+				default:
+					System.out.println(msg);
+			}
 		}
 		for (String s : inputArray) {
 			switch (listStyle) {
@@ -83,6 +89,9 @@ public class PermutationsTC1 {
 					System.out.printf("#%d[%s] ", counter++, s);
 					break;
 				case 2: //list arrays horizonally, without any linebreaks
+					System.out.printf("[%s] ", s);
+					break;
+				case 3:
 					System.out.printf("[%s] ", s);
 					break;
 				default:
@@ -100,17 +109,26 @@ public class PermutationsTC1 {
 		return result;
 	}
 
+	public static void printEndResult(String[][] endResult) {
+		int counter = 0;
+		for (String[] currentArray : endResult) {
+			System.out.printf("resultArray[%02d]: ", counter++);
+			printArray(currentArray, null, 2);
+			System.out.println("");
+		}
+	}
+
 	public static void main(String[] args) {
-		String[] inputArray = {"A", "B", "C","D"};
+		String[] inputArray = {"A", "B", "C", "D"};
+//		String[] inputArray = {"A", "B", "C","D", "E"};
+		String[][] resultArray = new String[maxResults(inputArray)][1];
 //		Path path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC1");
 //		Path file = path.resolve("TC1-results.txt");
 //		System.out.println(file);
-
-		System.out.println(maxResults(inputArray));
-		String[][] resultArray = new String[maxResults(inputArray)][1];
+//		System.out.println(maxResults(inputArray));
 
 		resultArray[0] = inputArray;
-		int swapPosition = 0;
+		int swapPosition = -1;
 		for (int i = 1; i < resultArray.length; i++) {
 			//inputArray length=3 
 			//max swap position: 0, 1
@@ -123,17 +141,17 @@ public class PermutationsTC1 {
 			resultArray[i] = swapArrayItems(resultArray[i - 1], swapPosition);
 			if (true) {
 				System.out.printf("iteration:[%d], swap pos:[%d], array:", i, swapPosition);
-				printArray(resultArray[i], null, 2);
+				System.out.println("");
+				System.out.print("\t");
+				printArray(resultArray[i - 1], "prev", 3);
+				System.out.println("");
+				System.out.print("\t");
+				printArray(resultArray[i], "next", 3);
 				System.out.println("");
 			}
 		}
-
 		System.out.println("Test Case 1 results");
-		int counter = 0;
-		for (String[] currentArray : resultArray) {
-			System.out.printf("resultArray[%d]: ", counter++);
-			printArray(currentArray, null, 2);
-			System.out.println("");
-		}
+		printEndResult(resultArray);
+
 	}//main
 }//class
