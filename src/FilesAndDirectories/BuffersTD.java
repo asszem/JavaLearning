@@ -25,7 +25,7 @@ public class BuffersTD {
 		double testDouble = 456.789;
 		char testChr = 'A';
 		//</editor-fold>
-		int testCase = 5;
+		int testCase = 7;
 		System.out.println("Test case: " + testCase);
 		switch (testCase) {
 			case 0:
@@ -318,19 +318,16 @@ public class BuffersTD {
 				System.out.println(bbTc6.getDouble());
 				//</editor-fold>
 				break;
+			case 7:
+//<editor-fold desc="Formatter used to put data to a CharBuffer">
+			ByteBuffer bbTc7 = ByteBuffer.allocate(1024);
+			CharBuffer bbTc7cb= bbTc7.asCharBuffer();
+			String Tc7TestString="This is a test string";
+			Buffers.putStringToCharBufferWithFormatter(bbTc7, bbTc7cb, Tc7TestString);
+			Buffers.getStringFromByteBufferWithGetChar(bbTc7);
+				//</editor-fold>
+				break;
 		}//end Switch
-
 	} //End Main
-/*
-	public static String bufTrace(Buffer buf) { //Don't need to create method for all buffer types
-		int p = buf.position();
-		int c = buf.capacity();
-		int l = buf.limit();
-		int r = buf.remaining();
-		String className = buf.getClass().getSimpleName();
-		String returnStr = String.format("Pos:%02d Rem:%d Lim:%d Cap:%d", p, r, l, c);
-		return returnStr;
-	}
-*/
 } //end class BuffersTD
 

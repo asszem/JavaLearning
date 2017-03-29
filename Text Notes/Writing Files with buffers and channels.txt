@@ -128,6 +128,9 @@ ViewBuffers - TypeBuffer referenceVariable = byteBufferObject.asTypeBuffer();
 	ViewBuffers can be chained:
 		ByteBuffer byteBuffer=ByteBuffer.allocate(1024);
 		byteBuffer.asDoubleBuffer().put(42.41).position()
+	
+	Manually update ByteBuffer to keep in sync with an updated Viewbuffer
+		bytebuffer.position(8*.DoubleViewBuffer.position();
 
 
 Duplicate Buffers
@@ -146,12 +149,75 @@ Other sources on Buffers
 	Java NIO by Ron Hitchen
 		https://books.google.hu/books?id=z7TQ8NSooS4C&pg=PT18&hl=hu&source=gbs_toc_r&cad=4#v=onepage&q&f=false
 
+****************************************************************************************************
+Channels
+	Description
+		The java.nio.channels.FileChannel class encapsulates a file channel and a FileChannel object provides a connection to a file for writing and/or reading. 
+		A channel is simply a path for data to flow to or from an external device. 
+		To write to a file using a channel, you assemble the data that you want to transfer in one or more buffers, and then write the contents of the buffers to the file. 
+		Reading a file is the inverse of this process 
+		The methods that a FileChannel object provides for reading and writing fi les are declared in channel interfaces that the FileChannel class implements. 
+		All these interfaces are defined in the java.nio.channels package.	
+	Try-with-resources block can be used as all channels extends AutoClosable interface
+	Channels work only with ByteBuffer
+	Channel Interfaces (see Ivor Horton pg. 385 for a table showing relations) inheritance:
+															  / <- GatheringByteChannel
+															  |
+												/- Writable Byte Channel \ 
+		AutoCloseable <- Closeable <- Channel <-						  <- ByteChannel <-SeekableByteChannel
+												\- ReadableByteChannel   / 
+																				ScatteringByteChannel
+	newByteChannel()
+		Obtaining a File Channel with the static newByteChannel() method from the Files class
+		The newByteChannel() method returns a FileChannel object as a reference of type java.nio.channels.SeekableByteChannel
+		Although the newByteChannel() method returns a reference to an object of type FileChannel, you cannot store the reference directly in a variable of this type.
+		You can only store the reference as type SeekableByteChannel, or one of the interface types that the SeekableByteChannel interface extends
+	Example:
+		Path file = Paths.get(“D:\Junk\mydata.txt”);
+		WritableByteChannel fileOut = Files.newByteChannel(file, EnumSet.of(WRITE, CREATE, TRUNCATE_EXISTING))	
+	Write Method example
+		int write(ByteBuffer output)
+			Writes bytes from the output buffer to the channel and returns the number of bytes written. [Not the content written, but the AMount)
 
+	Position in file vs. Position in Buffer
+		Don’t confuse the file position with the position for a buffer  the two are quite independent.
+		When writing, the byte at the buffer’s current position is written to the file at the file’s current position.
+		The file channel object keeps track of the current position in the file 
+		The file position is generally incremented by the number of bytes written each time you write to the file 
+		Bytes from the buffer are written starting at the buffer’s current position, and buf.remaining() bytes are written. 
+			remaining() = limit - position         AND NOT capacity-position!
+	Writing to file also updates the buffer position
 
+	SeekableFileChannel to write to specific position in a file
+		Channel must be open  to WRITE to be able to write to specific position, if APPEND is open, the file will be written to the end.
+		channel.position() 
+			returns the position as LONG (as it can grow big)
+		channel.position(long position)
+			sets the channel's position
+		Example
+			try (SeekableByteChannel channel = Files.newByteChannel(path, EnumSet.of(CREATE, WRITE))) {...
+			buf.flip();
+			channel.position(position);
+			channel.write(buf);
 
+Using a Formatter
+	Description
+		A formater (like in printf()) can also be used to store string to a Charbuffer. 
+		The charbuffer needs to be flipped before reading (so the limit will be the current position and position will be zero)
+		The bytebuffer LIMIT needs to be set to the the length of charbuffer * 2 (because a char takes 2 bytes in the buffer).
+	Example
+		ByteBuffer buf = ByteBuffer.allocate(1024); 
+		CharBuffer charBuf = buf.asCharBuffer(); 
+		Formatter formatter = new Formatter(charBuf); 
+		formatter.format("This [%s] is a formatted text", testString);
+		charBuf.flip();
+		buf.limit(2*charBuf.length);
 
+Force to write a channel:
+	channelReference.force(true);
 
-
+Sources:
+https://www.youtube.com/watch?v=2LJ6YSwAH6Y
 
 
 
