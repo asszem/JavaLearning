@@ -1,0 +1,230 @@
+File I/O Basics
+	After you have written data to a file, what you have is just a linear sequence of bytes. 
+	The bytes in a file are referenced by their offset from the beginning, so the first byte is byte 0, the next byte is byte 1, the third byte is byte 2, and so on through to the end of the file.
+	If there are n bytes in a file, the last byte is at offset n-1
+
+Imports
+	import java.nio.file.Files	
+	import static java.nio.file.StandardOpenOption.*
+
+3 ways in the Files class to access files defined in Path:
+	1. newOutputStream() - file opened for writing bytes
+	2. BufferedWriter() - file opened for writing characters
+	3. newByteChannel() - file opended for random access for writing binary or textual data.
+
+2 write() methods
+	The Files class also defines two static write() methods that can write either a byte[] array to a file or an Iterable set of lines as characters.	
+	
+
+newOutputStream() - Writing Bytes by creating OutputStream object - Files.newOutputStream
+	Description
+		Wrap to a BufferedOutPutStream object, provide a Path for the target file and optional Standard Open Options.
+	Standard Open Options	
+		Enumerations to import for Standard Open Options (multiple or no options can be used)
+			import static java.nio.file.StandardOpenOption.*; //to import all available options
+		Default Options (when no option provided)
+			-WRITE (open the file for writing)
+			-CREATE (create the file if doesnt exists)
+			-TRUNCATE_EXISTING (new data is overwriting existing data)
+	Usage
+		Open it in a try-with-resources block
+		Example:
+		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file, APPEND, CREATE))) {....
+
+newBufferedWriter() - Writing Characters by creating BufferedWriter object - Files.newBufferedWriter
+	Description
+		The static newBufferedWriter() method in the Files class returns a java.io.BufferedWriter object that you can use to write to a file. 
+		A BufferedWriter can only write character data to a file. A BufferedWriter has an internal buffer that ensures that strings and even single characters can be written efficiently.
+	Charset
+		A java.nio.charset.Charset object determines how Unicode characters are mapped to the sequences of bytes that are written to the file
+		Ultimately you are always writing bytes to a file, whatever the type of the original data 
+		The charset used to write a file determines what bytes are written for each Unicode character and for reading the same charset that was used when the file was written must be used
+	Standard Open Options 
+		The same as with OutputStream
+	Usage:
+		Open it ina try-with-resources block
+	Example:
+		try (BufferedWriter fileOut = Files.newBufferedWriter(filePath, Charset.forName("UTF-16"), CREATE, APPEND)) {...
+
+Files.newByteChannel()
+	Writing files through a Channel. See Channel & Buffers
+
+****************************************************************************************************
+Buffers
+	Overview
+		A channel is a mechanism for transferring data to and from an external source using buffers. 
+		Using a channel is considerably more powerful and flexible than using an output stream or a writer.
+		All the data that you write (read) to a file using a channel starts out in one or more buffers in memory.
+		All the classes that define buffers have the abstract java.nio.Buffer class as a base
+	ByteBuffer	
+		A buffer that stores values of type byte or the binary values of any of the other primitive types, except for boolean. 
+		Each binary value stored occupies a number of bytes in the buffer determined by the type: Variable Size
+			Type	Byte	Bit     Mnemo
+			byte	1		8	
+			short	2		16		R2D2 was a short droid	
+			char	2		16		charTwodeeTwoo	
+			float	4		32		[F]our-[F]loat
+			int		4		32		Forint
+			long	8		64		LOng   - LODO8
+			double	8		64		DOuble - LODO8	
+			boolean	n/a		n/a
+
+To create a new buffer, you must use typeBuffer.allocate(capacity)
+
+	CAPACITY - the total number of types the buffer can hold. Fixed if not ViewBuffer
+	POSITION - index position of the next buffer element that is available to be read or written
+	LIMIT - index position in a buffer of the first value that should not be read or written
+
+	0 <= position <= limit <= capacity
+	Elements can be read or written starting with the element at POSITION and up to and including the element at LIMIT-1
+	Use the POSITION and LIMIT for a ByteBuffer to determine what bytes in the buffer are involved in a read or write operation executed by a channel 
+
+Methods
+	allocate() - create buffer
+	remaining() - returns the number of elements between POSITION and LIMIT
+	position() - returns the position
+	position(int newPosition) - sets the new position
+	limit(int newLimit) - sets the new limit
+	duplicate() - new buffer with initial capacity, position, limit, content shared, pos/limit independent
+	slice() - new buffer from original buffers position to limit. The two buffer's content are shared, but pos/limit/mark remain independent.
+		- Capacity of new slice = remaining of original (orig: p30, l:90, rem:90-30=60, new slice buffer: poz:0, limit, cap=60) 
+	wrap() -creates a buffer that already contains the data in the array.
+		The buffer is backed by the array that you have used to define it, so modifications to the values in the buffer alters the array, and vice versa
+		hasArray() will only be true if a buffer was created with a wrap
+	hasArray() - true if there is a backing array
+	mark() / reset() / rewind () - marks a position in a buffer
+	put() / get() - transfer data to / from  a buffer
+	flip() - setup the buffer to be written. Does: buf.limit(buf.position()).rewind(0);
+	clear() -  sets the limit to the capacity and the position to zero. Doesnt reset data!
+	array() - returns the backing array of the buffer
+
+ViewBuffers - TypeBuffer referenceVariable = byteBufferObject.asTypeBuffer();
+	A view buffer has two primary uses
+		- for loading data items that are not of type byte into a ByteBuffer prior to writing it to a file
+		- for accessing data that has been read from a file as values that are other than type byte.
+
+	Data is always transferred to or from a file as a series of bytes, but it typically consists of data values of a mix of types other than type byte
+	A view buffer always maps to bytes in the byte buffer starting at the current position.
+	The parent ByteBuffer's position must be updated after put/get data in the ViewBuffer
+
+	Example:
+		Create a ViewBuffer for int's in a ByteBuffer
+			ByteBuffer buf = ByteBuffer.allocate(1024); // Buffer of 1024 bytes capacity
+			IntBuffer intBuf = buf.asIntBuffer(); 		// Now create a view buffer
+		The content of the view buffer, intBuf, that you create here start at the byte buffer’s current position, which in this case is zero because it is newly created. 
+		The remaining bytes in buf are effectively shared with the view buffer. 
+		The view buffer has an initial position of 0 and has a capacity and limit of 256. 
+		The capacity of this viewBuffer is a multiple of 4, because intBuf stores elements of type int that require 4 bytes each. 
+		This is because 256 elements of type int completely fill the 1024 bytes remaining in buf. 
+		If you had allocated buf with 1023 bytes, then intBuf would have mapped to 1020 bytes of buf and would have a capacity and limit of 255.
+
+		You could now use this view buffer to load the original buffer with values of type int. 
+		You could then use the original byte buffer to write the int values to a file. As I said at the outset, view buffers have
+		a similar role when you are reading a file. You would have a primary buffer of type ByteBuffer into
+		which you read bytes from a file, and then you might access the contents of the ByteBuffer through a
+		view buffer of type DoubleBuffer to enable you to retrieve the data that is read from the file as values of
+		type double.
+
+	ViewBuffers can be chained:
+		ByteBuffer byteBuffer=ByteBuffer.allocate(1024);
+		byteBuffer.asDoubleBuffer().put(42.41).position()
+	
+	Manually update ByteBuffer to keep in sync with an updated Viewbuffer
+		bytebuffer.position(8*.DoubleViewBuffer.position();
+
+
+Duplicate Buffers
+	A duplicate buffer is not really a new buffer in memory. It is just a new object that provides an alternative route to accessing the same block of memory that is being used to buffer the data. 
+	The duplicate() method returns a reference of a new object of the same type as the original, but has no independent data storage. 
+	It merely shares the memory that belongs to the original buffer object but with independent position and limit values.
+
+Writing from a Buffers to a file
+	1. Create Buffer
+	2. Put values to Buffer
+	3. Flip() buffer - makes the current position as limit and sets position to 0
+	4. Write buffer - writing updates the buffer position
+	5. Clear() buffer
+
+Other sources on Buffers
+	Java NIO by Ron Hitchen
+		https://books.google.hu/books?id=z7TQ8NSooS4C&pg=PT18&hl=hu&source=gbs_toc_r&cad=4#v=onepage&q&f=false
+
+****************************************************************************************************
+Channels
+	Description
+		The java.nio.channels.FileChannel class encapsulates a file channel and a FileChannel object provides a connection to a file for writing and/or reading. 
+		A channel is simply a path for data to flow to or from an external device. 
+		To write to a file using a channel, you assemble the data that you want to transfer in one or more buffers, and then write the contents of the buffers to the file. 
+		Reading a file is the inverse of this process 
+		The methods that a FileChannel object provides for reading and writing fi les are declared in channel interfaces that the FileChannel class implements. 
+		All these interfaces are defined in the java.nio.channels package.	
+	Try-with-resources block can be used as all channels extends AutoClosable interface
+	Channels work only with ByteBuffer
+	Channel Interfaces (see Ivor Horton pg. 385 for a table showing relations) inheritance:
+															  / <- GatheringByteChannel
+															  |
+												/- Writable Byte Channel \ 
+		AutoCloseable <- Closeable <- Channel <-						  <- ByteChannel <-SeekableByteChannel
+												\- ReadableByteChannel   / 
+																				ScatteringByteChannel
+	newByteChannel()
+		Obtaining a File Channel with the static newByteChannel() method from the Files class
+		The newByteChannel() method returns a FileChannel object as a reference of type java.nio.channels.SeekableByteChannel
+		Although the newByteChannel() method returns a reference to an object of type FileChannel, you cannot store the reference directly in a variable of this type.
+		You can only store the reference as type SeekableByteChannel, or one of the interface types that the SeekableByteChannel interface extends
+	Example:
+		Path file = Paths.get(“D:\Junk\mydata.txt”);
+		WritableByteChannel fileOut = Files.newByteChannel(file, EnumSet.of(WRITE, CREATE, TRUNCATE_EXISTING))	
+	Write Method example
+		int write(ByteBuffer output)
+			Writes bytes from the output buffer to the channel and returns the number of bytes written. [Not the content written, but the AMount)
+
+	Position in file vs. Position in Buffer
+		Don’t confuse the file position with the position for a buffer  the two are quite independent.
+		When writing, the byte at the buffer’s current position is written to the file at the file’s current position.
+		The file channel object keeps track of the current position in the file 
+		The file position is generally incremented by the number of bytes written each time you write to the file 
+		Bytes from the buffer are written starting at the buffer’s current position, and buf.remaining() bytes are written. 
+			remaining() = limit - position         AND NOT capacity-position!
+	Writing to file also updates the buffer position
+
+	SeekableFileChannel to write to specific position in a file
+		Channel must be open  to WRITE to be able to write to specific position, if APPEND is open, the file will be written to the end.
+		channel.position() 
+			returns the position as LONG (as it can grow big)
+		channel.position(long position)
+			sets the channel's position
+		Example
+			try (SeekableByteChannel channel = Files.newByteChannel(path, EnumSet.of(CREATE, WRITE))) {...
+			buf.flip();
+			channel.position(position);
+			channel.write(buf);
+
+Using a Formatter
+	Description
+		A formater (like in printf()) can also be used to store string to a Charbuffer. 
+		The charbuffer needs to be flipped before reading (so the limit will be the current position and position will be zero)
+		The bytebuffer LIMIT needs to be set to the the length of charbuffer * 2 (because a char takes 2 bytes in the buffer).
+	Example
+		ByteBuffer buf = ByteBuffer.allocate(1024); 
+		CharBuffer charBuf = buf.asCharBuffer(); 
+		Formatter formatter = new Formatter(charBuf); 
+		formatter.format("This [%s] is a formatted text", testString);
+		charBuf.flip();
+		buf.limit(2*charBuf.length);
+
+Force to write a channel:
+	channelReference.force(true);
+
+Sources:
+https://www.youtube.com/watch?v=2LJ6YSwAH6Y
+
+
+
+
+
+****************************************************************************************************
+Sources:
+	Ivor Horton: Beginning Java, Chapter 10 - Writing files
+	Ron Hitchens: Java NIO
+		https://books.google.hu/books?id=z7TQ8NSooS4C&pg=PT59&lpg=PT59&dq=view+buffers+explained+java&source=bl&ots=SXyDoN31xI&sig=Ap5rNfDH1cJab6D0bIa6amQ3vZQ&hl=hu&sa=X&ved=0ahUKEwilzMWj3cTRAhUlJpoKHQ8GCLU4ChDoAQhAMAU#v=onepage&q=view%20buffers%20explained%20java&f=false

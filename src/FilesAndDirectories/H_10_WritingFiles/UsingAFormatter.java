@@ -14,7 +14,7 @@ public class UsingAFormatter {
                         "An ounce of practice is worth a pound of instruction."
                        };
     String separator = System.lineSeparator();                         // Get line separator
-    Path file = Paths.get("D:/Junk/Phrases.txt");                      // Path object for the file
+    Path file = Paths.get("E:\\javatest\\usingaformatter.txt");                      // Path object for the file
     try {
       Files.createDirectories(file.getParent());                       // Make sure we have the directory
     } catch (IOException e) {
