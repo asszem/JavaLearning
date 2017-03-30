@@ -178,12 +178,12 @@ public class GetPermutations {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param arrayToCheck a String[][] array. The 2nd dimension will be checked
 	 * @return Returns the number of duplicate items in the provided array list
 	 */
 	public static int getDuplicates(String[][] arrayToCheck) {
-		boolean debug = true;
+		boolean debug = false;
 		int duplicates = 0;
 		String[] compareTo = new String[arrayToCheck[0].length]; //All array will be the same length
 		if (debug) {
@@ -221,7 +221,26 @@ public class GetPermutations {
 			}//inner
 			outerCounter++;
 		}//outer
-		return duplicates/2; //As duplicates will be found twice in the method, only half need to be returned
+		return duplicates / 2; //As duplicates will be found twice in the method, only half need to be returned
+	}
+
+	/**
+	 * Displays only those arrays that match the filter criteria on the given index
+	 * @param inputArray The input array. The second dimension will be filtered
+	 * @param filter Only results that equals with filter will be shown
+	 * @param filterIndex the index of the array to be used for filter
+	 */
+	public static void filterArray(String[][] inputArray, String filter, int filterIndex) {
+		int counter = 0;
+		System.out.printf("Filter:[%s] index:[%d]%n",filter, filterIndex); 
+		for (String[] currentArray : inputArray) {
+			if (inputArray[counter][filterIndex].equals(filter)){
+			System.out.printf("resultArray[%02d]: ", counter);
+			printArray(currentArray, null, 2);
+			System.out.println("");
+			}
+			counter++;
+		}
 	}
 
 	public static void main(String[] args) {
@@ -236,6 +255,7 @@ public class GetPermutations {
 //		System.out.println(maxResults(inputArray));
 
 		resultArray[0] = inputArray;
+		String[] startArray = inputArray; //This will be changed once the swapping will results identical to the start
 		int swapPosition = -1;
 		for (int i = 1; i < resultArray.length; i++) {
 			//inputArray length=3 
@@ -246,7 +266,22 @@ public class GetPermutations {
 				swapPosition++;
 			}
 //			resultArray[i] = swapArrayItems(inputArray, swapPosition);
+			//Create a new result array by swapping the items
 			resultArray[i] = swapArrayItems(resultArray[i - 1], swapPosition);
+			//Check if the resultArray is the same as the startArray (which is initially the inputArray
+			//if yes, then create a new start array with swap the first position or the previous start array
+			if (checkArrayEquality(resultArray[i], startArray)) {
+				System.out.println("Result array equals! i=" + i);
+				System.out.println("");
+//				printArray(resultArray[i], "equals!", 3);
+				startArray = swapArrayItems(startArray, 0);
+				printArray(startArray, "new start array:", 2);
+				resultArray[i] = startArray;
+				printArray(resultArray[i], "new result array:", 2);
+				swapPosition = 1;
+				System.out.println("New swapPosition: " + swapPosition);
+			}
+
 			if (false) {
 				System.out.printf("iteration:[%d], swap pos:[%d], array:", i, swapPosition);
 				System.out.println("");
@@ -262,6 +297,7 @@ public class GetPermutations {
 		System.out.println("Number of duplicates: " + getDuplicates(resultArray));
 		printEndResult(resultArray);
 		writeResultsToFile(resultArray, file);
+		filterArray(resultArray, "A", 0);
 
 	}//main
 }//class
