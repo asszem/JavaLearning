@@ -226,26 +226,43 @@ public class GetPermutations {
 
 	/**
 	 * Displays only those arrays that match the filter criteria on the given index
+	 *
 	 * @param inputArray The input array. The second dimension will be filtered
 	 * @param filter Only results that equals with filter will be shown
 	 * @param filterIndex the index of the array to be used for filter
 	 */
 	public static void filterArray(String[][] inputArray, String filter, int filterIndex) {
 		int counter = 0;
-		System.out.printf("Filter:[%s] index:[%d]%n",filter, filterIndex); 
+		System.out.printf("Filter:[%s] index:[%d]%n", filter, filterIndex);
 		for (String[] currentArray : inputArray) {
-			if (inputArray[counter][filterIndex].equals(filter)){
-			System.out.printf("resultArray[%02d]: ", counter);
-			printArray(currentArray, null, 2);
-			System.out.println("");
+			if (inputArray[counter][filterIndex].equals(filter)) {
+				System.out.printf("resultArray[%02d]: ", counter);
+				printArray(currentArray, null, 2);
+				System.out.println("");
 			}
 			counter++;
 		}
 	}
 
+	/**
+	 * Shifts left the array content. The first item becomes the last, the second the first, etc.
+	 * @param inputArray
+	 * @return ABCD -> BCDA
+	 */
+	public static String[] leftShiftArray(String[] inputArray) {
+		String[] shiftArray = new String[inputArray.length];
+		shiftArray[0] = inputArray[inputArray.length - 1];
+		shiftArray[inputArray.length - 1] = inputArray[0];
+		for (int i = 0; i < inputArray.length - 1; i++) {
+			shiftArray[i] = inputArray[i + 1];
+		}
+		return shiftArray;
+	}
+
 	public static void main(String[] args) {
 		String[] inputArray = {"A", "B", "C", "D"};
 		String[] inputArray2 = {"a", "B", "C", "D"};
+//		printArray(leftShiftArray(inputArray));
 //		System.out.println(checkArrayEquality(inputArray, inputArray2));
 //		String[] inputArray = {"A", "B", "C","D", "E"};
 		String[][] resultArray = new String[maxResults(inputArray)][1];
@@ -268,19 +285,30 @@ public class GetPermutations {
 //			resultArray[i] = swapArrayItems(inputArray, swapPosition);
 			//Create a new result array by swapping the items
 			resultArray[i] = swapArrayItems(resultArray[i - 1], swapPosition);
+			//check if the new array already exists. If yes, skip. Does this make an infinite loop?
+
+
+
+			
+			//<editor-fold desc="swift the start array when end reached - did not work">
+			/*
 			//Check if the resultArray is the same as the startArray (which is initially the inputArray
 			//if yes, then create a new start array with swap the first position or the previous start array
 			if (checkArrayEquality(resultArray[i], startArray)) {
 				System.out.println("Result array equals! i=" + i);
 				System.out.println("");
 //				printArray(resultArray[i], "equals!", 3);
-				startArray = swapArrayItems(startArray, 0);
+				//ABCD -> BCDA - swiftLeft method
+//				startArray = swapArrayItems(startArray, 0);
+				startArray = leftShiftArray(startArray);
 				printArray(startArray, "new start array:", 2);
 				resultArray[i] = startArray;
 				printArray(resultArray[i], "new result array:", 2);
-				swapPosition = 1;
+				swapPosition = -1;
 				System.out.println("New swapPosition: " + swapPosition);
 			}
+*/
+			//</editor-fold>
 
 			if (false) {
 				System.out.printf("iteration:[%d], swap pos:[%d], array:", i, swapPosition);
@@ -292,7 +320,7 @@ public class GetPermutations {
 				printArray(resultArray[i], "next", 3);
 				System.out.println("");
 			}
-		}
+		}//end for
 		System.out.println("Test Case 1 results");
 		System.out.println("Number of duplicates: " + getDuplicates(resultArray));
 		printEndResult(resultArray);
