@@ -14,11 +14,10 @@ import java.util.EnumSet;
 import java.util.Formatter;
 
 /**
- * To calculate permutations of list with 3 items only
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class PermutationsTC1 {
+public class GetPermutations {
 
 	public static String strBuild(String[] input) {
 		boolean debug = false;
@@ -159,8 +158,76 @@ public class PermutationsTC1 {
 		}//end catch
 	} //end method
 
+	/**
+	 * Compares two string array's content for equality
+	 *
+	 * @param a String array
+	 * @param b String array
+	 * @return true if arrays equals, false if not
+	 */
+	public static boolean checkArrayEquality(String[] a, String[] b) {
+		if (a.length != b.length) {
+			return false;
+		}
+		for (int i = 0; i < a.length; i++) {
+			if (!a[i].equals(b[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param arrayToCheck a String[][] array. The 2nd dimension will be checked
+	 * @return Returns the number of duplicate items in the provided array list
+	 */
+	public static int getDuplicates(String[][] arrayToCheck) {
+		boolean debug = true;
+		int duplicates = 0;
+		String[] compareTo = new String[arrayToCheck[0].length]; //All array will be the same length
+		if (debug) {
+			System.out.println("Result array length: " + compareTo.length);
+		}
+		//Outer: run through the arrayToCheck array to set the CompareTo array
+		int outerCounter = 0;
+		for (String[] s : arrayToCheck) {
+			compareTo = s;
+			if (false) {
+				printArray(compareTo, "CompareTo", 3);
+				System.out.println("-");
+			}
+			//Inner: run through the arrayToCheck array again to compare each value to the CompareTo array
+			int innerCounter = 0;
+			for (String[] testS : arrayToCheck) {
+				if (false) {
+					System.out.print("  ");
+					printArray(testS, "a", 3);
+					System.out.println("");
+				}
+				//Equality check
+				if (checkArrayEquality(compareTo, testS) && innerCounter != outerCounter) {
+					duplicates++;
+					if (debug) {
+//						System.out.println("");
+//						printArray(compareTo, "CompareTo", 3);
+						System.out.println("");
+//						printArray(testS, "CompareD to", 3);
+						System.out.println("Equals! Duplicates count: " + duplicates);
+						System.out.printf("Outer[%d] inner[%d]", outerCounter, innerCounter);
+					}
+				}
+				innerCounter++;
+			}//inner
+			outerCounter++;
+		}//outer
+		return duplicates/2; //As duplicates will be found twice in the method, only half need to be returned
+	}
+
 	public static void main(String[] args) {
-		String[] inputArray = {"A", "B", "C", "D", "E"};
+		String[] inputArray = {"A", "B", "C", "D"};
+		String[] inputArray2 = {"a", "B", "C", "D"};
+//		System.out.println(checkArrayEquality(inputArray, inputArray2));
 //		String[] inputArray = {"A", "B", "C","D", "E"};
 		String[][] resultArray = new String[maxResults(inputArray)][1];
 		Path path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC1");
@@ -192,6 +259,7 @@ public class PermutationsTC1 {
 			}
 		}
 		System.out.println("Test Case 1 results");
+		System.out.println("Number of duplicates: " + getDuplicates(resultArray));
 		printEndResult(resultArray);
 		writeResultsToFile(resultArray, file);
 
