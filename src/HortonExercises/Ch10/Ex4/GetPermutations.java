@@ -275,7 +275,8 @@ public class GetPermutations {
 	}
 
 	/**
-	 * Get Permutations method. Test Case 1. The methods swaps the array items starting from left and loops through the entire array
+	 * Test Case 1 - Algorithm: swap from left to right Get Permutations method. Test Case 1. The methods swaps the array items starting from left and loops through the entire
+	 * array
 	 *
 	 * @param inputArray
 	 * @return a two dimensional array. First dimension equals the total number of possible permutations, second dimension are the permutation array
@@ -341,19 +342,130 @@ public class GetPermutations {
 		return resultArray;
 	}//end method
 
+	//Helper methods for TC2
+	/**
+	 *
+	 * @param stringToCheck
+	 * @param arrayToCheck
+	 * @return
+	 */
+	public static boolean checkAlreadyExists(String stringToCheck, String[] arrayToCheck) {
+		for (String s : arrayToCheck) {
+			if (s.equals(stringToCheck)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Test Case 2 - Algorithm: BuildAll first - Remove duplicates later Step 1: build all possible variations (duplicates and same positions included) Step 2: remove duplicates
+	 *
+	 * @param inputArray
+	 * @return
+	 */
+	public static String[][] getPermutationsTC2(String[] inputArray, boolean debug) {
+		int totalVariations = (int) Math.pow(inputArray.length, inputArray.length);
+//		String[][] resultArray = new String[totalVariations][1];
+		String[][] resultArray = new String[maxResults(inputArray)][1];
+		if (debug) {
+			System.out.println("**getPermutationsTC1 debug mode START**");
+			System.out.println("Input array length=" + inputArray.length);
+			System.out.println("Result array length=" + resultArray.length);
+		}
+		resultArray[0] = inputArray; //The first item in the results array must be set for the algorithm to work
+
+		//Walk through the input array. inputIndex = horizontal walkthrough
+		int currentVariation = 0;
+		//Repeat until all possible permutations (=MaxResults) are found
+//		String[] nextValidPermutation = new String[inputArray.length]; //To store the next valid permutation
+		String[] nextValidPermutation = resultArray[0];
+		while (currentVariation < maxResults(inputArray)-1) { //-1 because the first one is already found
+			boolean validPermutationFound = false;
+			//Repeat until the next valid permutation is found
+			while (!validPermutationFound) {
+				/*
+				How to find next valid permutation? 
+				What to change? What to validate?
+				How to build?
+				Array position, by array position? 
+				When checking an array position for valid options, already used options and available options should be calculated
+				Swap method produces duplicates
+				Try more than 1 step swaps?
+						swap+1  swap+2  swap+3 .... swap+n
+				ABCD -> BACD -> BCAD -> BCDA    ->  BCD...XA
+						BADC ->	CBAD -> BCAD	->	BCD...AX
+						BACDE
+						BACED
+				BCDA -> 
+
+				Input	output
+				AB		AB
+						BA
+
+				BC		BC
+						CB
+j
+				A		B		C		D 		-> ABCD
+								D		C		-> ABDC
+						C		B 		D 		-> ACBD
+								D		B		-> ACDB
+						D		C		B		-> ADCB
+								B		C		-> ADCB
+
+				0		1		2		3		4		
+				A		B		C		D		E 		-> ABCDE 1
+										E		D		-> ABCED 2
+								D		E		C 		-> ABDEC 3 --
+										C		E		-> ABDCE 4
+						C		B		D		E		-> ACBDE 5
+										E		D		-> ACBED 6 
+								D		B		E		-> ACDBE 7
+										E		B		-> ACDEB 8
+			
+				1. Pick the last one and swap (step 1-2) lastIndex=4 (starting from zero)
+						swap lastIndex, lastIndex-1
+				2. Pick one to the left 
+				
+				I. Move the Item at Head to Last position (abCdef ---> abdefC)
+				II. get all the variation from Last to HEAD
+						call same method with position Head+1 (to the right, until head==last-1)
+			
+				abCdef
+					-> CDEF
+						
+				
+				*/
+
+
+
+				validPermutationFound = true;
+			}
+			//add the found permutation to the result array and increment current variation
+			resultArray[++currentVariation] = nextValidPermutation;
+		}//end while
+		if (debug) {
+			System.out.println("**getPermutationsTC1 debug mode END**");
+		}
+		return resultArray;
+	}
+
 	public static void main(String[] args) {
 		String[] inputArray = {"A", "B", "C", "D"};
 //		String[] inputArray = {"A", "B", "C","D", "E"};
-		int testCase = 1;
+//		String[] inputArray = {"A", "B", "C","D", "E", "F"};
+		String[][] resultArray = new String[maxResults(inputArray)][1];
+		Path path;
+		Path file;
+		int testCase = 2;
 		switch (testCase) {
 			case 1:
 				//<editor-fold desc="TC1 - swapping array items from left to right">
 				System.out.println("Test Case 1 results");
-				Path path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC1");
-				Path file = path.resolve("TC1-results.txt");
+				path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC1");
+				file = path.resolve("TC1-results.txt");
 //		printArray(leftShiftArray(inputArray));
 //		System.out.println(checkArrayEquality(inputArray, inputArray2));
-				String[][] resultArray = new String[maxResults(inputArray)][1];
 				printArray(inputArray, "input array=", 3);
 				System.out.println("\nMax permutations=" + maxResults(inputArray));
 				System.out.println("Test result");
@@ -366,6 +478,20 @@ public class GetPermutations {
 				//</editor-fold>
 				break;
 			case 2:
+				//<editor-fold desc="TC2 - ">
+				System.out.println("Test Case 2 results");
+				path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC2");
+				file = path.resolve("TC2-results.txt");
+				printArray(inputArray, "input array=", 3);
+				System.out.println("\nMax permutations=" + maxResults(inputArray));
+				System.out.println("Test result");
+				//call the new method
+				resultArray = getPermutationsTC2(inputArray, true); //second parameter = debug mode
+				//print results
+				printEndResult(resultArray);
+				writeResultsToFile(resultArray, file);
+				System.out.println("File written: " + file);
+				//</editor-fold>
 				break;
 		}//switch
 
