@@ -1,4 +1,4 @@
-package HortonExercises.Ch10.Ex4;
+package HortonExercises.Ch10.Ex4.Attempts;
 
 /**
  *

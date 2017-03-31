@@ -8,7 +8,7 @@ the fat cat, the cat fat, cat the fat, cat fat the, fat the cat, and fat cat the
 to the file, although not necessarily in that sequence.
 (Don’t use very long strings; with n words in the string, the number of permutations is n!, so a string with 10 words has 3,628,800 permutations!)
  */
-package HortonExercises.Ch10.Ex4;
+package HortonExercises.Ch10.Ex4.Attempts;
 
 /**
  *
