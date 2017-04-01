@@ -40,7 +40,7 @@ public class GetPermutations {
 			if (i == swapIndex) {
 				newString.append(inputArray[i + 1]); //Add the next item to the current position in newstring
 				newString.append(inputArray[i++]); //Add the current item to the next position in newString
-				//increment i so the next item will not be included in this 
+				//increment firstIndex so the next item will not be included in this 
 			} else {
 				newString.append(inputArray[i]);
 			}
@@ -48,24 +48,40 @@ public class GetPermutations {
 		return newString.toString();
 	}
 
-	public static String[] swapArrayItems(String[] swapInputArray, int swapIndex) {
+	/**
+	 * Method swaps the array items from the provided position to the provided position
+	 *
+	 * @param swapInputArray
+	 * @param swapFromIndex
+	 * @param swapAmount
+	 * @return an array with the swapped content
+	 */
+	public static String[] swapArrayItems(String[] swapInputArray, int swapFromIndex, int swapAmount) {
 		boolean debug = false;
 		if (debug) {
 			System.out.println("swapArrayItems method");
 			System.out.println("input array length=" + swapInputArray.length);
-			System.out.println("swap index=" + swapIndex);
+			System.out.println("swap index=" + swapFromIndex);
+			System.out.println("swap to index= " + swapAmount);
 		}
 //Creates a new array that has swapped the specified items
-		if (swapIndex >= swapInputArray.length - 1) {
-			System.out.printf("Error. Swap index[%d] higher than inputArray length[%d]", swapIndex, swapInputArray.length);
+		if (swapFromIndex + swapAmount >= swapInputArray.length) {
+			System.out.printf("Error. Swap to index [%d] is higher than max possible index [%d]", swapFromIndex + swapAmount, swapInputArray.length - 1);
 			return null;
 		}
 		String[] newArray = new String[swapInputArray.length];
+//		newArray = swapInputArray; //to make sure they have the same values -- this will change the INPUT array passed as argument!
+		//Clone the swapInputArray 
 		for (int i = 0; i < swapInputArray.length; i++) {
-			if (i == swapIndex) {
-				newArray[i] = swapInputArray[i + 1];
-				newArray[i + 1] = swapInputArray[i++]; //swap items and increment i
-			} else {
+			newArray[i] = swapInputArray[i];
+		}
+		for (int i = 0; i < swapInputArray.length; i++) {
+			if (i == swapFromIndex) {
+				String temp = swapInputArray[i];
+				newArray[i] = swapInputArray[i + swapAmount];
+				newArray[i + swapAmount] = temp;
+				i++;
+			} else if (i != swapFromIndex + swapAmount) {
 				newArray[i] = swapInputArray[i];
 			}
 		}
@@ -300,28 +316,28 @@ public class GetPermutations {
 			} else {
 				swapPosition++;
 			}
-//			resultArray[i] = swapArrayItems(inputArray, swapPosition);
+//			resultArray[firstIndex] = swapArrayItems(inputArray, swapPosition);
 			//Create a new result array by swapping the items
-			resultArray[i] = swapArrayItems(resultArray[i - 1], swapPosition);
+			resultArray[i] = swapArrayItems(resultArray[i - 1], swapPosition, 1);
 			//check if the new array already exists. If yes, skip. Does this make an infinite loop?
 
 //			if (getDuplicates(resultArray) > 0) {
-//				System.out.println("Duplicte at " + i);
+//				System.out.println("Duplicte at " + firstIndex);
 //			}
 			//<editor-fold desc="shift the start array when end reached - did not work">
 			/*
 			//Check if the resultArray is the same as the startArray (which is initially the inputArray
 			//if yes, then create a new start array with swap the first position or the previous start array
-			if (checkArrayEquality(resultArray[i], startArray)) {
-				System.out.println("Result array equals! i=" + i);
+			if (checkArrayEquality(resultArray[firstIndex], startArray)) {
+				System.out.println("Result array equals! firstIndex=" + firstIndex);
 				System.out.println("");
-//				printArray(resultArray[i], "equals!", 3);
+//				printArray(resultArray[firstIndex], "equals!", 3);
 				//ABCD -> BCDA - swiftLeft method
 //				startArray = swapArrayItems(startArray, 0);
 				startArray = leftShiftArray(startArray);
 				printArray(startArray, "new start array:", 2);
-				resultArray[i] = startArray;
-				printArray(resultArray[i], "new result array:", 2);
+				resultArray[firstIndex] = startArray;
+				printArray(resultArray[firstIndex], "new result array:", 2);
 				swapPosition = -1;
 				System.out.println("New swapPosition: " + swapPosition);
 			}
@@ -359,93 +375,88 @@ public class GetPermutations {
 	}
 
 	/**
-	 * Test Case 2 - Algorithm: BuildAll first - Remove duplicates later Step 1: build all possible variations (duplicates and same positions included) Step 2: remove duplicates
+	 * Test Case 2 - Algorithm: Build 2-item 'molecules'
 	 *
 	 * @param inputArray
 	 * @return
 	 */
 	public static String[][] getPermutationsTC2(String[] inputArray, boolean debug) {
-		int totalVariations = (int) Math.pow(inputArray.length, inputArray.length);
-//		String[][] resultArray = new String[totalVariations][1];
+		int len = inputArray.length;
+		String[][] molecules = new String[len * (len - 1)][len - 1];
 		String[][] resultArray = new String[maxResults(inputArray)][1];
+//		String[][] resultArray = new String[totalVariations][1];
+//		int totalVariations = (int) Math.pow(inputArray.length, inputArray.length);
 		if (debug) {
-			System.out.println("**getPermutationsTC1 debug mode START**");
-			System.out.println("Input array length=" + inputArray.length);
+			System.out.println("**getPermutationsTC2 debug mode START**");
+			System.out.println("Input array length=" + len);
 			System.out.println("Result array length=" + resultArray.length);
+			System.out.println("Molecule array length=" + molecules.length);
 		}
-		resultArray[0] = inputArray; //The first item in the results array must be set for the algorithm to work
+		/*
+		'Molecules'	is a list of all possible 2 item variations
+		First[] = index of input array
+		Second[] = a possible variation (value, not index)
+		molecules[0][0]=B --> AB
+		molecules[0][1]=C --> AC
+		molecules[0][2]=D --> AD
+		molecules[1][0]=A --> BA
+		molecules[1][1]=C --> BC
+		 */
+		for (int firstIndex = 0; firstIndex < molecules.length; firstIndex++) {  //Get the first 'atom' of the molecule
+			int secondIndex = 0; //the index of second items, could be anything except the first index
+			int secondCounter = 0; //The number of found second items (should be len-1)
+			while (secondCounter < len - 1) {
+				if (firstIndex != secondIndex) { //found one!
+					molecules[firstIndex][secondCounter] = inputArray[secondIndex];
+					secondCounter++;
+				}
+				if (secondIndex + 1 >= len) {
+					secondIndex = 0;
+				} else {
+					secondIndex++;
+				}
+			}
+		}//end for building the molecule array
+		if (debug) {
+			System.out.println("The molecule array");
+			for (int firstIndex=1;firstIndex<len;firstIndex++) {
+				for (int i = 0; i < molecules[i].length; i++) {
+					System.out.printf("[%d][%d]=%s Mol:%s%n", firstIndex, i, molecules[firstIndex][i],inputArray[firstIndex]+molecules[firstIndex][i]);
+				}
+			}
+		}
+
+		//Walk through the list and 'stich' together all possible variations
+		//<editor-fold desc="Attempt to solve with with a while loop">
+		/*
 
 		//Walk through the input array. inputIndex = horizontal walkthrough
 		int currentVariation = 0;
 		//Repeat until all possible permutations (=MaxResults) are found
 //		String[] nextValidPermutation = new String[inputArray.length]; //To store the next valid permutation
 		String[] nextValidPermutation = resultArray[0];
-		while (currentVariation < maxResults(inputArray)-1) { //-1 because the first one is already found
+		while (currentVariation < maxResults(inputArray) - 1) { //-1 because the first one is already found
 			boolean validPermutationFound = false;
-			//Repeat until the next valid permutation is found
 			while (!validPermutationFound) {
-				/*
-				How to find next valid permutation? 
-				What to change? What to validate?
-				How to build?
-				Array position, by array position? 
-				When checking an array position for valid options, already used options and available options should be calculated
-				Swap method produces duplicates
-				Try more than 1 step swaps?
-						swap+1  swap+2  swap+3 .... swap+n
-				ABCD -> BACD -> BCAD -> BCDA    ->  BCD...XA
-						BADC ->	CBAD -> BCAD	->	BCD...AX
-						BACDE
-						BACED
-				BCDA -> 
-
-				Input	output
-				AB		AB
-						BA
-
-				BC		BC
-						CB
-j
-				A		B		C		D 		-> ABCD
-								D		C		-> ABDC
-						C		B 		D 		-> ACBD
-								D		B		-> ACDB
-						D		C		B		-> ADCB
-								B		C		-> ADCB
-
-				0		1		2		3		4		
-				A		B		C		D		E 		-> ABCDE 1
-										E		D		-> ABCED 2
-								D		E		C 		-> ABDEC 3 --
-										C		E		-> ABDCE 4
-						C		B		D		E		-> ACBDE 5
-										E		D		-> ACBED 6 
-								D		B		E		-> ACDBE 7
-										E		B		-> ACDEB 8
-			
-				1. Pick the last one and swap (step 1-2) lastIndex=4 (starting from zero)
-						swap lastIndex, lastIndex-1
-				2. Pick one to the left 
-				
-				I. Move the Item at Head to Last position (abCdef ---> abdefC)
-				II. get all the variation from Last to HEAD
-						call same method with position Head+1 (to the right, until head==last-1)
-			
-				abCdef
-					-> CDEF
-						
-				
-				*/
-
-
-
+				//create new proposed array configuration
+				//validate if it's a duplicate or not
 				validPermutationFound = true;
 			}
-			//add the found permutation to the result array and increment current variation
-			resultArray[++currentVariation] = nextValidPermutation;
+			int swapStartIndex = 0;
+			int swapAmount = 1;
+			if (swapStartIndex + swapAmount >= inputArray.length - 1) {
+				swapStartIndex = 0;
+			} else {
+				System.out.println(++swapStartIndex);
+			}
+//				nextValidPermutation = swapArrayItems(resultArray[currentVariation], swapStartIndex, swapAmount);
+			resultArray[++currentVariation] = swapArrayItems(resultArray[currentVariation], swapStartIndex++, swapAmount);
+//			resultArray[++currentVariation] = nextValidPermutation;
 		}//end while
+		 */
+		//</editor-fold>
 		if (debug) {
-			System.out.println("**getPermutationsTC1 debug mode END**");
+			System.out.println("**getPermutationsTC2 debug mode END**");
 		}
 		return resultArray;
 	}
@@ -489,6 +500,7 @@ j
 				resultArray = getPermutationsTC2(inputArray, true); //second parameter = debug mode
 				//print results
 				printEndResult(resultArray);
+//				filterArray(resultArray, "A", 0);
 				writeResultsToFile(resultArray, file);
 				System.out.println("File written: " + file);
 				//</editor-fold>
