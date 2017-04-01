@@ -421,16 +421,47 @@ public class GetPermutations {
 			for (firstIndex = 0; firstIndex < molecules.length; firstIndex++) {
 //				System.out.printf("%d. molecules[%d][0]=%s%n", counter++, firstIndex, molecules[firstIndex][0]);
 //				System.out.printf("%d. molecules[%d][1]=%s%n", counter++, firstIndex, molecules[firstIndex][1]);
-				System.out.printf("The %d. molecule:[%d] [0]+[1] =%s%n", firstIndex ,firstIndex, molecules[firstIndex][0]+molecules[firstIndex][1]);
+				System.out.printf("The %d. molecule:[%d] [0]+[1] =%s%n", firstIndex, firstIndex, molecules[firstIndex][0] + molecules[firstIndex][1]);
 			}
 		}//end debug
 		//Walk through the list and 'stich' together all possible variations
-		for (firstIndex = 0; firstIndex < len; firstIndex++) {
-//			int secondIndex = 0;
-//			for (int comparedMolecule = 0; comparedMolecule < molecules.length; comparedMolecule++) { String currentMolecule = molecules[firstIndex][secondIndex];
-//			}
+		if (debug) {
+			System.out.println("Comparing molecules...\n");
 		}
-
+		int resultCounter=0;
+		for (int currentMolecule = 0; currentMolecule < molecules.length; currentMolecule++) {
+			//Walk through the array again and compare each molecule to current molecule	
+			boolean isMoleculeDifferent = false;
+			for (int comparedMolecule = 0; comparedMolecule < molecules.length; comparedMolecule++) {
+				String currentStringAtom0 = molecules[currentMolecule][0];
+				String currentStringAtom1 = molecules[currentMolecule][1];
+				String comparedStringAtom0 = molecules[comparedMolecule][0];
+				String comparedStringAtom1 = molecules[comparedMolecule][1];
+				if (currentStringAtom0.equals(comparedStringAtom0) || currentStringAtom1.equals(comparedStringAtom1) || currentStringAtom0.equals(currentStringAtom1) || comparedStringAtom0.equals(comparedStringAtom1) || currentStringAtom0.equals(comparedStringAtom1) || currentStringAtom1.equals(comparedStringAtom0)) {
+					isMoleculeDifferent = false;
+				} else { //This is it! The atoms are different, lets built the final string!
+					isMoleculeDifferent = true;
+					//build a result string
+					String[] actualResult =new String[len];
+					actualResult[0]=currentStringAtom0;
+					actualResult[1]=currentStringAtom1;
+					actualResult[2]=comparedStringAtom0;
+					actualResult[3]=comparedStringAtom1;
+					resultArray[resultCounter++]=actualResult;
+				}
+				if (debug) {
+					if (isMoleculeDifferent) {
+						System.out.println("Current molecule" + currentStringAtom0 + currentStringAtom1);
+						System.out.println("Compared molecule" + comparedStringAtom0 + comparedStringAtom1);
+						System.out.println("isMoleculeDifferent: " + isMoleculeDifferent);
+						System.out.println("");
+					}
+				}//end debug
+			}//end ComparedMolecule
+		}
+		if (debug) {
+			System.out.println("End of Comparing molecules...\n");
+		}
 		//<editor-fold desc="Attempt to solve with with a while loop">
 		/*
 
@@ -504,7 +535,7 @@ public class GetPermutations {
 				resultArray = getPermutationsTC2(inputArray, true); //second parameter = debug mode
 				//print results
 				printEndResult(resultArray);
-//				filterArray(resultArray, "A", 0);
+				filterArray(resultArray, "A", 0);
 				writeResultsToFile(resultArray, file);
 				System.out.println("File written: " + file);
 				//</editor-fold>
