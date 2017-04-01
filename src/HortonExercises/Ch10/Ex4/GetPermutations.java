@@ -382,7 +382,7 @@ public class GetPermutations {
 	 */
 	public static String[][] getPermutationsTC2(String[] inputArray, boolean debug) {
 		int len = inputArray.length;
-		String[][] molecules = new String[len * (len - 1)][len - 1];
+		String[][] molecules = new String[len * len][2];
 		String[][] resultArray = new String[maxResults(inputArray)][1];
 //		String[][] resultArray = new String[totalVariations][1];
 //		int totalVariations = (int) Math.pow(inputArray.length, inputArray.length);
@@ -390,43 +390,47 @@ public class GetPermutations {
 			System.out.println("**getPermutationsTC2 debug mode START**");
 			System.out.println("Input array length=" + len);
 			System.out.println("Result array length=" + resultArray.length);
-			System.out.println("Molecule array length=" + molecules.length);
+			System.out.println("Molecule first array length=" + molecules.length);
 		}
 		/*
-		'Molecules'	is a list of all possible 2 item variations
-		First[] = index of input array
-		Second[] = a possible variation (value, not index)
-		molecules[0][0]=B --> AB
-		molecules[0][1]=C --> AC
-		molecules[0][2]=D --> AD
-		molecules[1][0]=A --> BA
-		molecules[1][1]=C --> BC
+		0 molecules[0][0]=A 
+		1 molecules[0][1]=B 		molecules[0][0] + [0][1] = AB
+		2 molecules[1][0]=A 
+		3 molecules[1][1]=C 
+								molecules[1][0] + [1][1] = AC
+		4 molecules[2][0]=A 
+		5 molecules[2][1]=D 
+								molecules[2][0] + [2][1] = AD
 		 */
-		for (int firstIndex = 0; firstIndex < molecules.length; firstIndex++) {  //Get the first 'atom' of the molecule
-			int secondIndex = 0; //the index of second items, could be anything except the first index
-			int secondCounter = 0; //The number of found second items (should be len-1)
-			while (secondCounter < len - 1) {
-				if (firstIndex != secondIndex) { //found one!
-					molecules[firstIndex][secondCounter] = inputArray[secondIndex];
-					secondCounter++;
-				}
-				if (secondIndex + 1 >= len) {
-					secondIndex = 0;
-				} else {
-					secondIndex++;
-				}
+		int counter = 0; //the counter for Molecules array length. Equals to len*len
+		int firstIndex = 0; //The first index. Should be incremented only when all second index is used
+		int secondIndex = 0; //The second index. 
+		while (counter < molecules.length) {
+			molecules[counter][0] = inputArray[firstIndex];
+			molecules[counter][1] = inputArray[secondIndex];
+			if (secondIndex >= len - 1) {
+				secondIndex = 0;
+				firstIndex++;
+			} else {
+				secondIndex++;
 			}
-		}//end for building the molecule array
+			counter++;
+		}
 		if (debug) {
-			System.out.println("The molecule array");
-			for (int firstIndex=1;firstIndex<len;firstIndex++) {
-				for (int i = 0; i < molecules[i].length; i++) {
-					System.out.printf("[%d][%d]=%s Mol:%s%n", firstIndex, i, molecules[firstIndex][i],inputArray[firstIndex]+molecules[firstIndex][i]);
-				}
+			System.out.println("The molecule array:");
+			for (firstIndex = 0; firstIndex < molecules.length; firstIndex++) {
+//				System.out.printf("%d. molecules[%d][0]=%s%n", counter++, firstIndex, molecules[firstIndex][0]);
+//				System.out.printf("%d. molecules[%d][1]=%s%n", counter++, firstIndex, molecules[firstIndex][1]);
+				System.out.printf("The %d. molecule:[%d] [0]+[1] =%s%n", firstIndex ,firstIndex, molecules[firstIndex][0]+molecules[firstIndex][1]);
 			}
+		}//end debug
+		//Walk through the list and 'stich' together all possible variations
+		for (firstIndex = 0; firstIndex < len; firstIndex++) {
+//			int secondIndex = 0;
+//			for (int comparedMolecule = 0; comparedMolecule < molecules.length; comparedMolecule++) { String currentMolecule = molecules[firstIndex][secondIndex];
+//			}
 		}
 
-		//Walk through the list and 'stich' together all possible variations
 		//<editor-fold desc="Attempt to solve with with a while loop">
 		/*
 
