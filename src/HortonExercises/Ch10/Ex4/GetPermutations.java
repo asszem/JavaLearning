@@ -374,40 +374,93 @@ public class GetPermutations {
 		return false;
 	}
 
-	/**
-	 * Test Case 2 - Algorithm: Build 2-item 'molecules'
-	 *
-	 * @param inputArray
-	 * @return
-	 */
-	public static String[][] getPermutationsTC2(String[] inputArray, boolean debug) {
-		int len = inputArray.length;
-		String[][] molecules = new String[len * len][2];
-		String[][] resultArray = new String[maxResults(inputArray)][1];
-//		String[][] resultArray = new String[totalVariations][1];
-//		int totalVariations = (int) Math.pow(inputArray.length, inputArray.length);
-		if (debug) {
-			System.out.println("**getPermutationsTC2 debug mode START**");
-			System.out.println("Input array length=" + len);
-			System.out.println("Result array length=" + resultArray.length);
-			System.out.println("Molecule first array length=" + molecules.length);
-		}
+	public static String[][] getMolecules(String[] inputArrayForMolecules, boolean debug) {
+		int len = inputArrayForMolecules.length;
+		//<editor-fold desc="Description of the molecule concept">
 		/*
-		0 molecules[0][0]=A 
-		1 molecules[0][1]=B 		molecules[0][0] + [0][1] = AB
-		2 molecules[1][0]=A 
-		3 molecules[1][1]=C 
-								molecules[1][0] + [1][1] = AC
-		4 molecules[2][0]=A 
-		5 molecules[2][1]=D 
-								molecules[2][0] + [2][1] = AD
+		Atom = a string item from the original input array
+		Molecule = two or more atoms stiched together. The individual atoms are kept in the molecule
+		Molecule[INDEX][ATOM_INDEX]
+		Example:
+		Input
+			Atoms:
+				Input Array[0]=A
+				Input Array[1]=B
+				Input Array[2]=C
+				Input Array[3]=D
+
+			Output
+			Molecules with two atoms:
+				molecule[0][0]=A
+				molecule[0][1]=B
+
+		getMolecule from Atoms vs. getMolecule from Molecules
+		Input
+			Molecule
+				Molecule[0][0]=array
+				Molecule[0][1] 
+		Molecule with 4 atoms
+			molecule[0][0]=A
+			molecule[0][1]=B
+			molecule[0][2]=C
+			molecule[0][3]=D
+
+		idea: 
+			- create a method with parameter that sets the number of atoms included in a molecule index
+			- create a method to get the String array by stiching together the atoms of the molecules
+		
 		 */
+		//</editor-fold>
+		String[][] molecules = new String[len * len][len];
+		if (debug) {
+			System.out.println("**GetMolecules method debug on");
+			printArray(inputArrayForMolecules, "Input array: ", 3);
+			System.out.println("Molecule first array length=" + molecules.length);
+			System.out.println("Molecule second array length=" + molecules[0].length);
+		}
 		int counter = 0; //the counter for Molecules array length. Equals to len*len
 		int firstIndex = 0; //The first index. Should be incremented only when all second index is used
 		int secondIndex = 0; //The second index. 
 		while (counter < molecules.length) {
-			molecules[counter][0] = inputArray[firstIndex];
-			molecules[counter][1] = inputArray[secondIndex];
+			molecules[counter][0] = inputArrayForMolecules[firstIndex];
+			molecules[counter][1] = inputArrayForMolecules[secondIndex];
+			if (secondIndex >= len - 1) {
+				secondIndex = 0;
+				firstIndex++;
+			} else {
+				secondIndex++;
+			}
+			counter++;
+		}
+		if (debug) {
+			System.out.println("The molecule array:");
+			for (firstIndex = 0; firstIndex < molecules.length; firstIndex++) {
+				System.out.printf("The %d. molecule:[%d] [0]+[1] =%s%n", firstIndex, firstIndex, molecules[firstIndex][0] + molecules[firstIndex][1]);
+			}
+			System.out.println("**END getMolecules method\n");
+		}//end debug
+		return molecules;
+	}
+
+	public static String[][] getAllMolecules(String[] inputArrayForMolecules, boolean debug) {
+		String result[][] = new String[inputArrayForMolecules.length][1];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = inputArrayForMolecules;
+		}
+		return result;
+	}
+
+	public static String[] getStringMolecules(String[] inputArrayForMolecules, boolean debug) {
+		int len = inputArrayForMolecules.length;
+		String[] molecules = new String[len * len];
+		if (debug) {
+			System.out.println("Molecule first array length=" + molecules.length);
+		}
+		int counter = 0; //the counter for Molecules array length. Equals to len*len
+		int firstIndex = 0; //The first index. Should be incremented only when all second index is used
+		int secondIndex = 0; //The second index. 
+		while (counter < molecules.length) {
+			molecules[counter] = inputArrayForMolecules[firstIndex] + inputArrayForMolecules[secondIndex];
 			if (secondIndex >= len - 1) {
 				secondIndex = 0;
 				firstIndex++;
@@ -421,77 +474,83 @@ public class GetPermutations {
 			for (firstIndex = 0; firstIndex < molecules.length; firstIndex++) {
 //				System.out.printf("%d. molecules[%d][0]=%s%n", counter++, firstIndex, molecules[firstIndex][0]);
 //				System.out.printf("%d. molecules[%d][1]=%s%n", counter++, firstIndex, molecules[firstIndex][1]);
-				System.out.printf("The %d. molecule:[%d] [0]+[1] =%s%n", firstIndex, firstIndex, molecules[firstIndex][0] + molecules[firstIndex][1]);
+				System.out.printf("The %d. molecule:[%d]=%s%n", firstIndex, firstIndex, molecules[firstIndex]);
 			}
 		}//end debug
-		//Walk through the list and 'stich' together all possible variations
-		if (debug) {
-			System.out.println("Comparing molecules...\n");
-		}
-		int resultCounter=0;
-		for (int currentMolecule = 0; currentMolecule < molecules.length; currentMolecule++) {
+		return molecules;
+	}
+
+	/**
+	 * Under construction
+	 *
+	 * @param baseArray - Molecule[counter][atoms]
+	 * @param optionsPool - Molecule[counter][atoms]
+	 * @return an array with every possible connections of different base array items and option pool items
+	 *
+	 * base Array:AB	options pool CD resultArray[0]=[AB] resultArray[1]=[CD] resultArray[0]=result
+	 *
+	 * resultArray[0]=[ABCD] resultArray[1]=[EF] resultArray[0]=result
+	 *
+	 */
+	public static void getDifferents(String[] baseArray, String[] optionsPool) {
+		/*
+		Input Array: 	
+		A B C				
+		A B D
+		A B E
+		A B F
+		A X A
+
+		Options Pool
+		A B C
+		A B X
+		X X X
+
+		Result Array
+		ABC XXX
+		ABD XXX
+		ABE XXX
+		ABF XXX
+
+	
+	
+
+
+		//Find out the number of new results
+		int resultCounter = 0;
+		for (int currentMolecule = 0; currentMolecule < baseArray.length; currentMolecule++) {
 			//Walk through the array again and compare each molecule to current molecule	
 			boolean isMoleculeDifferent = false;
-			for (int comparedMolecule = 0; comparedMolecule < molecules.length; comparedMolecule++) {
-				String currentStringAtom0 = molecules[currentMolecule][0];
-				String currentStringAtom1 = molecules[currentMolecule][1];
-				String comparedStringAtom0 = molecules[comparedMolecule][0];
-				String comparedStringAtom1 = molecules[comparedMolecule][1];
-				if (currentStringAtom0.equals(comparedStringAtom0) || currentStringAtom1.equals(comparedStringAtom1) || currentStringAtom0.equals(currentStringAtom1) || comparedStringAtom0.equals(comparedStringAtom1) || currentStringAtom0.equals(comparedStringAtom1) || currentStringAtom1.equals(comparedStringAtom0)) {
+			for (int comparedMolecule = 0; comparedMolecule < optionsPool.length; comparedMolecule++) {
+//				if (baseArray[currentMolecule]) {
 					isMoleculeDifferent = false;
 				} else { //This is it! The atoms are different, lets built the final string!
 					isMoleculeDifferent = true;
-					//build a result string
-					String[] actualResult =new String[len];
-					actualResult[0]=currentStringAtom0;
-					actualResult[1]=currentStringAtom1;
-					actualResult[2]=comparedStringAtom0;
-					actualResult[3]=comparedStringAtom1;
-					resultArray[resultCounter++]=actualResult;
+					resultCounter++;
 				}
-				if (debug) {
-					if (isMoleculeDifferent) {
-						System.out.println("Current molecule" + currentStringAtom0 + currentStringAtom1);
-						System.out.println("Compared molecule" + comparedStringAtom0 + comparedStringAtom1);
-						System.out.println("isMoleculeDifferent: " + isMoleculeDifferent);
-						System.out.println("");
-					}
-				}//end debug
 			}//end ComparedMolecule
-		}
-		if (debug) {
-			System.out.println("End of Comparing molecules...\n");
-		}
-		//<editor-fold desc="Attempt to solve with with a while loop">
-		/*
-
-		//Walk through the input array. inputIndex = horizontal walkthrough
-		int currentVariation = 0;
-		//Repeat until all possible permutations (=MaxResults) are found
-//		String[] nextValidPermutation = new String[inputArray.length]; //To store the next valid permutation
-		String[] nextValidPermutation = resultArray[0];
-		while (currentVariation < maxResults(inputArray) - 1) { //-1 because the first one is already found
-			boolean validPermutationFound = false;
-			while (!validPermutationFound) {
-				//create new proposed array configuration
-				//validate if it's a duplicate or not
-				validPermutationFound = true;
-			}
-			int swapStartIndex = 0;
-			int swapAmount = 1;
-			if (swapStartIndex + swapAmount >= inputArray.length - 1) {
-				swapStartIndex = 0;
-			} else {
-				System.out.println(++swapStartIndex);
-			}
-//				nextValidPermutation = swapArrayItems(resultArray[currentVariation], swapStartIndex, swapAmount);
-			resultArray[++currentVariation] = swapArrayItems(resultArray[currentVariation], swapStartIndex++, swapAmount);
-//			resultArray[++currentVariation] = nextValidPermutation;
-		}//end while
+		}//endCurrentMolecule
+		System.out.println("result counter: " + resultCounter);
 		 */
-		//</editor-fold>
+	}
+
+	/**
+	 * Test Case 2 - Algorithm: Build 2-item 'molecules'
+	 *
+	 * @param inputArray
+	 * @return
+	 */
+	public static String[][] getPermutationsTC2(String[] inputArray, boolean debug) {
+		int len = inputArray.length;
+		String[][] resultArray = new String[maxResults(inputArray)][1];
 		if (debug) {
-			System.out.println("**getPermutationsTC2 debug mode END**");
+			System.out.println("**getPermutationsTC2 debug mode START**");
+			System.out.println("Input array length=" + len);
+			System.out.println("Result array length=" + resultArray.length);
+		}
+		String[][] molecules = getMolecules(inputArray, true);
+		if (debug) {
+			System.out.println("**GetPermutationsTC2 debug mode END");
 		}
 		return resultArray;
 	}
@@ -499,12 +558,17 @@ public class GetPermutations {
 	public static void main(String[] args) {
 		String[] inputArray = {"A", "B", "C", "D"};
 //		String[] inputArray = {"A", "B", "C","D", "E"};
-//		String[] inputArray = {"A", "B", "C","D", "E", "F"};
+//		String[] inputArray = {"A", "B", "C", "D", "E", "F"};
 		String[][] resultArray = new String[maxResults(inputArray)][1];
 		Path path;
 		Path file;
 		int testCase = 2;
 		switch (testCase) {
+			case 0: //for quick testing purposes
+				resultArray = getAllMolecules(inputArray, true);
+				printEndResult(resultArray);
+				System.out.println(resultArray[1][3]);
+				break;
 			case 1:
 				//<editor-fold desc="TC1 - swapping array items from left to right">
 				System.out.println("Test Case 1 results");
@@ -524,7 +588,7 @@ public class GetPermutations {
 				//</editor-fold>
 				break;
 			case 2:
-				//<editor-fold desc="TC2 - ">
+				//<editor-fold desc="TC2 - Using 'molecules' to stich together parts">
 				System.out.println("Test Case 2 results");
 				path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC2");
 				file = path.resolve("TC2-results.txt");
@@ -534,10 +598,10 @@ public class GetPermutations {
 				//call the new method
 				resultArray = getPermutationsTC2(inputArray, true); //second parameter = debug mode
 				//print results
-				printEndResult(resultArray);
-				filterArray(resultArray, "A", 0);
-				writeResultsToFile(resultArray, file);
-				System.out.println("File written: " + file);
+//				printEndResult(resultArray);
+//				filterArray(resultArray, "A", 0);
+//				writeResultsToFile(resultArray, file);
+//				System.out.println("File written: " + file);
 				//</editor-fold>
 				break;
 		}//switch
