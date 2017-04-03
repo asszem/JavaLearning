@@ -184,7 +184,7 @@ public class arrayMethods {
 					result[resultIndex] = target[resultIndex];
 				}
 				result[resultIndex] = pool[poolIndex];
-				break breakout;
+//				break breakout;
 			}
 		}
 		for (String s : result) {

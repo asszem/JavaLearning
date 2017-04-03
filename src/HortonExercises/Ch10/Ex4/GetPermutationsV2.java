@@ -152,26 +152,37 @@ public class GetPermutationsV2 {
 
 	public static String[][] buildArray(String[][] inputArray, String[] baseArray) {
 		boolean debug = false;
-		System.out.println("Base array");
-		for (int i = 0; i < baseArray.length; i++) {
-			System.out.printf("[%d]]=%s%n", i, baseArray[i]);
-		}
-		System.out.println("Input array");
-		for (int i = 0; i < inputArray.length; i++) {
-			System.out.printf("[%d]  ", i);
-			for (int j = 0; j < inputArray[i].length; j++) {
-				System.out.printf("[%d]=%s", j, inputArray[i][j]);
-			}
-			System.out.println("");
-		}
-		int resultArrayLength = inputArray[0].length * (inputArray.length * (baseArray.length - 1));
-		System.out.println("Result array length: " + resultArrayLength);
+//		int resultArrayLength = inputArray[0].length * ((inputArray[0].length+1) * (baseArray.length - 1));
+/*
+POOL: ABCD
+		input	options 	pool-options.length 
+		A 		BCD			3	
+		AB		CD			2
+		ABC		D			1
+		 */
+		int resultArrayLength = inputArray.length * (baseArray.length - inputArray[0].length);
 		String[][] result = new String[resultArrayLength][inputArray[0].length + 1];
-		System.out.println("Result[] length: " + result.length);
-		System.out.println("Result[][] length: " + result[0].length);
+		if (debug) {
+			System.out.println("Base array");
+			for (int i = 0; i < baseArray.length; i++) {
+				System.out.printf("[%d]=%s%n", i, baseArray[i]);
+			}
+			System.out.println("Input array");
+			for (int i = 0; i < inputArray.length; i++) {
+				System.out.printf("[%d]  ", i);
+				for (int j = 0; j < inputArray[i].length; j++) {
+					System.out.printf("[%d]=%s", j, inputArray[i][j]);
+				}
+				System.out.println("");
+			}
+			System.out.println("Result array length: " + resultArrayLength);
+			System.out.println("Result[] length: " + result.length);
+			System.out.println("Result[][] length: " + result[0].length);
+		}//end debug
 		int resultIndex = 0;
 		//(0) - Continue until all results found
-		while (resultIndex < result.length) { //Repeat until all results created
+//		while (resultIndex < result.length) { //Repeat until all results created
+		while (resultIndex < resultArrayLength) { //Repeat until all results created
 
 			//(1) - Walk through the array on the first index of InputArray
 			for (int inputArrayFirstIndex = 0; inputArrayFirstIndex < inputArray.length; inputArrayFirstIndex++) {
@@ -194,30 +205,26 @@ public class GetPermutationsV2 {
 						int tempIndex = 0;
 						//walk through the array on the inputArrayFirstIndex
 						for (; tempIndex < inputArray[inputArrayFirstIndex].length; tempIndex++) {
-							result[resultIndex][tempIndex] = inputArray[inputArrayFirstIndex][tempIndex];
+							if (resultIndex < resultArrayLength) {
+								result[resultIndex][tempIndex] = inputArray[inputArrayFirstIndex][tempIndex];
+							}
 						}
 						//add the extra item
-						result[resultIndex][tempIndex] = baseArray[baseIndex];
-						//increment result index only if there is available more index, if not, break out from the WHILE loop -> outer:
-						/*
-						if (resultIndex < result.length - 1) {
-							resultIndex++;
-						} else {
-							break continueWithNextInput;
+						if (resultIndex < resultArrayLength) {
+							result[resultIndex][tempIndex] = baseArray[baseIndex];
 						}
-						 */
+//						System.out.println("resultindex" + resultIndex);
 						resultIndex++;
-						break continueWithNextInput;
 					} //end of creating new result array
 				}//end InputArray2nd index walkthrough
 			}//end InputArray1st index walkthrough
 		}//end While
-		if (false) {
-			System.out.println("Output array");
+		if (debug) {
+			System.out.println("Output array from buildArray method:");
 			for (int i = 0; i < result.length; i++) {
 				System.out.printf("[%d]  ", i);
 				for (int j = 0; j < result[i].length; j++) {
-					System.out.printf("[%d]=%s", j, result[i][j]);
+					System.out.printf("[%d]=%s ", j, result[i][j]);
 				}
 				System.out.println("");
 			}
@@ -225,11 +232,110 @@ public class GetPermutationsV2 {
 		return result;
 	}//end buildArray method
 
+	public static String[][] buildResult(String[] inputArray) {
+		boolean debug = false;
+
+		//Length of endResultArray is n!
+		int endResultLength = 1;
+		for (int i = inputArray.length; i > 0; i--) {
+			endResultLength *= i;
+		}
+		if (debug) {
+			System.out.println("Input Array: ");
+			for (int i = 0; i < inputArray.length; i++) {
+				System.out.printf("%s", inputArray[i]);
+			}
+			System.out.println("");
+			System.out.println("Output Array length:" + endResultLength);
+		}
+//<editor-fold desc="Pseudo code for buildResult logic">	
+		/*
+		Pseudo-code	
+		Variables
+			resultLength - this will controll the iteration flow
+			targetArray - this will be the result of the previous iteration of BuildArray
+			baseArray - it will always be the Input array
+		Start from 1 length
+			Create a starterArray[][] from inputArray
+			Call the buildArray method
+			Provide the input array as the base
+			Provide the starterArray as target
+		Loop through the midResultLength=inputArray.length
+		 */
+		//</editor-fold>
+
+		//Create manually the targetArray from the inputArray
+		String[][] targetArray = new String[inputArray.length][1];
+		for (int i = 0; i < inputArray.length; i++) {
+			targetArray[i][0] = inputArray[i]; //Example: targetArray[2][0]=C
+		}
+
+		if (debug) {
+			System.out.println("Print out first target array");
+			for (int i = 0; i < targetArray.length; i++) {
+				for (int j = 0; j < targetArray[i].length; j++) {
+					System.out.printf("[%d][%d]=%s", i, j, targetArray[i][j]);
+				}
+				System.out.println("");
+			}
+		}
+
+		//Iterate the buildArray as many times as needed to reach the inputArray length
+		int resultLength = 0;
+		while (resultLength < inputArray.length - 1) {
+			String[][] newTargetArray = buildArray(targetArray, inputArray);
+			if (debug) {
+				System.out.println("Current result iteration: " + resultLength);
+				System.out.println("The new targetArray");
+				for (int i = 0; i < newTargetArray.length; i++) {
+					for (int j = 0; j < newTargetArray[i].length; j++) {
+//					System.out.printf("[%02d][%d]=%s", i, j, newTargetArray[i][j]);
+						System.out.printf("%s", newTargetArray[i][j]);
+					}
+					System.out.println("");
+				}
+			}
+			targetArray = newTargetArray;
+			resultLength++;
+		}
+
+		String[][] endResult = new String[endResultLength][1];
+		if (debug) {
+			System.out.println(endResult.length);
+			System.out.println("Printing out targetArray");
+			for (int i = 0; i < targetArray.length; i++) {
+				for (int j = 0; j < targetArray[i].length; j++) {
+//				System.out.printf("[%d][%d]=%s", i, j, targetArray[i][j]);
+					System.out.printf("%s", targetArray[i][j]);
+				}
+				System.out.println("");
+			}
+		}
+		return targetArray;
+	}
+
 	public static void main(String[] args) {
-		String[] test = {"A", "B", "C", "D"};
+//		String[] test = {"A", "B", "C", "D"};
+		String[] test = {"A", "B", "C","D","E"};
 		int testCase = 1;
 		switch (testCase) {
 			case 1:
+				String[][] testResultArray = buildResult(test);
+				System.out.println("Input array:");
+				for (String s:test){
+					System.out.print(s);
+				}
+				System.out.println("\nResult array:");
+				int counter=1;
+				for (int i = 0; i < testResultArray.length; i++) {
+					System.out.printf("%02d. ",counter++);
+					for (int j = 0; j < testResultArray[i].length; j++) {
+//				System.out.printf("[%d][%d]=%s", i, j, testResultArray[i][j]);
+						System.out.printf("%s", testResultArray[i][j]);
+					}
+					System.out.println("");
+				}
+				/*
 				String[] a = {"A"};
 				String[] b = {"B"};
 				String[] c = {"C"};
@@ -240,6 +346,7 @@ public class GetPermutationsV2 {
 				buildTest1[2] = c;
 				buildTest1[3] = d;
 				buildArray(buildTest1, test);
+				 */
 				break;
 			case 2:
 				String[] a2 = {"A", "B"};
@@ -252,18 +359,9 @@ public class GetPermutationsV2 {
 				buildTest2[2] = c2;
 				buildTest2[3] = d2;
 				buildArray(buildTest2, test);
+				buildResult(test);
 				break;
 			case 3:
-				String[] a3 = {"A", "B"};
-				String[] b3 = {"B", "A"};
-				String[] c3 = {"A", "C"};
-				String[] d3 = {"C", "A"};
-				String[][] buildTest3 = new String[test.length][test.length];
-				buildTest3[0] = a3;
-				buildTest3[1] = b3;
-				buildTest3[2] = c3;
-				buildTest3[3] = d3;
-				buildArrayV2(buildTest3, test);
 				break;
 		}
 	}
