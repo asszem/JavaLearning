@@ -23,7 +23,7 @@ public class GetPermutations {
 		boolean debug = false;
 		StringBuilder strBuild = new StringBuilder();
 		for (int i = 0; i < input.length; i++) {
-			strBuild.append(input[i]);
+			strBuild.append(input[i]+" ");
 		}
 		if (debug) {
 			System.out.println(strBuild);
@@ -562,7 +562,7 @@ public class GetPermutations {
 		String[][] resultArray = new String[maxResults(inputArray)][1];
 		Path path;
 		Path file;
-		int testCase = 2;
+		int testCase = 3;
 		switch (testCase) {
 			case 0: //for quick testing purposes
 				resultArray = getAllMolecules(inputArray, true);
@@ -602,6 +602,25 @@ public class GetPermutations {
 //				filterArray(resultArray, "A", 0);
 //				writeResultsToFile(resultArray, file);
 //				System.out.println("File written: " + file);
+				//</editor-fold>
+				break;
+			case 3:
+				//<editor-fold desc="TCA - using GetPermutationsV2 class's buildArray/getResults methods">
+				String[] inputArray3 = {"Böbe", "baba", "böngészője", "QEEG", "NFB", "permutáció", "java"};
+				System.out.println("Test Case 3 results");
+				path = Paths.get("E:\\javaFileOpTest\\Permutations\\TC3");
+				file = path.resolve("TC3-results.txt");
+				printArray(inputArray, "input array=", 3);
+				System.out.println("\nMax permutations=" + maxResults(inputArray3));
+				System.out.println("Test result");
+				//call the new method
+				resultArray = GetPermutationsV2.buildResult(inputArray3);
+				//print results
+				printEndResult(resultArray);
+				filterArray(resultArray, "A", 0);
+				System.out.println("Duplicates: " +getDuplicates(resultArray));
+				writeResultsToFile(resultArray, file);
+				System.out.println("File written: " + file);
 				//</editor-fold>
 				break;
 		}//switch
