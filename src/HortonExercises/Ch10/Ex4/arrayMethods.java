@@ -83,6 +83,7 @@ public class arrayMethods {
 
 	/**
 	 * Compares two string arrays and returns the number of differences
+	 *
 	 * @param diffA the first array to check
 	 * @param diffB the second array to check
 	 * @param debug verbose output if true
@@ -138,8 +139,8 @@ public class arrayMethods {
 		}
 		String[] mergedAndRemovedDuplicates = removeDuplicates(mergedArray, true, false);
 		int commonItems = mergedArray.length - mergedAndRemovedDuplicates.length;
-		int uniqueItemsInArrayA = diffARemovedDuplicates.length-commonItems;
-		int uniqueItemsInArrayB = diffBRemovedDuplicates.length-commonItems;
+		int uniqueItemsInArrayA = diffARemovedDuplicates.length - commonItems;
+		int uniqueItemsInArrayB = diffBRemovedDuplicates.length - commonItems;
 		if (debug) {
 			System.out.println("Merged and Removed Duplicated array");
 			for (String s : mergedAndRemovedDuplicates) {
@@ -155,8 +156,56 @@ public class arrayMethods {
 		return uniqueItemsInArrayB;
 	}
 
+	public static void addToArray(String[] target, String[] pool) {
+		String[] result = new String[target.length + 1];
+		//Validations
+		//The pool must be one item longer than the target
+		//The pool must not have duplicates
+		//The pool must have only one letter that is not included in the target
+
+		//Step1 Walk through the pool. Check if current item is included in target. If not, add it and stop
+		breakout:
+		for (int poolIndex = 0; poolIndex < pool.length; poolIndex++) {
+			boolean thereWasAMatch = false;
+			//Step 2 walk through the target
+			for (int targetIndex = 0; targetIndex < target.length; targetIndex++) {
+				if (pool[poolIndex].equals(target[targetIndex])) {
+					//Mark it as found. This is to make sure the loop goes through the full target
+					thereWasAMatch = true;
+				} else {
+//					System.out.printf("pool:[%s], target:[%s]", pool[poolIndex], target[targetIndex]);
+				}
+			}
+			//After going through the whole target pool, see if there was a match. 
+			//If there was no match, then the current pool item is the one that needs to be added
+			if (!thereWasAMatch) {
+				int resultIndex = 0;
+				for (; resultIndex < target.length; resultIndex++) {
+					result[resultIndex] = target[resultIndex];
+				}
+				result[resultIndex] = pool[poolIndex];
+				break breakout;
+			}
+		}
+		for (String s : result) {
+			System.out.printf(s);
+		}
+		System.out.println("");
+	}
 
 	public static void main(String[] args) {
+		String[] pool = {"A", "B", "C", "D"};
+		String[] target = {"A", "B", "C"};
+		String[] target2 = {"C", "B", "A"};
+		String[] target3 = {"B", "D", "A"};
+		//Expected result
+		addToArray(target, pool);
+		addToArray(target2, pool);
+		addToArray(target3, pool);
+		//target1: ABCD
+		//target2: CBAD
+		//target3: BDAC
+		System.exit(121);
 		String a[][] = new String[10][1];
 //		String[] test = {"A1", "A2", "A3", "A4", "A5"};
 //		String[] test2 ={"A1", "A2", "A3", "A4", "A5"};
@@ -170,20 +219,20 @@ public class arrayMethods {
 //		removeDuplicates(test4, true, false);
 		//merge the different elements only
 		int dif = checkDiffs(test, test2, true);
-		String[] t1 = {"A","B","C"};
-		String[] t2 = {"C","B"};
+		String[] t1 = {"A", "B", "C"};
+		String[] t2 = {"C", "B"};
 		System.out.println("Array t1");
-		for (String s:t1){
-			System.out.print(s+" ");
+		for (String s : t1) {
+			System.out.print(s + " ");
 		}
 		System.out.println("");
 		System.out.println("Array t2");
-		for (String s:t2){
-			System.out.print(s+" ");
+		for (String s : t2) {
+			System.out.print(s + " ");
 		}
 		System.out.println("");
-		System.out.println("Diff result: " +checkDiffs(t1,t2,true));
-		
+		System.out.println("Diff result: " + checkDiffs(t1, t2, true));
+
 	}
 
 }
