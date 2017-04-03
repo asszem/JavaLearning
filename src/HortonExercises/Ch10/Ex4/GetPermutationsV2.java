@@ -105,7 +105,7 @@ public class GetPermutationsV2 {
 		sc.nextLine();
 	}
 
-	//use the RemoveDuplicates method to simply find out which is the missing item
+	//NOT FINISHEDuse the RemoveDuplicates method to simply find out which is the missing item
 	public static String[][] buildArrayV2(String[][] inputArray, String[] baseArray) {
 		int resultArrayLength = inputArray[0].length * (inputArray.length * (baseArray.length - 1));
 		String[][] result = new String[resultArrayLength][inputArray[0].length + 1];
@@ -128,7 +128,7 @@ public class GetPermutationsV2 {
 					result[resultIndex][tempIndex] = inputArray[inputArrayFirstIndex][tempIndex];
 				}
 				for (int i = 0; i < removedDuplicates.length; i++) {
-					result[resultIndex][tempIndex+i] = removedDuplicates[i];
+					result[resultIndex][tempIndex + i] = removedDuplicates[i];
 				}
 				resultIndex++;
 				//increment result index only if there is available more index, if not, break out from the WHILE loop -> outer:
@@ -171,109 +171,63 @@ public class GetPermutationsV2 {
 		System.out.println("Result[][] length: " + result[0].length);
 		int resultIndex = 0;
 		//(0) - Continue until all results found
-		breakFromWhile:
 		while (resultIndex < result.length) { //Repeat until all results created
 
 			//(1) - Walk through the array on the first index of InputArray
 			for (int inputArrayFirstIndex = 0; inputArrayFirstIndex < inputArray.length; inputArrayFirstIndex++) {
 
-				//(3) - Walk through the array on the second index of InputArray to compare with the current BASE item
-				for (int inputArraySecondIndex = 0; inputArraySecondIndex < inputArray[inputArrayFirstIndex].length; inputArraySecondIndex++) {
-					//(2) - Walk through all items in the Base array to find the one that is not included in the input array
-					boolean isThereMatch = false; //if going through the input array there is no match from base...
-					//ABC ABCD
-					//Base: ABCD 
-					//Test: ABC 
-					/*
-					t: A
-					b: A -> its in the base, check next test
-					t: B
-					b: A -> not in the base, check next BASE
-					t: B 
-					b: B -> its in the base, check next test
-					t: C 
-					b: A -> test(c) not in the base
-					b: B
-					b: C 
-
-					TO BE Continued: find a method to find out which letter of the base is NOT included in the input
-					input: ABC
-					base: ABCD
-					
-					 */
-					boolean itsInTheInput = false;
-					breakToSecond:
-					for (int baseIndex = 0; baseIndex < baseArray.length; baseIndex++) {
-						if (debug) {
-							System.out.println("**");
-							System.out.println("Result index:\t" + resultIndex);
-							System.out.printf("Base item:\t[%d]=%s%n", baseIndex, baseArray[baseIndex]);
-							System.out.printf("inputArray:\t[%d][%d]=%s", inputArrayFirstIndex, inputArraySecondIndex, inputArray[inputArrayFirstIndex][inputArraySecondIndex]);
-							System.out.println("\nPress enter to evaulate!");
-							waitForEnter();
-						}
+				//(2) - Walk through all items in the Base array to find the one that is not included in the input array
+				continueWithNextInput: //when the result is foundf or the input[n] array, continue with the input[n+1]
+				for (int baseIndex = 0; baseIndex < baseArray.length; baseIndex++) {
+					//(3) - Walk through the array on the second index of InputArray
+					//Set boolean isBaseInTarget to TRUE if found a match
+					//The result will be when after the loop the boolean remains FALSE
+					boolean isBaseInTarget = false; //The foor loop will change this if any results found
+					for (int inputArraySecondIndex = 0; inputArraySecondIndex < inputArray[inputArrayFirstIndex].length; inputArraySecondIndex++) {
 						//If the current SecondItem equals a BASE item -> there is a match! Continue with next Base item
 						if (baseArray[baseIndex].equals(inputArray[inputArrayFirstIndex][inputArraySecondIndex])) {
-							itsInTheInput = true;
-							if (debug) {
-								System.out.println("Base item EQUALS input item");
-								waitForEnter();
-							}
-							break breakToSecond; //Continue with loop (2)
+							isBaseInTarget = true;
+						}//end if
+					}//end secondIndex walkthrough
+					//if the current base was not found in the array, then we have it.
+					if (!isBaseInTarget) {
+						int tempIndex = 0;
+						//walk through the array on the inputArrayFirstIndex
+						for (; tempIndex < inputArray[inputArrayFirstIndex].length; tempIndex++) {
+							result[resultIndex][tempIndex] = inputArray[inputArrayFirstIndex][tempIndex];
+						}
+						//add the extra item
+						result[resultIndex][tempIndex] = baseArray[baseIndex];
+						//increment result index only if there is available more index, if not, break out from the WHILE loop -> outer:
+						/*
+						if (resultIndex < result.length - 1) {
+							resultIndex++;
 						} else {
-
-							if (debug) {
-								System.out.println("Base item DOES NOT equal input item");
-								waitForEnter();
-							}
-
-							//This point is only reached if there was no match found. Add the item to the result array
-//						String[] temp = new String[inputArray.length + 1];
-							//clone the current input array's content
-							if (debug) {
-								System.out.println("I will create the new array now!");
-							}
-
-							int tempIndex = 0;
-							//walk through the array on the inputArrayFirstIndex
-							for (; tempIndex < inputArray[inputArrayFirstIndex].length; tempIndex++) {
-//							System.out.println("InputArrayFirstIndex: " + inputArrayFirstIndex);
-//							System.out.println("tempIndex" + tempIndex);
-								result[resultIndex][tempIndex] = inputArray[inputArrayFirstIndex][tempIndex];
-							}
-							//add the extra item
-//						System.out.println("tempIndex" + tempIndex);
-//						System.out.println("ResultIndex: " + resultIndex);
-							result[resultIndex][tempIndex] = baseArray[baseIndex];
-							//increment result index only if there is available more index, if not, break out from the WHILE loop -> outer:
-							if (resultIndex < result.length - 1) {
-								resultIndex++;
-							} else {
-								break breakFromWhile;
-							}
-						}//end else
-//end equality chekc
-					}//end baseIndex walkthrough
-
+							break continueWithNextInput;
+						}
+						 */
+						resultIndex++;
+						break continueWithNextInput;
+					} //end of creating new result array
 				}//end InputArray2nd index walkthrough
 			}//end InputArray1st index walkthrough
 		}//end While
-		System.out.println("Output array");
-		for (int i = 0; i < result.length; i++) {
-			System.out.printf("[%d]  ", i);
-			for (int j = 0; j < result[i].length; j++) {
-				System.out.printf("[%d]=%s", j, result[i][j]);
+		if (false) {
+			System.out.println("Output array");
+			for (int i = 0; i < result.length; i++) {
+				System.out.printf("[%d]  ", i);
+				for (int j = 0; j < result[i].length; j++) {
+					System.out.printf("[%d]=%s", j, result[i][j]);
+				}
+				System.out.println("");
 			}
-			System.out.println("");
 		}
 		return result;
 	}//end buildArray method
 
-//	public static String[][] buildPermutations(String[] inputArray) {
-//	}
 	public static void main(String[] args) {
 		String[] test = {"A", "B", "C", "D"};
-		int testCase = 3;
+		int testCase = 1;
 		switch (testCase) {
 			case 1:
 				String[] a = {"A"};
