@@ -1,0 +1,21 @@
+Source: Ivor Horton - Beginning Java 7 - Chapter 11 - Reading files
+
+3 ways in the Files class to read files
+	1. newInputStream() method returns an InputStream object, to read a binary file.
+	2. newBufferedReader() method returns a BufferedReader object,  to read a file containing character data.
+	3. The newByteChannel() method returns a reference to a FileChannel object as type SeekableByteChannel
+		This object can be used to read binary or character data from a file when the READ open option is in effect. 
+
+
+newInputStream() - reading bytes
+	Description
+		Assumes READ opening option if no option provided
+		Must be in a try-catch block
+	Methods
+		read() - reads a single byte from the stream buffer and returns it as a value of type int or -1 if the end of file reached
+		read(byte[] bytes, int offset, int length) reads up to length bytes from the stream and stores them in the bytes array starting at index position offset. 
+			Less than length bytes are read if there are fewer than this number of bytes available up to end-of-file. 
+			Returns the actual number of bytes read as int or -1 if no bytes were read because EOF was reached. 
+	Usage:
+		try {
+			BufferedInputStream bufferedInputStream = new BufferedInputStream(Files.newInputStream(filename));...
