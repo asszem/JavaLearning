@@ -18,9 +18,10 @@ public class AllWritingFilesTD {
 		if (false) {
 			AllWritingFiles.writingWithOutputStream(testPath.resolve("outputStreamWriteTest.txt"), 12345);
 			AllWritingFiles.writingWithOutputStream(testPath.resolve("outputStreamWriteTest.txt"), 12345);
-			AllWritingFiles.writingWithOutputStreamWithOptions(testPath.resolve("outputStreamAppend.txt"), 12345);
-			AllWritingFiles.writingWithOutputStreamWithOptions(testPath.resolve("outputStreamAppend.txt"), 12345);
-			AllWritingFiles.writingWithOutputStreamWithOptions(testPath.resolve("outputStreamAppend.txt"), 12345);
+			//The method below was updated to accept BYTE types only as it writes bytes. Value should be between -128 and +127
+			AllWritingFiles.writingWithOutputStreamWithOptions(testPath.resolve("outputStreamAppend.txt"), (byte) -128);
+			AllWritingFiles.writingWithOutputStreamWithOptions(testPath.resolve("outputStreamAppend.txt"), (byte) 12345);
+			AllWritingFiles.writingWithOutputStreamWithOptions(testPath.resolve("outputStreamAppend.txt"), (byte) 127);
 		}
 		//</editor-fold>
 		//<editor-fold desc="BufferedWriter tests">

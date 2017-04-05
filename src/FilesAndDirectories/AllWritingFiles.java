@@ -3,6 +3,8 @@ package FilesAndDirectories;
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.*;
@@ -14,6 +16,18 @@ import static java.nio.file.StandardOpenOption.*;
  */
 public class AllWritingFiles {
 
+	static boolean writingIntegersToBinaryWithOutputStream(Path file, int intToWrite) {
+		ByteBuffer byteBuffer =ByteBuffer.allocate(4); //We are going to write a single integer (4 bytes) 
+		IntBuffer intViewBuffer =byteBuffer.asIntBuffer();
+		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file))) {
+			intViewBuffer.put(intToWrite); //To put the actual value to the buffer
+			bos.write(byteBuffer.array(), 0, byteBuffer.capacity()); //To write the full capacity of the buffer
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 	static boolean writingWithOutputStream(Path file, int content) {
 		System.out.println("Writing binary data to file with default Standard Open Options.");
 		System.out.println("Target file: " + file);
@@ -26,7 +40,7 @@ public class AllWritingFiles {
 		return false;
 	}
 
-	static boolean writingWithOutputStreamWithOptions(Path file, int content) {
+	static boolean writingWithOutputStreamWithOptions(Path file, byte content) {
 		System.out.println("Writing binary data to file with APPEND, CREATE Standard Open Option.");
 		System.out.println("Target file: " + file);
 		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file, APPEND, CREATE))) {

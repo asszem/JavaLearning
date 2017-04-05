@@ -1,6 +1,7 @@
 package FilesAndDirectories;
 
 import java.io.BufferedInputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -12,10 +13,43 @@ public class AllReadingFilesTD {
 
 	public static void main(String[] args) {
 		Path path = Paths.get("E:\\javaFileOpTest\\ReadingFiles");
-		Path pathBin = path.resolve("readFromBinaryFile.bin");
-//		AllWritingFiles.writingWithOutputStreamWithOptions(pathBin, 42);
-//		AllWritingFiles.writingWithOutputStreamWithOptions(pathBin, 100);
-//		AllWritingFiles.writingWithOutputStreamWithOptions(pathBin, 5);
-		AllReadingFiles.readLongWithInputStream(pathBin);
+		int testCase = 3;
+		switch (testCase) {
+			case 1:
+				//<editor-fold desc="Writing and Reading binary byte data from InputStream">
+				Path pathReadByteFromBin = path.resolve("readByteFromBinaryFile.bin");
+				byte bytesToWrite;
+				//Delete the output file every time to make sure only the created amount of data exists
+				AllFileOperationsSample.deleteSingleFileOrDir(pathReadByteFromBin);
+				bytesToWrite = -10;
+				AllWritingFiles.writingWithOutputStreamWithOptions(path.resolve(pathReadByteFromBin), bytesToWrite);
+				bytesToWrite = -1;
+				AllWritingFiles.writingWithOutputStreamWithOptions(path.resolve(pathReadByteFromBin), bytesToWrite);
+				bytesToWrite = 127;
+				AllWritingFiles.writingWithOutputStreamWithOptions(path.resolve(pathReadByteFromBin), bytesToWrite);
+				AllReadingFiles.readByteWithInputStream(path.resolve("readByteFromBinaryFile.bin"));
+				//</editor-fold>
+				break;
+			case 2:
+				//<editor-fold desc="Reading LONG data from binary file using InputStream">
+				//Note: the ReadLongFromBinaryFile must have LONG values stored in it in order to work correctly
+				//See Hortons StreamOutputToFile class, that writes LONG values as binary to the file
+				Path pathReadLongFromBinary = path.resolve("readLongFromBinaryFile.bin");
+				AllReadingFiles.readLongWithInputStream(pathReadLongFromBinary);
+				//</editor-fold>
+				break;
+			case 3:
+				//<editor-fold desc="Writing INT to a binary file (OutputStream) and reading it back (InputStream)">
+				Path pathReadIntFromBin = path.resolve("readIntFromBin.bin");
+				AllFileOperationsSample.deleteSingleFileOrDir(pathReadIntFromBin);
+				int intToWrite;
+				intToWrite=100;
+				AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
+//				intToWrite=1024;
+//				AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
+//				intToWrite=4242;
+//				AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
+				AllReadingFiles.readIntWithInputStream(pathReadIntFromBin);
+		}
 	}
 }
