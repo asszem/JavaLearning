@@ -19,7 +19,7 @@ public class AllWritingFiles {
 	static boolean writingIntegersToBinaryWithOutputStream(Path file, int intToWrite) {
 		ByteBuffer byteBuffer =ByteBuffer.allocate(4); //We are going to write a single integer (4 bytes) 
 		IntBuffer intViewBuffer =byteBuffer.asIntBuffer();
-		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file))) {
+		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file, APPEND, CREATE))) {
 			intViewBuffer.put(intToWrite); //To put the actual value to the buffer
 			bos.write(byteBuffer.array(), 0, byteBuffer.capacity()); //To write the full capacity of the buffer
 			return true;
@@ -28,9 +28,9 @@ public class AllWritingFiles {
 		}
 		return false;
 	}
+
+	//This method is WRONG, it writes a SINGLE byte from the provided INT. It can not be retrieved later
 	static boolean writingWithOutputStream(Path file, int content) {
-		System.out.println("Writing binary data to file with default Standard Open Options.");
-		System.out.println("Target file: " + file);
 		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file))) {
 			bos.write(content);
 			return true;
@@ -40,9 +40,7 @@ public class AllWritingFiles {
 		return false;
 	}
 
-	static boolean writingWithOutputStreamWithOptions(Path file, byte content) {
-		System.out.println("Writing binary data to file with APPEND, CREATE Standard Open Option.");
-		System.out.println("Target file: " + file);
+	static boolean writingByteToBinaryWithOutputStream(Path file, byte content) {
 		try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file, APPEND, CREATE))) {
 			bos.write(content);
 			return true;

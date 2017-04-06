@@ -13,21 +13,21 @@ public class AllReadingFilesTD {
 
 	public static void main(String[] args) {
 		Path path = Paths.get("E:\\javaFileOpTest\\ReadingFiles");
-		int testCase = 3;
+		int testCase = 1;
 		switch (testCase) {
 			case 1:
-				//<editor-fold desc="Writing and Reading binary byte data from InputStream">
+				//<editor-fold desc="Writing and Reading BYTE to a binary file with Output/InputStream">
 				Path pathReadByteFromBin = path.resolve("readByteFromBinaryFile.bin");
 				byte bytesToWrite;
 				//Delete the output file every time to make sure only the created amount of data exists
 				AllFileOperationsSample.deleteSingleFileOrDir(pathReadByteFromBin);
 				bytesToWrite = -10;
-				AllWritingFiles.writingWithOutputStreamWithOptions(path.resolve(pathReadByteFromBin), bytesToWrite);
+				AllWritingFiles.writingByteToBinaryWithOutputStream(path.resolve(pathReadByteFromBin), bytesToWrite);
 				bytesToWrite = -1;
-				AllWritingFiles.writingWithOutputStreamWithOptions(path.resolve(pathReadByteFromBin), bytesToWrite);
+				AllWritingFiles.writingByteToBinaryWithOutputStream(path.resolve(pathReadByteFromBin), bytesToWrite);
 				bytesToWrite = 127;
-				AllWritingFiles.writingWithOutputStreamWithOptions(path.resolve(pathReadByteFromBin), bytesToWrite);
-				AllReadingFiles.readByteWithInputStream(path.resolve("readByteFromBinaryFile.bin"));
+				AllWritingFiles.writingByteToBinaryWithOutputStream(path.resolve(pathReadByteFromBin), bytesToWrite);
+				System.out.println("Bytes read: "+AllReadingFiles.readByteWithInputStream(pathReadByteFromBin));
 				//</editor-fold>
 				break;
 			case 2:
@@ -44,12 +44,16 @@ public class AllReadingFilesTD {
 				AllFileOperationsSample.deleteSingleFileOrDir(pathReadIntFromBin);
 				int intToWrite;
 				intToWrite=100;
-				AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
-//				intToWrite=1024;
-//				AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
-//				intToWrite=4242;
-//				AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
-				AllReadingFiles.readIntWithInputStream(pathReadIntFromBin);
+				//AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
+				//intToWrite=-1;
+				//AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
+				//intToWrite=1024;
+				//AllWritingFiles.writingIntegersToBinaryWithOutputStream(pathReadIntFromBin, intToWrite);
+				//This generates a wrong input as only one byte is read, the integer gets written as one byte
+				//AllWritingFiles.writingWithOutputStream(pathReadIntFromBin, intToWrite);
+				System.out.println("Int read: "+AllReadingFiles.readIntWithInputStream(pathReadIntFromBin));
+				//</editor-fold>
+				break;
 		}
 	}
 }
