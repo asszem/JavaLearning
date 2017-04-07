@@ -1,10 +1,12 @@
 package FilesAndDirectories;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -128,4 +130,35 @@ public class AllReadingFiles {
 		}//end else
 		return intValueRead;
 	}//end method
+
+	/**
+	 * This method does not have a try-catch block, so the calling method must have it to catch possible IOException
+	 * @param filename
+	 * @param readMethod 1- reads a single char; 2-reads everyting to a char array; 3- reads a single line
+	 * @return the result of reading operation as a String
+	 * @throws IOException
+	 */
+	public static String readStringWithBufferedReader(Path filename, int readMethod) throws IOException {
+		String result = "Nothing was read";
+		BufferedReader bufferedReader = Files.newBufferedReader(filename, Charset.forName("UTF-16"));
+		//Read methods
+		switch (readMethod) {
+			case 1: //Method 1 - read() single char
+				int readResult = bufferedReader.read();
+				result = Character.toString((char) readResult);
+				break;
+			case 2: //Method 2 - read(char[]...) - reads char array, including the newline as well
+				char[] charArray = new char[100];
+				int numberOfCharsRead = bufferedReader.read(charArray);
+				result="";
+				for (int i=0;i<numberOfCharsRead;i++) {
+					result += charArray[i];
+				}
+				break;
+			case 3: //Method 3 - readLine() - reads line
+				result = bufferedReader.readLine();
+				break;
+		}
+		return result;
+	}
 } //class

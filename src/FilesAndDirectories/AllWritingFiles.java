@@ -57,9 +57,9 @@ public class AllWritingFiles {
 		switch (openOption.toLowerCase()) {
 			case "append":
 				try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, Charset.forName("UTF-16"),CREATE, APPEND)) {
-					System.out.println("Appending...");
 					bufferedWriter.write(outputContent);
 					bufferedWriter.newLine();
+					System.out.printf("String [%s] appended to file.%n",outputContent);
 					return true;
 				} catch (IOException e) {
 					e.printStackTrace();

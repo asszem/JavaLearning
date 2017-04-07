@@ -59,7 +59,7 @@ import java.nio.file.StandardCopyOption;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class AllFileOperationsSample {
+public class AllFileOperations {
 
 	Path objectPath; //Sets an instance variable called objectPath
 

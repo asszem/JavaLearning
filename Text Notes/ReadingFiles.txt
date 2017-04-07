@@ -19,3 +19,8 @@ newInputStream() - reading bytes
 	Usage:
 		try {
 			BufferedInputStream bufferedInputStream = new BufferedInputStream(Files.newInputStream(filename));...
+
+newBufferedReader() - reading Characters
+
+	Usage:
+		BufferedReader inFile = Files.newBufferedReader(path, Charset.forName(“UTF-16”));
