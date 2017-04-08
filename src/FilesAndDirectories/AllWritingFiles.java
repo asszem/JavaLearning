@@ -50,16 +50,23 @@ public class AllWritingFiles {
 		return false;
 	}
 
-	static boolean writingWithBufferedWriter(Path file, String outputContent, String openOption) {
-		System.out.println("Writing character with UTF-16 encoding, standard opening options");
-		System.out.println("Standard Open Option: " + openOption);
-		System.out.println("Target file: " + file);
+	/**
+	 *
+	 * @param file
+	 * @param outputContent
+	 * @param openOption "append"
+	 * @return
+	 */
+	public static boolean writingWithBufferedWriter(Path file, String outputContent, String openOption) {
+//		System.out.println("Writing character with UTF-16 encoding, standard opening options");
+//		System.out.println("Standard Open Option: " + openOption);
+		System.out.println("File: " + file);
 		switch (openOption.toLowerCase()) {
 			case "append":
 				try (BufferedWriter bufferedWriter = Files.newBufferedWriter(file, Charset.forName("UTF-16"),CREATE, APPEND)) {
 					bufferedWriter.write(outputContent);
 					bufferedWriter.newLine();
-					System.out.printf("String [%s] appended to file.%n",outputContent);
+					System.out.printf("String [%s] appended.%n",outputContent);
 					return true;
 				} catch (IOException e) {
 					e.printStackTrace();

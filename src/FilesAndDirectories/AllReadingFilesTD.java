@@ -33,15 +33,7 @@ public class AllReadingFilesTD {
 				//</editor-fold>
 				break;
 			case 2:
-				//<editor-fold desc="Reading LONG data from binary file using InputStream">
-				//Note: the ReadLongFromBinaryFile must have LONG values stored in it in order to work correctly
-				//See Hortons StreamOutputToFile class, that writes LONG values as binary to the file
-				Path pathReadLongFromBinary = path.resolve("readLongFromBinaryFile.bin");
-				AllReadingFiles.readLongWithInputStream(pathReadLongFromBinary);
-				//</editor-fold>
-				break;
-			case 3:
-				//<editor-fold desc="Writing INT to a binary file (OutputStream) and reading it back (InputStream)">
+				//<editor-fold desc="Writing and Reading INT to a binary file with Output/InputStream">
 				Path pathReadIntFromBin = path.resolve("readIntFromBin.bin");
 				AllFileOperations.deleteSingleFileOrDir(pathReadIntFromBin);
 				int intToWrite;
@@ -56,26 +48,66 @@ public class AllReadingFilesTD {
 				System.out.println("Int read: " + AllReadingFiles.readIntWithInputStream(pathReadIntFromBin));
 				//</editor-fold>
 				break;
-			case 4:
-					//<editor-fold desc="Writing and Reading Character data from file">
-					//To test throwing exceptions, I will intentionally use try-catch block here and not in the method
-					Path fileCharacterToRead = path.resolve("readCharFromTxt.txt");
-					AllFileOperations.deleteSingleFileOrDir(fileCharacterToRead);
-					String testString = "Árvíztűrő tükörfúrógép";
-					ArrayList resultStrings = new ArrayList();
-					AllWritingFiles.writingWithBufferedWriter(fileCharacterToRead, testString, "append");
-					AllWritingFiles.writingWithBufferedWriter(fileCharacterToRead, testString, "append");
-					AllWritingFiles.writingWithBufferedWriter(fileCharacterToRead, testString, "append");
-					try {
-						resultStrings.add(AllReadingFiles.readStringWithBufferedReader(fileCharacterToRead, 1));
-						resultStrings.add(AllReadingFiles.readStringWithBufferedReader(fileCharacterToRead, 2));
-						resultStrings.add(AllReadingFiles.readStringWithBufferedReader(fileCharacterToRead, 3));
-						System.out.println(resultStrings);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					//</editor-fold>
+			case 3:
+				//<editor-fold desc="Reading LONG data from binary file using InputStream">
+				//Note: the ReadLongFromBinaryFile must have LONG values stored in it in order to work correctly
+				//See Hortons StreamOutputToFile class, that writes LONG values as binary to the file
+				Path pathReadLongFromBinary = path.resolve("readLongFromBinaryFile.bin");
+				AllReadingFiles.readLongWithInputStream(pathReadLongFromBinary);
+				//</editor-fold>
 				break;
+			case 4:
+				//<editor-fold desc="Reading LONG data from BINARY file using newByteChannel">
+				//Note: the ReadLongFromBinaryFile must have LONG values stored in it in order to work correctly
+				//See Hortons StreamOutputToFile class, that writes LONG values as binary to the file
+				pathReadLongFromBinary = path.resolve("readLongFromBinaryFile.bin");
+				displayArrayList(AllReadingFiles.readLongFromByteChannel(pathReadLongFromBinary, 1));
+				//</editor-fold>
+				break;
+			case 5:
+				//<editor-fold desc="Writing and Reading string/char data from text file with BufferedREader">
+				//To test throwing exceptions, I will intentionally use try-catch block here and not in the method
+				Path fileCharacterToRead = path.resolve("readCharFromTxt.txt");
+				AllFileOperations.deleteSingleFileOrDir(fileCharacterToRead);
+				String testString = "Árvíztűrő tükörfúrógép";
+				ArrayList resultStrings = new ArrayList();
+				AllWritingFiles.writingWithBufferedWriter(fileCharacterToRead, testString, "append");
+				AllWritingFiles.writingWithBufferedWriter(fileCharacterToRead, testString, "append");
+				AllWritingFiles.writingWithBufferedWriter(fileCharacterToRead, testString, "append");
+				try {
+					resultStrings.add(AllReadingFiles.readStringWithBufferedReader(fileCharacterToRead, 1));
+					resultStrings.add(AllReadingFiles.readStringWithBufferedReader(fileCharacterToRead, 2));
+					resultStrings.add(AllReadingFiles.readStringWithBufferedReader(fileCharacterToRead, 3));
+					System.out.println(resultStrings);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				//</editor-fold>
+				break;
+			case 6:
+				//<editor-fold desc="Writing and Reading string/char data from text files with newByteChannel">
+				Path fileChannelRead = path.resolve("fileChannelRead.txt");
+				AllFileOperations.deleteSingleFileOrDir(fileChannelRead);
+				AllWritingFiles.writingWithBufferedWriter(fileChannelRead, "Árvíztűrő tükörfúrógép", "append");
+				AllWritingFiles.writingWithBufferedWriter(fileChannelRead, "1234432   00", "append");
+				AllWritingFiles.writingWithBufferedWriter(fileChannelRead, "Árvíztűrő tükörfúrógép", "append");
+				System.out.println("\nReading operations");
+				System.out.println("Read to byteBuffer method 1 (ArrayList)");
+				ArrayList testResult = AllReadingFiles.readCharFromByteChannel(fileChannelRead, 1);
+				displayArrayList(testResult);
+				System.out.println("Read to byteBuffer method 2 (StringBuilder)");
+				testResult = AllReadingFiles.readCharFromByteChannel(fileChannelRead, 2);
+				displayArrayList(testResult);
+			//</editor-fold>
+		}
+	}
+
+	public static void displayArrayList(ArrayList al) {
+		System.out.println("Array List size: " + al.size());
+		int counter=0;
+		for (Object o : al) {
+			System.out.printf("[%d] ", counter++);
+			System.out.println(o);
 		}
 	}
 }

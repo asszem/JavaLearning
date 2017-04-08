@@ -290,8 +290,7 @@ public class AllFileOperations {
 
 //Returns true if deleting a single file completed successfully
 	public static boolean deleteSingleFileOrDir(Path source) {
-		System.out.println("Delete File Method started...");
-		System.out.printf("Deleting file %s%n", source);
+		System.out.printf("File: %s%n", source);
 		try {
 			Files.delete(source);
 			System.out.println("Delete completed.");
