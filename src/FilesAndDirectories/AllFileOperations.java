@@ -59,7 +59,7 @@ import java.nio.file.StandardCopyOption;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class AllFileOperationsSample {
+public class AllFileOperations {
 
 	Path objectPath; //Sets an instance variable called objectPath
 
@@ -290,8 +290,7 @@ public class AllFileOperationsSample {
 
 //Returns true if deleting a single file completed successfully
 	public static boolean deleteSingleFileOrDir(Path source) {
-		System.out.println("Delete File Method started...");
-		System.out.printf("Deleting file %s%n", source);
+		System.out.printf("File: %s%n", source);
 		try {
 			Files.delete(source);
 			System.out.println("Delete completed.");

@@ -19,3 +19,22 @@ newInputStream() - reading bytes
 	Usage:
 		try {
 			BufferedInputStream bufferedInputStream = new BufferedInputStream(Files.newInputStream(filename));...
+
+newBufferedReader() - reading Characters
+	Usage:
+		BufferedReader inFile = Files.newBufferedReader(path, Charset.forName(“UTF-16”));
+
+newByteChannel() - using channel to read data to a buffer
+	Description
+		If no options provided, READ is the default. Data is read to a buffer.
+		The newByteChannel()
+method returns a reference of type SeekableByteChannel
+	Usage
+		try (ReadableByteChannel rbc = files.newByteChannel(filepath)) {...
+	Channels
+															  / <- GatheringByteChannel
+															  |
+												/- Writable Byte Channel \ 
+		AutoCloseable <- Closeable <- Channel <-						  <- ByteChannel <-SeekableByteChannel
+												\- ReadableByteChannel   / 
+																				ScatteringByteChannel
