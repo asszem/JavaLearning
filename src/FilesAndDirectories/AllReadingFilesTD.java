@@ -15,7 +15,7 @@ public class AllReadingFilesTD {
 
 	public static void main(String[] args) {
 		Path path = Paths.get("E:\\javaFileOpTest\\ReadingFiles");
-		int testCase = 4;
+		int testCase = 7;
 		switch (testCase) {
 			case 1:
 				//<editor-fold desc="Writing and Reading BYTE to a binary file with Output/InputStream">
@@ -99,12 +99,23 @@ public class AllReadingFilesTD {
 				testResult = AllReadingFiles.readCharFromByteChannel(fileChannelRead, 2);
 				displayArrayList(testResult);
 			//</editor-fold>
+			case 7:
+				//<editor-fold desc="Reading MIXED data from a binary file with newByteChannel">
+				//Note: the sample file is created by PrimesToFile3.java in Horton's Chapter 10
+				Path readMixedFile = path.resolve("readMixedData(primes).txt");
+//				testResult=AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 1);
+//				displayArrayList(testResult);
+//				testResult=AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 2);
+				testResult = AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 3); //the Horton method
+				displayArrayList(testResult);
+				//</editor-fold>
+				break;
 		}
 	}
 
 	public static void displayArrayList(ArrayList al) {
 		System.out.println("Array List size: " + al.size());
-		int counter=0;
+		int counter = 0;
 		for (Object o : al) {
 			System.out.printf("[%d] ", counter++);
 			System.out.println(o);
