@@ -285,7 +285,8 @@ public class AllReadingFiles {
 		/*
 		Method 1 - determine the String length in standalone read operation - resource ineffective
 		Method 2 - Create a bigger ByteBuffer, load with data and use the .compact() method when there is not enough space available
-		Horton's book, Chapter 11, reading files, page 431
+		Method 3 - Horton's logic. Check buffer remaining before Double/String/Long and if less then read with compact
+					Horton's book, Chapter 11, reading files, page 431
 		File structure
 		[double][string][long]
 		double	= the length of the following string (stored as Double to make things even more complicated :D)
@@ -317,6 +318,7 @@ public class AllReadingFiles {
 						long currentAsLong = ((ByteBuffer) buffersArray[1].flip()).asLongBuffer().get();
 						formattedResult.format("Sting length:[%03d] String:[%s] Long:[%d]", currentStringLength, currentAsString, currentAsLong);
 						resultArray.add(formattedResult);
+						formattedResult = new Formatter();
 						stringLengthBuffer.clear(); //Clear it for the next DOUBLE
 						buffersArray[1].clear(); //Clear it so it can read the next LONG
 					}
@@ -358,6 +360,7 @@ public class AllReadingFiles {
 							currentLong = bigByteBuffer.getLong(); //this updates the position
 							formattedResult.format("Sting length:[%03d] String:[%s] Long:[%d]", currentStringLength, currentString, currentLong);
 							resultArray.add(formattedResult);
+							formattedResult = new Formatter();
 
 							//at this point the position should point to the next DOUBLE number
 							if (bigByteBuffer.remaining() >= 8) //if there is enough data to read the next Double
@@ -381,22 +384,28 @@ public class AllReadingFiles {
 					//</editor-fold>
 					break;
 				case 3: //Using the .compact method based on logic in Horton's book
-					ByteBuffer buf = ByteBuffer.allocate(256);
-					buf.position(buf.limit()); //why this needed
+					//<editor-fold desc="Using read(buf.compact()) method">
+					ByteBuffer buf = ByteBuffer.allocateDirect(36); // A direct buffer is faster if you are reading a lot of data from a file, as the data is transferred directly from the file to our buffer. 
+					buf.position(buf.limit()); //to make sure remaining is 0 even at first run, so READ is called
 					int strLength = 0;
 					byte[] strChars = null;
 					long longValue=0;
 					while (true) {
+						//CHECKPOINT 1 - Verifiy if there is enough data to read the DOUBLE value for string length
 						if (buf.remaining() < 8) {
-							//at this point, not enough data to read all bytes for next double
+							//at this point, not enough data to read all bytes for next double, initiate a read operation
 							if (readChannel.read(buf.compact()) == -1) {
+								//This should be the normal exit point of the loop, as if this is reached, no more lines in the file
 								break; //End of file reached
 							}
+							//at this point the buffer is filled with new data, file position updated
 							buf.flip();
 						}
 						strLength = (int) buf.getDouble();
+
+						//CHECKPOINT 2 - Verify if there is enough data in the buffer to read the STRING
 						if (buf.remaining() < 2 * strLength) {
-							//at this point, not enough data in buffer to read full string
+							//at this point, not enough data in buffer to read full string, but there should be
 							if (readChannel.read(buf.compact()) == -1) {
 								//At this point eOF reached while it was expecting more data for building the string. The file is corrupted
 								System.err.println("EOF found while reading the string. File corrupted? Error code: 001");
@@ -409,7 +418,7 @@ public class AllReadingFiles {
 						strChars=new byte[2*strLength]; //create a byte array for chars
 						buf.get(strChars);
 
-						//Verify if there are enough data remainig to read LONG
+						//CHECKPOINT 3 - Verify if there are enough data in the buffer to read the LONG
 						if (buf.remaining()<8){
 							//at this point not enough data to read LONG
 							//another READ operation needed
@@ -423,11 +432,14 @@ public class AllReadingFiles {
 							buf.flip(); //limit=position then position=0
 						}
 						longValue=buf.getLong();
-						//at this point we have all 3 values set, create and build the result array
-						Formatter fr2 =new Formatter();
-						fr2.format("Sting length:[%03d] String:[%s] Long:[%d]", strLength, ByteBuffer.wrap(strChars).asCharBuffer(), longValue);
-						resultArray.add(fr2);
+
+						//FINAL POINT
+						//at this point we have all 3 values to build the next item in the result array
+						//note the way the byte[] array's content is displayed using wrap and a CharBuffer
+						resultArray.add(formattedResult.format("Sting length:[%03d] String:[%s] Long:[%d]", strLength, ByteBuffer.wrap(strChars).asCharBuffer(), longValue));
+						formattedResult = new Formatter(); //To reset the formatter
 					}//end file reading while
+					//</editor-fold>
 			}//end switch
 		}//end try
 		catch (IOException e) {

@@ -80,7 +80,8 @@ To create a new buffer, you must use typeBuffer.allocate(capacity)
 	Use the POSITION and LIMIT for a ByteBuffer to determine what bytes in the buffer are involved in a read or write operation executed by a channel 
 
 Methods
-	allocate() - create buffer
+	allocate() - create buffer. 
+	AllocateDirect() - A direct buffer is faster if reading a lot of data from a file, as the data is transferred directly from the file to the buffer
 	remaining() - returns the number of elements between POSITION and LIMIT
 	position() - returns the position
 	position(int newPosition) - sets the new position
@@ -97,6 +98,7 @@ Methods
 	flip() - setup the buffer to be written. Does: buf.limit(buf.position()).rewind(0);
 	clear() -  sets the limit to the capacity and the position to zero. Doesnt reset data!
 	array() - returns the backing array of the buffer
+	compact() - moves buffer's data from position to beginning, set position to moved data lenght+1 and limit to capacity. 
 
 ViewBuffers - TypeBuffer referenceVariable = byteBufferObject.asTypeBuffer();
 	A view buffer has two primary uses

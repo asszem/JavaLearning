@@ -103,9 +103,16 @@ public class AllReadingFilesTD {
 				//<editor-fold desc="Reading MIXED data from a binary file with newByteChannel">
 				//Note: the sample file is created by PrimesToFile3.java in Horton's Chapter 10
 				Path readMixedFile = path.resolve("readMixedData(primes).txt");
-//				testResult=AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 1);
-//				displayArrayList(testResult);
-//				testResult=AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 2);
+				System.out.println("******************************");
+				System.out.println("Read method 1");
+				testResult=AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 1);
+				displayArrayList(testResult);
+				System.out.println("******************************");
+				testResult=AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 2);
+				System.out.println("Read method 2");
+				displayArrayList(testResult);
+				System.out.println("******************************");
+				System.out.println("Read method 3");
 				testResult = AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 3); //the Horton method
 				displayArrayList(testResult);
 				//</editor-fold>

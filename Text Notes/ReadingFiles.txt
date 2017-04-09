@@ -27,10 +27,13 @@ newBufferedReader() - reading Characters
 newByteChannel() - using channel to read data to a buffer
 	Description
 		If no options provided, READ is the default. Data is read to a buffer.
-		The newByteChannel()
-method returns a reference of type SeekableByteChannel
+		The newByteChannel() method returns a reference of type SeekableByteChannel
 	Usage
-		try (ReadableByteChannel rbc = files.newByteChannel(filepath)) {...
+		Open a ReadByteChannel for simple read operations (READ is the default) 
+			ReadableByteChanel rbc = Files.newByteChannel(filename);
+		Open a channel casted to FileChannel, so file.position and int read(ByteBuffer[] buffers)) methods are available
+			FileChannel readChannel = (FileChannel) Files.newByteChannel(filename, READ);
+		
 	Channels
 															  / <- GatheringByteChannel
 															  |
@@ -38,3 +41,6 @@ method returns a reference of type SeekableByteChannel
 		AutoCloseable <- Closeable <- Channel <-						  <- ByteChannel <-SeekableByteChannel
 												\- ReadableByteChannel   / 
 																				ScatteringByteChannel
+	Notes
+		A direct buffer is faster if you are reading a lot of data from a file, as the data is transferred directly from the file to our buffer+ check todo list leaders
+		
