@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import static java.nio.file.StandardOpenOption.*;
 import java.util.ArrayList;
+import java.util.Formatter;
 
 /**
  *
@@ -250,7 +251,7 @@ public class AllReadingFiles {
 		ArrayList resultsArrayList = new ArrayList();
 		//Use try-with-resources to automatically close the stream after reading is completed
 		try (SeekableByteChannel seekableByteChannel = Files.newByteChannel(filename, READ)) {
-			int numberOfLongToReadInOneIteration = 4; //In one read iteration this many LONG numbers to read
+			int numberOfLongToReadInOneIteration = 10; //In one read iteration this many LONG numbers to read
 			final int LONG_BYTE_COUNT = 8; //A LONG number has 8 bytes of data
 			ByteBuffer byteBuffer = ByteBuffer.allocate(numberOfLongToReadInOneIteration * LONG_BYTE_COUNT); //Allocate enough space in buffer
 			int currentBytesReadCount = 0;
@@ -259,9 +260,13 @@ public class AllReadingFiles {
 				//(ByteBuffer)byteBuffer.flip() is a new ByteBuffer object without reference, will be used only as argumetn to ArrayL.
 				//Because the ByteBuffer holds numberOfLongToReadInOneIteration data, all of them needs to be read in a loop
 				byteBuffer.flip(); //set the byteBuffer position to 0 for the read operations
+				LongBuffer viewLongBuffer = byteBuffer.asLongBuffer(); //create a viewBuffer to get the LONG values from the byteBuffer
 				for (int i = 0; i < numberOfLongToReadInOneIteration; i++) { //Copy the content of bytebuffer to the result array
-					if (byteBuffer.remaining() >= 8) { //Only read if there are at least 8 more available bytes in the buffer
-						resultsArrayList.add(byteBuffer.asLongBuffer().get());
+					//if (byteBuffer.remaining() >= 8) { //Only read if there are at least 8 more available bytes in the buffer
+					//	resultsArrayList.add(byteBuffer.asLongBuffer().get());
+					//}
+					if (viewLongBuffer.hasRemaining()) { //Only call the .get on the viewLongBuffer if it has more values to get
+						resultsArrayList.add(viewLongBuffer.get());
 						byteBuffer.position(byteBuffer.position() + 8);
 					}
 				}
@@ -271,5 +276,180 @@ public class AllReadingFiles {
 			e.printStackTrace();
 		}
 		return resultsArrayList;
+	}
+
+	public static ArrayList readMixedDataFromByteChannel(Path filename, int readMethod) {
+		ArrayList resultArray = new ArrayList();
+		Formatter formattedResult = new Formatter();
+		//<editor-fold desc="Method description">
+		/*
+		Method 1 - determine the String length in standalone read operation - resource ineffective
+		Method 2 - Create a bigger ByteBuffer, load with data and use the .compact() method when there is not enough space available
+		Method 3 - Horton's logic. Check buffer remaining before Double/String/Long and if less then read with compact
+					Horton's book, Chapter 11, reading files, page 431
+		File structure
+		[double][string][long]
+		double	= the length of the following string (stored as Double to make things even more complicated :D)
+		string	= the prime values as string, example prime = 23
+		long 	= the prime value as long		
+		 */
+		//</editor-fold>
+		try (FileChannel readChannel = (FileChannel) Files.newByteChannel(filename, READ);) {
+			switch (readMethod) {
+				case 1: //Using two read operations in each iteration
+					//<editor-fold desc="Method 1. - using multiple reads">
+					ByteBuffer stringLengthBuffer = ByteBuffer.allocate(8); //It will only read an DOUBLE value, 8 bytes 
+					ByteBuffer[] buffersArray = new ByteBuffer[2]; //[0] will hold the buffer for String, [1] will hold the buffer for LONG
+					buffersArray[0] = null; //size of String bytebuffer unknown at this point
+					buffersArray[1] = ByteBuffer.allocate(8); //It will have 8 bytes for the LONG values
+					while (true) { //loop through the file
+						//Get the value of [double]
+						if (readChannel.read(stringLengthBuffer) == -1) { //If EOF reached, stop the WHILE cycle
+							break; //stop the reading when EOF reached
+						}
+						//get the int value from the double read to the stringLenghtBuffer
+						int currentStringLength = (int) ((ByteBuffer) stringLengthBuffer.flip()).asDoubleBuffer().get();
+						buffersArray[0] = ByteBuffer.allocate(currentStringLength * 2); //as strings are in Unicode char, 2 bytes each
+						//At this point we have the string length, but we need to read the remaining data
+						//Which is currentStringLenght+8
+						readChannel.read(buffersArray); //When the first buffer is full, it continues to write to the second 
+						//At this point we have all information in the 3 buffers. Pass it to the result array
+						String currentAsString = ((ByteBuffer) buffersArray[0].flip()).asCharBuffer().toString();
+						long currentAsLong = ((ByteBuffer) buffersArray[1].flip()).asLongBuffer().get();
+						formattedResult.format("Sting length:[%03d] String:[%s] Long:[%d]", currentStringLength, currentAsString, currentAsLong);
+						resultArray.add(formattedResult);
+						formattedResult = new Formatter();
+						stringLengthBuffer.clear(); //Clear it for the next DOUBLE
+						buffersArray[1].clear(); //Clear it so it can read the next LONG
+					}
+
+					//</editor-fold>
+					break;
+				case 2: //Using the .compact method
+					//<editor-fold desc="Method 2. - using .compact()">
+//<editor-fold desc="Method 2 description & pseudo code">
+/*pseudo code At this point we have the buffer with data. What we ASSUME, the first 8 is a double
+1. read the first string length (position will be updated in bytebuffer)
+2. calculate the first required length (stringlenght*2+8)
+3. make a while cycle until the bytbuffer has enough remaining to get the requied string and long data
+	get the string and long, build the next result array and increment buffer position
+after the while cycle compact the buffer, and then read again (but keep the already read data's position)
+ */
+//</editor-fold>
+					ByteBuffer bigByteBuffer = ByteBuffer.allocate(265); //Allocate an aribtary amount of bytes
+					int currentLineFullLength; //8+stringLength*2+8 -- this will be one item in the ArrayList
+					int currentStringLength;
+					String currentString;
+					Long currentLong;
+					bigByteBuffer.position(bigByteBuffer.limit());
+					while (true) { //reading through the file
+						//Read data to the bigByteBuffer until EOF is reached. 
+						if ((readChannel.read(bigByteBuffer.compact())) == -1) { //READ more than one valid line data to the Buffer
+							break;
+						}
+						//CHECKPOINT 1 - Verify if there is enough data to read a FULL next line
+						//CHECKPOINT 2 - Verify if 
+						bigByteBuffer.flip(); //get the buffer ready to read
+						currentStringLength = (int) bigByteBuffer.getDouble(); //this updates the Position of bigByteBuffer!
+						bigByteBuffer.position(bigByteBuffer.position() - 8); //Reset the position
+						currentLineFullLength = 8 + currentStringLength * 2 + 8;
+						boolean enoughDataInBuffer = (bigByteBuffer.remaining() >= currentLineFullLength);
+						while (enoughDataInBuffer) {
+							currentStringLength = (int) bigByteBuffer.getDouble(); //this updates the Position of bigByteBuffer!
+							//read all the characters from the bigbytebuffer WHILE increasing the position as well
+							StringBuilder buildCurrentString = new StringBuilder();
+							for (int i = 0; i < currentStringLength; i++) {
+								buildCurrentString.append(bigByteBuffer.getChar()); //this updates the position
+							}
+							currentString = buildCurrentString.toString();
+							currentLong = bigByteBuffer.getLong(); //this updates the position
+							formattedResult.format("Sting length:[%03d] String:[%s] Long:[%d]", currentStringLength, currentString, currentLong);
+							resultArray.add(formattedResult);
+							formattedResult = new Formatter();
+
+							//at this point the position should point to the next DOUBLE number
+							if (bigByteBuffer.remaining() >= 8) //if there is enough data to read the next Double
+							{
+								currentStringLength = (int) bigByteBuffer.getDouble(); //this updates the Position of bigByteBuffer!
+								//check if there is enough data to read a complete new line
+								enoughDataInBuffer = bigByteBuffer.remaining() >= currentStringLength * 2 + 8;
+								//If it turns out that there is not enough data to read string+long
+								//but the position is already read, the byte buffer position needs to be rewind with 8
+								//because the currentString position double will be read at the beginning of the cycle
+								if (!enoughDataInBuffer) {
+									bigByteBuffer.position(bigByteBuffer.position() - 8);
+								}
+							} else //there is not enough room for the next int
+							{
+								enoughDataInBuffer = false;
+							}
+						}//end buffer reading while
+						bigByteBuffer.compact();
+					}//end file reading while
+					//</editor-fold>
+					break;
+				case 3: //Using the .compact method based on logic in Horton's book
+					//<editor-fold desc="Using read(buf.compact()) method">
+					ByteBuffer buf = ByteBuffer.allocateDirect(36); // A direct buffer is faster if you are reading a lot of data from a file, as the data is transferred directly from the file to our buffer. 
+					buf.position(buf.limit()); //to make sure remaining is 0 even at first run, so READ is called
+					int strLength = 0;
+					byte[] strChars = null;
+					long longValue=0;
+					while (true) {
+						//CHECKPOINT 1 - Verifiy if there is enough data to read the DOUBLE value for string length
+						if (buf.remaining() < 8) {
+							//at this point, not enough data to read all bytes for next double, initiate a read operation
+							if (readChannel.read(buf.compact()) == -1) {
+								//This should be the normal exit point of the loop, as if this is reached, no more lines in the file
+								break; //End of file reached
+							}
+							//at this point the buffer is filled with new data, file position updated
+							buf.flip();
+						}
+						strLength = (int) buf.getDouble();
+
+						//CHECKPOINT 2 - Verify if there is enough data in the buffer to read the STRING
+						if (buf.remaining() < 2 * strLength) {
+							//at this point, not enough data in buffer to read full string, but there should be
+							if (readChannel.read(buf.compact()) == -1) {
+								//At this point eOF reached while it was expecting more data for building the string. The file is corrupted
+								System.err.println("EOF found while reading the string. File corrupted? Error code: 001");
+								break;//ends the while loop
+							}
+							//at this point the data is read from the file to the compacted buffer
+							buf.flip();//buffer is ready to read from
+						}//end buffer string length validation
+						//at this point, buffer position at the beginning of string and there is enough data in buffer to read the full string
+						strChars=new byte[2*strLength]; //create a byte array for chars
+						buf.get(strChars);
+
+						//CHECKPOINT 3 - Verify if there are enough data in the buffer to read the LONG
+						if (buf.remaining()<8){
+							//at this point not enough data to read LONG
+							//another READ operation needed
+							if (readChannel.read(buf.compact()) ==-1){
+								//at this point the read operation failed to fill the buffer, while ther should be enough data in the file to read. Terminate
+								System.err.println("EOF found while reading the LONG. File corrupted? Error code: 002");
+								break;
+							}
+							//at this point new data is read to the compacted buffer
+							//buff pos=position+amount of read data
+							buf.flip(); //limit=position then position=0
+						}
+						longValue=buf.getLong();
+
+						//FINAL POINT
+						//at this point we have all 3 values to build the next item in the result array
+						//note the way the byte[] array's content is displayed using wrap and a CharBuffer
+						resultArray.add(formattedResult.format("Sting length:[%03d] String:[%s] Long:[%d]", strLength, ByteBuffer.wrap(strChars).asCharBuffer(), longValue));
+						formattedResult = new Formatter(); //To reset the formatter
+					}//end file reading while
+					//</editor-fold>
+			}//end switch
+		}//end try
+		catch (IOException e) {
+			e.printStackTrace();
+		}//end catch
+		return resultArray;
 	}
 } //class

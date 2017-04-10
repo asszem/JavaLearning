@@ -25,7 +25,7 @@ public class BuffersTD {
 		double testDouble = 456.789;
 		char testChr = 'A';
 		//</editor-fold>
-		int testCase = 7;
+		int testCase = 8;
 		System.out.println("Test case: " + testCase);
 		switch (testCase) {
 			case 0:
@@ -290,7 +290,7 @@ public class BuffersTD {
 				System.out.println("");
 				System.out.println("Get the same byte array with Method");
 				bbTc5.position(0).limit(20);
-				byte[] bbTc5Array=Buffers.getByteArrayFromByteBuffer(bbTc5);
+				byte[] bbTc5Array = Buffers.getByteArrayFromByteBuffer(bbTc5);
 				for (byte b : bbTc5Array) {
 					System.out.printf("[%d]", b);
 				}
@@ -320,11 +320,21 @@ public class BuffersTD {
 				break;
 			case 7:
 //<editor-fold desc="Formatter used to put data to a CharBuffer">
-			ByteBuffer bbTc7 = ByteBuffer.allocate(1024);
-			CharBuffer bbTc7cb= bbTc7.asCharBuffer();
-			String Tc7TestString="This is a test string";
-			Buffers.putStringToCharBufferWithFormatter(bbTc7, bbTc7cb, Tc7TestString);
-			Buffers.getStringFromByteBufferWithGetChar(bbTc7);
+				ByteBuffer bbTc7 = ByteBuffer.allocate(1024);
+				CharBuffer bbTc7cb = bbTc7.asCharBuffer();
+				String Tc7TestString = "This is a test string";
+				Buffers.putStringToCharBufferWithFormatter(bbTc7, bbTc7cb, Tc7TestString);
+				Buffers.getStringFromByteBufferWithGetChar(bbTc7);
+				//</editor-fold>
+				break;
+			case 8:
+//<editor-fold desc="Display a string from a byte[] array usingn ByteBuffer wrap and CharBuffer">
+				System.out.println(Charset.defaultCharset());
+				String test = "Árvíztűrő tükörfúrógép";
+				byte[] byteArray = test.getBytes(Charset.forName("UTF-16"));
+				String output;
+				output = ByteBuffer.wrap(byteArray).asCharBuffer().toString();
+				System.out.println(output);
 				//</editor-fold>
 				break;
 		}//end Switch

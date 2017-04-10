@@ -1,5 +1,6 @@
 package FilesAndDirectories;
 
+import FilesAndDirectories.Practice.ReadMixedFileWithCompact;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,7 +16,7 @@ public class AllReadingFilesTD {
 
 	public static void main(String[] args) {
 		Path path = Paths.get("E:\\javaFileOpTest\\ReadingFiles");
-		int testCase = 4;
+		int testCase = 8;
 		switch (testCase) {
 			case 1:
 				//<editor-fold desc="Writing and Reading BYTE to a binary file with Output/InputStream">
@@ -99,12 +100,39 @@ public class AllReadingFilesTD {
 				testResult = AllReadingFiles.readCharFromByteChannel(fileChannelRead, 2);
 				displayArrayList(testResult);
 			//</editor-fold>
+			case 7:
+				//<editor-fold desc="Reading MIXED data from a binary file with newByteChannel">
+				//Note: the sample file is created by PrimesToFile3.java in Horton's Chapter 10
+				Path readMixedFile = path.resolve("readMixedData(primes).txt");
+				//System.out.println("******************************");
+				//System.out.println("Read method 1");
+				//testResult=AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 1);
+				//displayArrayList(testResult);
+				//System.out.println("******************************");
+//				testResult=AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 2);
+//				System.out.println("Read method 2");
+//				displayArrayList(testResult);
+				//System.out.println("******************************");
+				//System.out.println("Read method 3");
+				testResult = AllReadingFiles.readMixedDataFromByteChannel(readMixedFile, 3); //the Horton method
+				displayArrayList(testResult);
+				//</editor-fold>
+				break;
+			case 8:
+				//<editor-fold desc="Reading MIXED data from binary file to a bigger byteBuffer">
+				ReadMixedFileWithCompact testObject = new ReadMixedFileWithCompact();
+				testObject.filename=Paths.get("E:\\javaFileOpTest\\ReadingFiles\\readMixedData(primes).txt");
+				testObject.byteBufferCapacity=40;
+				testResult=testObject.readFile();
+				displayArrayList(testResult);
+				//</editor-fold>
+				break;
 		}
 	}
 
 	public static void displayArrayList(ArrayList al) {
 		System.out.println("Array List size: " + al.size());
-		int counter=0;
+		int counter = 0;
 		for (Object o : al) {
 			System.out.printf("[%d] ", counter++);
 			System.out.println(o);
