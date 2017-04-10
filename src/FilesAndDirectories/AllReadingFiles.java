@@ -327,24 +327,29 @@ public class AllReadingFiles {
 					break;
 				case 2: //Using the .compact method
 					//<editor-fold desc="Method 2. - using .compact()">
-					ByteBuffer bigByteBuffer = ByteBuffer.allocate(65); //Allocate an aribtary amount of bytes
+//<editor-fold desc="Method 2 description & pseudo code">
+/*pseudo code At this point we have the buffer with data. What we ASSUME, the first 8 is a double
+1. read the first string length (position will be updated in bytebuffer)
+2. calculate the first required length (stringlenght*2+8)
+3. make a while cycle until the bytbuffer has enough remaining to get the requied string and long data
+	get the string and long, build the next result array and increment buffer position
+after the while cycle compact the buffer, and then read again (but keep the already read data's position)
+ */
+//</editor-fold>
+					ByteBuffer bigByteBuffer = ByteBuffer.allocate(265); //Allocate an aribtary amount of bytes
+					int currentLineFullLength; //8+stringLength*2+8 -- this will be one item in the ArrayList
 					int currentStringLength;
 					String currentString;
 					Long currentLong;
-					int currentLineFullLength; //8+stringLength*2+8 -- this will be one item in the ArrayList
+					bigByteBuffer.position(bigByteBuffer.limit());
 					while (true) { //reading through the file
 						//Read data to the bigByteBuffer until EOF is reached. 
-						if ((readChannel.read(bigByteBuffer)) == -1) { //READ more than one valid line data to the Buffer
+						if ((readChannel.read(bigByteBuffer.compact())) == -1) { //READ more than one valid line data to the Buffer
 							break;
 						}
+						//CHECKPOINT 1 - Verify if there is enough data to read a FULL next line
+						//CHECKPOINT 2 - Verify if 
 						bigByteBuffer.flip(); //get the buffer ready to read
-						/*pseudo code At this point we have the buffer with data. What we ASSUME, the first 8 is a double
-						1. read the first string length (position will be updated in bytebuffer)
-						2. calculate the first required length (stringlenght*2+8)
-						3. make a while cycle until the bytbuffer has enough remaining to get the requied string and long data
-							get the string and long, build the next result array and increment buffer position
-						after the while cycle compact the buffer, and then read again (but keep the already read data's position)
-						 */
 						currentStringLength = (int) bigByteBuffer.getDouble(); //this updates the Position of bigByteBuffer!
 						bigByteBuffer.position(bigByteBuffer.position() - 8); //Reset the position
 						currentLineFullLength = 8 + currentStringLength * 2 + 8;
