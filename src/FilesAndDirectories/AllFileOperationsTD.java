@@ -33,6 +33,7 @@ public class AllFileOperationsTD {
 //		AllFileOperations.deleteMultipleFiles(p.resolve("deldir"), "*.*");
 //		AllFileOperations.deleteSingleFileOrDir(p.resolve("deldir"));
 //		AllFileOperations.listDir(p.resolve("deldir"), null);
-		AllFileOperations.listDir(p, null);
+//		AllFileOperations.listDir(p, null);
+		AllFileOperations.copyFile(p.resolve("TC2-results.txt"), p.resolve("TC2-results-Copied.txt"));
 	}
 }

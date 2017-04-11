@@ -40,6 +40,7 @@ package FilesAndDirectories;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.NoSuchFileException;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.nio.file.DirectoryStream; //A mappa tartalmának kilistázásához kell
 
 import java.nio.file.Files;
@@ -54,6 +55,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path; //Interface
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import static java.nio.file.StandardOpenOption.*;
 
 /**
  *
@@ -193,7 +195,26 @@ public class AllFileOperations {
 		return false;
 	}
 
-	//TODO copySingleFileWithTransferToTransferFrom
+//Uses transferTo method between direct channels which is more effective
+	public static void copyFile(Path sourceFile, Path targetFile) {
+		if (!Files.exists(sourceFile)) {
+			throw new IllegalArgumentException("Source file does not exists.");
+		}
+		try (FileChannel readFromChannel = (FileChannel) Files.newByteChannel(sourceFile, READ);
+				FileChannel writeToChannel = (FileChannel) Files.newByteChannel(targetFile, WRITE, CREATE_NEW);) {
+			long bytesWritten = 0;
+			long sourceFileSize = readFromChannel.size();
+			//This works also:
+			//readFromChannel.transferTo(bytesWritten, sourceFileSize, writeToChannel);
+			//This makes sure all bytes are transferred and keeps count of bytes sent
+			while (bytesWritten < sourceFileSize) {
+				bytesWritten += readFromChannel.transferTo(bytesWritten, sourceFileSize - bytesWritten, writeToChannel);
+				System.out.println("");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 //Returns true if all files successfully copied
 	public static boolean copyMultipleFiles(Path source, Path target, String filter) {
