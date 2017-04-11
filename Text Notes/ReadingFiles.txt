@@ -42,5 +42,18 @@ newByteChannel() - using channel to read data to a buffer
 												\- ReadableByteChannel   / 
 																				ScatteringByteChannel
 	Notes
-		A direct buffer is faster if you are reading a lot of data from a file, as the data is transferred directly from the file to our buffer+ check todo list leaders
+	AllocateDirect()
+		Benefit
+			A direct buffer is faster if you are reading a lot of data from a file, as the data is transferred directly from the file to our buffer+ check todo list leaders
+	
+	Direct data transfer between channels
+		Benefits
+			The value of these methods lies in the potential for using the I/O capabilities of the underlying operating system directly
+			Where this is possible, the operation is likely to be much faster than copying from one file to another in a loop using the read() and write() methods you have seen.
+		transferTo(long position, long count, WritableByteChannel dst) 
+			From THIS channel opened to read to the channel that is opened to write
+			A channel that was opened for reading supports only the transferTo() method. 
+		transferFrom(ReadableByteChannel src, long position, long count))
+			From the src channel, transfer bytes to THIS channnel (must be opened for write)
+			A channel that was opened for writing supports only the transferFrom() method. 
 		
