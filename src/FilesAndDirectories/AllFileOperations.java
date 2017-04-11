@@ -193,6 +193,8 @@ public class AllFileOperations {
 		return false;
 	}
 
+	//TODO copySingleFileWithTransferToTransferFrom
+
 //Returns true if all files successfully copied
 	public static boolean copyMultipleFiles(Path source, Path target, String filter) {
 		if (!isDirectory(source)) {

@@ -278,6 +278,12 @@ public class AllReadingFiles {
 		return resultsArrayList;
 	}
 
+	/**
+	 * Read all mixed data type from BINARY file with newByteChannel
+	 * @param filename
+	 * @param readMethod
+	 * @return
+	 */
 	public static ArrayList readMixedDataFromByteChannel(Path filename, int readMethod) {
 		ArrayList resultArray = new ArrayList();
 		Formatter formattedResult = new Formatter();
@@ -452,4 +458,7 @@ after the while cycle compact the buffer, and then read again (but keep the alre
 		}//end catch
 		return resultArray;
 	}
+
+
+
 } //class
