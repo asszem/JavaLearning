@@ -108,4 +108,11 @@ public class ReadingRandomPositionTest {
 		assertEquals(resultFileSize % 8, 0); //Validate if the result file has only n*8 amount of bytes in it
 	}
 
+	@Test
+	public void testREplacelongAtRandomPosition_CorrectNumberWereReplaced() {
+		int actualDifferences = ReadingRandomPosition.compareResults(inputFile, resultFile);
+		int expectedDifferences = thisManyLongsToReplace;
+		assertEquals(expectedDifferences, actualDifferences);
+	}
+
 }
