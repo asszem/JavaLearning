@@ -45,6 +45,7 @@ public class ReadingRandomPositionTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testWhenFileDoesntExist() {
 		Path badInputFile = Paths.get("E:\\alma.txt");
-		boolean result=ReadingRandomPosition.readLongFromRandomPosition(badInputFile);
+		ReadingRandomPosition.readLongFromRandomPosition(badInputFile);
 	}
+
 }

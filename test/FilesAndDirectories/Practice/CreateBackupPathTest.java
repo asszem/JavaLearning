@@ -16,7 +16,7 @@ import org.junit.Ignore;
  * @author Andras Olah (olahandras78@gmail.com)
  */
 public class CreateBackupPathTest {
-
+	String toAppend="Junit";
 	public CreateBackupPathTest() {
 	}
 
@@ -37,7 +37,7 @@ public class CreateBackupPathTest {
 	}
 
 	/**
-	 * Test of getBackupPath method, of class CreateBackupPath.
+	 * Test of appendStringToFileName method, of class AppendStringToFileName.
 	 * This test runs only when there is no filename_backup.ext file created yet
 	 */
 	@Test
@@ -46,12 +46,12 @@ public class CreateBackupPathTest {
 		//given
 		Path originalFilename = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\Original File for BackupTest.txt");
 		//when
-		Path expResult = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\Original File for BackupTest_backup.txt");
+		Path expResult = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\Original File for BackupTest"+toAppend+".txt");
 		//then
 		//Run the test only if the backup file does not exists yet
 		if (!Files.exists(expResult)) {
 			System.out.println("Actually testing");
-			Path result = CreateBackupPath.getBackupPath(originalFilename);
+			Path result = AppendStringToFileName.appendStringToFileName(originalFilename,toAppend);
 			assertEquals(expResult, result);
 		} else {
 			System.out.println("Skipping this test, file already exists");
@@ -64,12 +64,12 @@ public class CreateBackupPathTest {
 		//given
 		Path originalFilename = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\Original File for BackupTest");
 		//when
-		Path expResult = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\Original File for BackupTest_backup");
+		Path expResult = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\Original File for BackupTest"+toAppend);
 		//then
 		//Run the test only if the backup file does not exists yet
 		if (!Files.exists(expResult)) {
 			System.out.println("Actually testing");
-			Path result = CreateBackupPath.getBackupPath(originalFilename);
+			Path result = AppendStringToFileName.appendStringToFileName(originalFilename,toAppend);
 			assertEquals(expResult, result);
 		} else {
 			System.out.println("Skipping this test, file already exists");
@@ -78,7 +78,7 @@ public class CreateBackupPathTest {
 	}
 	
 	/**
-	 * Test of getBackupPath method, of class CreateBackupPath.
+	 * Test of appendStringToFileName method, of class AppendStringToFileName.
 	 * This test validates if _backup is appended to the latest _backup file if that exists
 	 */
 	@Test
@@ -95,9 +95,9 @@ public class CreateBackupPathTest {
 		Path expResultWithOUTExtension = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\test_backup_backup");
 		if (Files.exists(alreadyExistsWithExtension) && Files.exists(alreadyExistsWithOUTExtension)) {
 			System.out.println("test_backup already exits");
-			Path resultWithExtension = CreateBackupPath.getBackupPath(originalFilenameWithExtension);
+			Path resultWithExtension = AppendStringToFileName.appendStringToFileName(originalFilenameWithExtension,"JunitTest");
 			assertEquals(expResultWithExtension, resultWithExtension);
-			Path resultWithOUTExtension = CreateBackupPath.getBackupPath(originalFilenameWithOUTExtension);
+			Path resultWithOUTExtension = AppendStringToFileName.appendStringToFileName(originalFilenameWithOUTExtension,"JunitTest");
 			assertEquals(expResultWithOUTExtension, resultWithOUTExtension);
 		} else {
 			System.out.println("Skipping this test, test_backup files do not exists");

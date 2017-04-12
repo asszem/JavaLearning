@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class CopyWithTransferToAndTransferFromTest {
 
 	Path sourceFile = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\test.txt");
-	Path targetFile = CreateBackupPath.getBackupPath(sourceFile);
+	Path targetFile = AppendStringToFileName.appendStringToFileName(sourceFile, "JunitTest");
 
 	public CopyWithTransferToAndTransferFromTest() {
 	}

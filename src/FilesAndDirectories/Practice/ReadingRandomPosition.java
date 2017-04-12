@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  *
- * @author Andras Olah (olahandras78@gmail.com)
+ * @author Andras Olah (olahandras78@gmail.com) based on Hortons chapter 11, page 438
  */
 public class ReadingRandomPosition {
 
@@ -42,13 +42,27 @@ public class ReadingRandomPosition {
 		}
 		return resultList;
 	}
+
+	/**
+	 * Replaces the LONG value read from a random position with 999999L.
+	 *
+	 * but not in the original file, it creates a new file, called _longReplaced using the createBackup helper class1s method
+	 *
+	 * @param inputFile
+	 */
+	public static void replaceLongAtRandomPosition(Path inputFile) {
+		if (!Files.exists(inputFile)) {
+			throw new IllegalArgumentException("File not found!");
+		}
+	}
+
 	public static void main(String[] args) {
 		Path inputFile = Paths.get("E:\\javaFileOpTest\\ReadingFiles\\primes.bin");
-		ArrayList resultArrayList=readLongFromRandomPosition(inputFile);
-		int counter=1;
-		for (Object current:resultArrayList){
-			System.out.printf("%02d= %-4d",counter++,current);
-			if (counter%6==0){
+		ArrayList resultArrayList = readLongFromRandomPosition(inputFile);
+		int counter = 1;
+		for (Object current : resultArrayList) {
+			System.out.printf("%02d= %-4d", counter++, current);
+			if (counter % 6 == 0) {
 				System.out.println("");
 			}
 		}

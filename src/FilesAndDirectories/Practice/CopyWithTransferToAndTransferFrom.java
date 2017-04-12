@@ -43,6 +43,6 @@ public class CopyWithTransferToAndTransferFrom {
 	//This is to test run of this class
 	public static void main(String[] args) {
 		Path sourceFile = Paths.get("E:\\javaFileOpTest\\CreateBackupFile\\test.txt");
-		copyFile(sourceFile, CreateBackupPath.getBackupPath(sourceFile));
+		copyFile(sourceFile, AppendStringToFileName.appendStringToFileName(sourceFile,"copied"));
 	}
 }
