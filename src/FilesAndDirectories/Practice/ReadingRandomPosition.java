@@ -50,10 +50,12 @@ public class ReadingRandomPosition {
 	 *
 	 * @param inputFile
 	 */
-	public static void replaceLongAtRandomPosition(Path inputFile) {
+	public static void replaceLongAtRandomPosition(Path inputFile, String toAppend) {
 		if (!Files.exists(inputFile)) {
 			throw new IllegalArgumentException("File not found!");
 		}
+		Path resultFile=AppendStringToFileName.appendStringToFileName(inputFile, toAppend);
+		CopyWithTransferToAndTransferFrom.copyFile(inputFile, resultFile);
 	}
 
 	public static void main(String[] args) {
