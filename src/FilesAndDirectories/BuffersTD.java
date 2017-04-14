@@ -4,7 +4,10 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
+import java.nio.MappedByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * This class is to TEST buffers
@@ -25,7 +28,7 @@ public class BuffersTD {
 		double testDouble = 456.789;
 		char testChr = 'A';
 		//</editor-fold>
-		int testCase = 8;
+		int testCase = 9;
 		System.out.println("Test case: " + testCase);
 		switch (testCase) {
 			case 0:
@@ -335,6 +338,12 @@ public class BuffersTD {
 				String output;
 				output = ByteBuffer.wrap(byteArray).asCharBuffer().toString();
 				System.out.println(output);
+				//</editor-fold>
+				break;
+			case 9:
+				//<editor-fold desc="Create MappedByteBuffer">
+				Path sourceFile=Paths.get("E:\\javaFileOpTest\\ReadingFiles\\fileChannelRead.txt");
+				MappedByteBuffer newMappedByteBuffer=Buffers.createMappedByteBuffer(sourceFile);
 				//</editor-fold>
 				break;
 		}//end Switch

@@ -49,7 +49,7 @@ public class MemoryMappedFileTest {
 		if (testObject.newFile != null) {
 			try {
 				testObject.mappedByteBuffer=null;
-//				System.gc();
+				System.gc();
 				Files.delete(testObject.newFile);
 				testObject.newFile = null;
 			} catch (IOException ex) {

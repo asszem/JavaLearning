@@ -79,4 +79,28 @@ MemoryMappedFiles - MappedByteBuffer - mappedByteBuffer = fileChannel.map(READ_W
 		force() - forces any changes that you make to the buffer’s contents to be written to the file and returns a reference to the buffer
 		load() - Tries on a “best efforts” basis to load the contents of the buffer into memory and returns a reference to the buffer.
 		isLoaded() - Returns true if it is likely that this buffer’s contents are available in physical memory and false otherwise.
-	
+
+Locking Files - on MemoryMapped files
+		A lock on a file is encapsulated by an object of the java.nio.channels.FileLock class. 
+	Shared lock
+		A shared lock allows several processes to have concurrent read access to the file. 
+	Exclusive lock
+			An exclusive lock gives you exclusive access to the file; no one else can access the file while you have the exclusive lock. Useful when creating a checksum for example
+		.lock()
+			The lock() method for a FileChannel object tries to obtain an EXCLUSIVE lock on the channel’s entire file. 
+			No other program or thread can access the file while this channel holds the lock. 
+			A PREREQUISITE for obtaining an exclusive lock is that the file has been opened for both reading and writing.
+			If another program or thread already has a lock on the file, the lock() method BLOCKS 
+			(i.e., does not return) until the lock on the file is released and can be acquired by this channel
+		.tryLock()
+			 It either returns a reference to a valid FileLock object or returns null if the lock could not be acquired. 
+	Verifying lock
+		isValid() method for a FileLock object to determine whether it is valid. A return value of true indicates a valid lock
+	Locking Part of a File
+		.lock(long position, long size, boolean shared)
+		.tryLock(long position, long size, boolean shared)
+		The effect of a shared lock is to prevent an exclusive lock being acquired by another program that overlaps the region that is locked. 
+	Overlapping locks
+		A shared lock DOES permit another program to acquire a SHARED lock on a region of the file that may overlap the region to which the original shared lock applies
+		A single Java Virtual Machine (JVM) does not allow overlapping locks, so different threads running on the same JVM cannot have overlapping locks on a file. 
+		If you want to test for the presence of an overlapping lock, you can call the overlaps() method for your lock object.

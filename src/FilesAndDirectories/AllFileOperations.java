@@ -41,6 +41,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.NoSuchFileException;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.file.DirectoryStream; //A mappa tartalmának kilistázásához kell
 
 import java.nio.file.Files;
@@ -378,5 +379,65 @@ public class AllFileOperations {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+//Gets an exclusive lock over entire file - breaks until lock is aquired
+	public static FileLock getExclusiveLock(Path fileToLock) {
+		try {
+			//try-with-resources would release the lock outside try block!
+			FileChannel fileChannel = (FileChannel) Files.newByteChannel(fileToLock, READ, WRITE);
+			FileLock isLocked = fileChannel.lock();
+			return isLocked;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+//Tries to get an exclusive lock over entire file, but only maxAttempt times
+	public static FileLock tryExclusiveLock(Path fileToLock, int maxAttempts) {
+		FileLock isLocked;
+		try {
+			//try-with-resources would release the lock outside try block!
+			FileChannel fileChannel = (FileChannel) Files.newByteChannel(fileToLock, READ, WRITE);
+			for (int attempts = 0; attempts < maxAttempts; attempts++) {
+				if ((isLocked = fileChannel.tryLock()).isValid()) {
+					//Lock successfully aquired
+					return isLocked;
+				}
+			}
+			//If this is reached, no lock was aquired
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+//Tries to get a shared lock on the entire file maxAttmepts time
+	public static FileLock trySharedLock(Path fileToLock, int maxAttempts) {
+		FileLock isLocked;
+		try {
+			//try-with-resources would release the lock outside try block!
+			FileChannel fileChannel = (FileChannel) Files.newByteChannel(fileToLock, READ, WRITE);
+			for (int attempts = 0; attempts < maxAttempts; attempts++) {
+				// Wait 200 msec before the next try for a fle lock
+				//nested try
+				try {
+					Thread.sleep(200); // Wait for 200 milliseconds
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if ((isLocked = fileChannel.tryLock(0L, fileChannel.size(), true)).isValid()) {
+					//Lock successfully aquired
+					return isLocked;
+				}
+			}
+			//If this is reached, no lock was aquired
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

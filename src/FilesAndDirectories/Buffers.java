@@ -1,11 +1,18 @@
 package FilesAndDirectories;
 
+import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import static java.nio.channels.FileChannel.MapMode.READ_WRITE;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import static java.nio.file.StandardOpenOption.*;
 import java.util.Formatter;
 
 /**
@@ -17,6 +24,23 @@ public class Buffers {
 	static ByteBuffer createByteBuffer(int capacity) {
 		ByteBuffer buffer = ByteBuffer.allocate(capacity);
 		return buffer;
+	}
+
+	static public MappedByteBuffer createMappedByteBuffer(Path sourceFile) {
+		if (!Files.exists(sourceFile)) {
+			throw new IllegalArgumentException("Input file does not exists!");
+		}
+		try {
+			FileChannel fileChannel = (FileChannel) Files.newByteChannel(sourceFile, READ, WRITE);
+			long fileSize = fileChannel.size();
+			//Open the buffer for ReadWrite, from position0, up until last position, and immedieately load it
+			MappedByteBuffer mappedByteBuffer = fileChannel.map(READ_WRITE, 0L, fileSize).load();
+			fileChannel.close(); //the mappedByteBuffer should have all the data
+			return mappedByteBuffer;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	static boolean newPositionValidation(int newPosition, int newLimit) {

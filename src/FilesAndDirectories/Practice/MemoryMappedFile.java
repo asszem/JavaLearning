@@ -14,7 +14,7 @@ import static java.nio.file.StandardOpenOption.*;
  *
  * @author Andras Olah (olahandras78@gmail.com) Horton, p439, Chapter 11 - Reading files
  */
-//TODO add this method to Reading Files class when completed
+
 public class MemoryMappedFile {
 
 	protected MappedByteBuffer mappedByteBuffer;
