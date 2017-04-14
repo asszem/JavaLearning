@@ -46,7 +46,7 @@ newByteChannel() - using channel to read data to a buffer
 		Benefit
 			A direct buffer is faster if you are reading a lot of data from a file, as the data is transferred directly from the file to our buffer+ check todo list leaders
 	
-	Direct data transfer between channels
+	Direct data transfer between channels (transferTO and transferFrom)
 		Benefits
 			The value of these methods lies in the potential for using the I/O capabilities of the underlying operating system directly
 			Where this is possible, the operation is likely to be much faster than copying from one file to another in a loop using the read() and write() methods you have seen.
@@ -56,4 +56,27 @@ newByteChannel() - using channel to read data to a buffer
 		transferFrom(ReadableByteChannel src, long position, long count))
 			From the src channel, transfer bytes to THIS channnel (must be opened for write)
 			A channel that was opened for writing supports only the transferFrom() method. 
-		
+
+MemoryMappedFiles - MappedByteBuffer - mappedByteBuffer = fileChannel.map(READ_WRITE, 0L, fileSize).load();
+	Source
+		Horton, p439, Chapter 11 - Reading files
+	Benefits
+		A memory-mapped file is a file that has its contents mapped into an area of virtual memory in your computer.
+		This enables you to reference or update the data in the file directly without performing any explicit file read or write operations on the physical file yourself.  
+		When you reference a part of the file that is not actually in real memory, it is automatically brought in by your operating system.
+		Because of the potentially immediate availability of the data it contains, a memory-mapped file is particularly useful when you need to access the file randomly. 
+		Your program code can reference the data in the file just as though it were all resident in memory.
+	Drawbacks
+		Unless the file is large, using a mapped byte buffer is typically slower than using the read() and write() methods for a channel
+	Creating
+		The map() method for a FileChannel object returns a reference to a buffer of type MappedByteBuffer that maps to a specified part of the channel’s file:
+		MappedByteBuffer map(int mode, long position, long size)
+		Map modes
+			MapMode.READ_ONLY (channel must be opened READ only) 
+			MapMode.READ_WRITE (channel must be opened READ, WRITE) The changes might or might not be visible to other users who have mapped the same file.
+			MapMode.PRIVATE (channel must be opened READ, WRITE) You can access or change the buffer, but changes are not propagated to the file and are not visible to users who have mapped the same file.
+	MappedByteBuffer methods
+		force() - forces any changes that you make to the buffer’s contents to be written to the file and returns a reference to the buffer
+		load() - Tries on a “best efforts” basis to load the contents of the buffer into memory and returns a reference to the buffer.
+		isLoaded() - Returns true if it is likely that this buffer’s contents are available in physical memory and false otherwise.
+	
