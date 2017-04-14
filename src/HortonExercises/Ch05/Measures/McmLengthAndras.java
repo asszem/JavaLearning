@@ -25,6 +25,7 @@ package HortonExercises.Ch05.Measures;
 public class McmLengthAndras {
 
 	public static void main(String[] args) {
+		//<editor-fold desc="Some test data">
 		/*
     lengths[0] = new mcmLength(274.65);
     lengths[1] = new mcmLength(274);
@@ -47,6 +48,7 @@ Length 0m 27cm 4mm is less than length 274m 2cm 3mm
 Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 
 		 */
+		//</editor-fold>
 		McmLengthAndras obj0 = new McmLengthAndras(274.65);
 		McmLengthAndras obj1 = new McmLengthAndras(274);
 		McmLengthAndras obj2 = new McmLengthAndras(274, 2, 3);
@@ -147,7 +149,7 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 		System.out.println("Obj B: " + iObj1);
 		System.out.println("Add #" + this.objectIdentifier + " + #" + iObj1.objectIdentifier + "");
 		System.out.println("Result to be converted before creating new object.");
-		int conversed[] = conversion(this.meters + iObj1.meters, this.centimeters + iObj1.centimeters, this.millimeters + iObj1.millimeters);
+		int conversed[] = conversion(this.getMeters() + iObj1.getMeters(), this.getCentimeters() + iObj1.getCentimeters(), this.getMillimeters() + iObj1.getMillimeters());
 		McmLengthAndras result = new McmLengthAndras(conversed[0], conversed[1], conversed[2]);
 		System.out.println("Result of Add() method: " + result);
 	}
@@ -158,7 +160,7 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 		System.out.println("Obj B: " + iObj1);
 		System.out.println("Add #" + this.objectIdentifier + " - #" + iObj1.objectIdentifier + "");
 		System.out.println("Result to be converted before creating new object.");
-		int conversed[] = conversion(this.meters - iObj1.meters, this.centimeters - iObj1.centimeters, this.millimeters - iObj1.millimeters);
+		int conversed[] = conversion(this.getMeters() - iObj1.getMeters(), this.getCentimeters() - iObj1.getCentimeters(), this.getMillimeters() - iObj1.getMillimeters());
 		McmLengthAndras result = new McmLengthAndras(conversed[0], conversed[1], conversed[2]);
 		System.out.println("Result of Substract() method: " + result);
 	}
@@ -170,7 +172,7 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 		System.out.println(this);
 		System.out.println("Result to be converted before creating new object.");
 		//all parameters needs to be multiplied by the integer
-		int conversed[] = conversion(this.meters * multiplier, this.centimeters * multiplier, this.millimeters * multiplier);
+		int conversed[] = conversion(this.getMeters() * multiplier, this.getCentimeters() * multiplier, this.getMillimeters() * multiplier);
 		McmLengthAndras result = new McmLengthAndras(conversed[0], conversed[1], conversed[2]);
 		System.out.println("Result object of multiply() method: " + result);
 	}
@@ -184,7 +186,7 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 
 			//	int conversed[] = conversion(this.meters / divider, this.centimeters / divider, this.millimeters / divider);
 			//	McmLengthAndras result = new McmLengthAndras(conversed[0], conversed[1], conversed[2]);
-			McmLengthAndras result = new McmLengthAndras((this.meters * 1000 + this.centimeters * 10 + this.millimeters) / divider);
+			McmLengthAndras result = new McmLengthAndras((this.getMeters() * 1000 + this.getCentimeters() * 10 + this.getMillimeters()) / divider);
 			System.out.println("Result of divide() method: " + result);
 		} else {
 			System.out.println("Nullával ne ossz!");
@@ -196,12 +198,12 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 		System.out.println("Obj A:" + obj1);
 		System.out.println("Obj B:" + obj2);
 		//mi van, ha null valamelyik érték, de a másik nem? a szorzat nulla lesz. Ezért akkor helyettesítsük egyre.
-		int obj1Meter = obj1.meters == 0 && obj2.meters != 0 ? 1 : obj1.meters;
-		int obj2Meter = obj2.meters == 0 && obj1.meters != 0 ? 1 : obj2.meters;
-		int obj1Centi = obj1.centimeters == 0 && obj2.centimeters != 0 ? 1 : obj1.centimeters;
-		int obj2Centi = obj2.centimeters == 0 && obj1.centimeters != 0 ? 1 : obj2.centimeters;
-		int obj1Milli = obj1.millimeters == 0 && obj2.millimeters != 0 ? 1 : obj1.millimeters;
-		int obj2Milli = obj2.millimeters == 0 && obj1.millimeters != 0 ? 1 : obj2.millimeters;
+		int obj1Meter = obj1.getMeters() == 0 && obj2.getMeters() != 0 ? 1 : obj1.getMeters();
+		int obj2Meter = obj2.getMeters() == 0 && obj1.getMeters() != 0 ? 1 : obj2.getMeters();
+		int obj1Centi = obj1.getCentimeters() == 0 && obj2.getCentimeters() != 0 ? 1 : obj1.getCentimeters();
+		int obj2Centi = obj2.getCentimeters() == 0 && obj1.getCentimeters() != 0 ? 1 : obj2.getCentimeters();
+		int obj1Milli = obj1.getMillimeters() == 0 && obj2.getMillimeters() != 0 ? 1 : obj1.getMillimeters();
+		int obj2Milli = obj2.getMillimeters() == 0 && obj1.getMillimeters() != 0 ? 1 : obj2.getMillimeters();
 		int conversed[] = conversion(obj1Meter * obj2Meter, obj1Centi * obj2Centi, obj1Milli * obj2Milli);
 //		System.out.println("Area is meters:" + conversed[0] + " centimeters:" + conversed[1] + " millimeters:" + conversed[2] + "");
 		double[] unitDisplayed = unitDisplay(conversed[0], conversed[1], conversed[2]);
@@ -210,11 +212,11 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 //				+ "\nSquare Centimeters:" + unitDisplayed[1]
 //				+ "\nSquare Millimeteres:" + unitDisplayed[2]);
 		McmLengthAndras area = new McmLengthAndras(
-				(obj1.meters * 1000 + obj1.centimeters * 10 + obj1.millimeters)
-				* (obj2.meters * 1000 + obj2.centimeters * 10 + obj2.millimeters)
+				(obj1.getMeters() * 1000 + obj1.getCentimeters() * 10 + obj1.getMillimeters())
+				* (obj2.getMeters() * 1000 + obj2.getCentimeters() * 10 + obj2.getMillimeters())
 		);
 		System.out.println("Area object: " + area);
-		double[] areaDisplayed = unitDisplay(area.meters, area.centimeters, area.millimeters);
+		double[] areaDisplayed = unitDisplay(area.getMeters(), area.getCentimeters(), area.getMillimeters());
 
 		System.out.println("Result displayed for each unit:\n"
 				+ "Square Meters:" + areaDisplayed[0]
@@ -226,8 +228,8 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 	public int areaObj(McmLengthAndras o1) {
 
 		return (
-				(meters * 1000 + centimeters * 10 + millimeters)
-				* (o1.meters * 1000 + o1.centimeters * 10 + o1.millimeters)
+				(getMeters() * 1000 + getCentimeters() * 10 + getMillimeters())
+				* (o1.getMeters() * 1000 + o1.getCentimeters() * 10 + o1.getMillimeters())
 		);
 	}
 
@@ -247,13 +249,34 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 
 	//Idea stolen from Horton solution, this method to convert lenght to MM for calculations
 	public int toMM() {
-		return this.meters * 1000 + this.centimeters * 10 + this.millimeters;
+		return this.getMeters() * 1000 + this.getCentimeters() * 10 + this.getMillimeters();
 	}
 
 	@Override
 	public String toString() {
 //		return "Object #" + objectIdentifier + " Properties: \t Meters:" + meters + " \tCentimeters:" + centimeters + " \t\tMillimeters:" + millimeters + ".";
-		return "Object #" + objectIdentifier + " Properties: \t " + meters + "m " + centimeters + "cm " + millimeters + "mm.";
+		return "Object #" + objectIdentifier + " Properties: \t " + getMeters() + "m " + getCentimeters() + "cm " + getMillimeters() + "mm.";
+	}
+
+	/**
+	 * @return the meters
+	 */
+	public int getMeters() {
+		return meters;
+	}
+
+	/**
+	 * @return the centimeters
+	 */
+	public int getCentimeters() {
+		return centimeters;
+	}
+
+	/**
+	 * @return the millimeters
+	 */
+	public int getMillimeters() {
+		return millimeters;
 	}
 
 }

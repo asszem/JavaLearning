@@ -71,11 +71,39 @@ public class tkgWeightAndras {
 	}
 
 	public int toGrams() {
-		return tons * GRperTON + kilograms * GRperKG + grams;
+		return getTons() * GRperTON + getKilograms() * GRperKG + getGrams();
 	}
 
 	@Override
 	public String toString() {
-		return "Obj #" + this.objID + " is " + this.tons + "t " + this.kilograms + "kg " + this.grams + "g";
+		return "Obj #" + this.objID + " is " + this.getTons() + "t " + this.getKilograms() + "kg " + this.getGrams() + "g";
+	}
+
+	/**
+	 * @return the tons
+	 */
+	public int getTons() {
+		return tons;
+	}
+
+	/**
+	 * @param tons the tons to set
+	 */
+	public void setTons(int tons) {
+		this.tons = tons;
+	}
+
+	/**
+	 * @return the kilograms
+	 */
+	public int getKilograms() {
+		return kilograms;
+	}
+
+	/**
+	 * @return the grams
+	 */
+	public int getGrams() {
+		return grams;
 	}
 }

@@ -14,6 +14,21 @@ package HortonExercises.Ch05.Measures;
  */
 public class CarpetsAndras {
 
+	McmLengthAndras carpetWidth;
+	McmLengthAndras carpetSize;
+	double carpetWeightPerSQM;
+	int numberOfCarpets;
+	double carpetArea;
+	tkgWeightAndras totalWeight;
+
+	public void calculateArea() {
+
+	}
+
+	public void calculateTotalWeight() {
+
+	}
+
 	public static void main(String[] args) {
 //		McmLengthAndras carpet1 = new McmLengthAndras(4, 0, 0);
 		McmLengthAndras carpet1 = new McmLengthAndras(4, 0, 0);
@@ -27,29 +42,36 @@ public class CarpetsAndras {
 		final double SQRMMtoSQRM = 1000000;  //1sqmm= 0.000001 sqm
 
 //1. calculate the square meters of carpet
-		double carpet1AreaSqMeter = (double) (carpet1.areaObj(carpet1B)/SQRMMtoSQRM);
-		double carpet2AreaSqMeter = (double) (carpet2.areaObj(carpet2B)/SQRMMtoSQRM);
-		System.out.println("Carpet 1: "+carpet1AreaSqMeter+"sq meter \nCarpet 2: "+carpet2AreaSqMeter+"sq meter");
+		double carpet1AreaSqMeter = (double) (carpet1.areaObj(carpet1B) / SQRMMtoSQRM);
+		double carpet2AreaSqMeter = (double) (carpet2.areaObj(carpet2B) / SQRMMtoSQRM);
+		System.out.println("Carpet 1: " + carpet1AreaSqMeter + "sq meter \nCarpet 2: " + carpet2AreaSqMeter + "sq meter");
 //2. Calculate the actual weight of 1 carpet in Kg
 		double carpet1WeightOneCarpet = carpet1AreaSqMeter * carpet1WeightPerSQM;
 		double carpet2WeightOneCarpet = carpet2AreaSqMeter * carpet2WeightPerSQM;
-		System.out.println("Carpet 1 weight:"+carpet1WeightOneCarpet+"kg\nCarpet 2 weight:"+carpet2WeightOneCarpet+"kg");
+		System.out.println("Carpet 1 weight:" + carpet1WeightOneCarpet + "kg\nCarpet 2 weight:" + carpet2WeightOneCarpet + "kg");
 //3. Calculate the total weight of all 200 and 60 carpets in KGs
 		double totalCarpet1Weight = carpet1WeightOneCarpet * numCarpet1;
 		double totalCarpet2Weight = carpet2WeightOneCarpet * numCarpet2;
-		System.out.println("Carpet 1 total weight:"+totalCarpet1Weight+"kg\nCarpet2 total weight:"+totalCarpet2Weight+" kg");
+		System.out.println("Carpet 1 total weight:" + totalCarpet1Weight + "kg\nCarpet2 total weight:" + totalCarpet2Weight + " kg");
 //4. Display the total weight results in T KG G format
-		tkgWeightAndras carpet1TotalDisplay = new tkgWeightAndras(0,0, (int) totalCarpet1Weight*1000);
-		tkgWeightAndras carpet2TotalDisplay= new tkgWeightAndras(totalCarpet2Weight); // mert megírtam a double értéket fogadó konstruktort is
+		tkgWeightAndras carpet1TotalDisplay = new tkgWeightAndras(0, 0, (int) totalCarpet1Weight * 1000);
+		tkgWeightAndras carpet2TotalDisplay = new tkgWeightAndras(totalCarpet2Weight); // mert megírtam a double értéket fogadó konstruktort is
 		System.out.println(carpet1TotalDisplay);
 		System.out.println(carpet2TotalDisplay);
-/*
+		/*
+		
+		Carpet 1: Size = 4m 0cm 0mm by 2m 9cm 0mm
+          Weight per sq. m. = 1.25
+          Area = 8.36 sq. m.
+          Weight = 0t 10kg 450g
+          Weight of 200 carpets = 2t 90kg 0g
+
 		Carpet 2: Size = 3m 57cm 0mm by 5m 0cm 0mm
           Weight per sq. m. = 1.05
           Area = 17.849999999999998 sq. m.
           Weight = 0t 18kg 743g
           Weight of 60 carpets = 1t 124kg 580g
 		//TODO find out, neki miért 580 és nekem miért 550 jön ki?
-		*/
+		 */
 	}
 }
