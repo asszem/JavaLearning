@@ -225,7 +225,7 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 	}
 
 	//Ez nem egy objektumot ad vissza, csak simán a területet, mméterben
-	public int areaObj(McmLengthAndras o1) {
+	public int calcAreaInMillimeters(McmLengthAndras o1) {
 
 		return (
 				(getMeters() * 1000 + getCentimeters() * 10 + getMillimeters())

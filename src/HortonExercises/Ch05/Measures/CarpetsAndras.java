@@ -14,14 +14,22 @@ package HortonExercises.Ch05.Measures;
  */
 public class CarpetsAndras {
 
+	final static double SQRMMtoSQRM = 1000000;  //1sqmm= 0.000001 sqm
 	McmLengthAndras carpetWidth;
-	McmLengthAndras carpetSize;
+	McmLengthAndras carpetHeight;
 	double carpetWeightPerSQM;
 	int numberOfCarpets;
-	double carpetArea;
+	int carpetAreaInMillimeters;
+	double carpetAreaInMeters;
+	tkgWeightAndras singleCarpetWeight;
 	tkgWeightAndras totalWeight;
 
 	public void calculateArea() {
+		carpetAreaInMillimeters = carpetWidth.calcAreaInMillimeters(carpetHeight);
+		carpetAreaInMeters=(double) (carpetAreaInMillimeters/SQRMMtoSQRM);
+	}
+
+	public void calculateSingleCarpetWeight(){
 
 	}
 
@@ -39,11 +47,10 @@ public class CarpetsAndras {
 		double carpet2WeightPerSQM = 1.05;
 		int numCarpet1 = 200;
 		int numCarpet2 = 60;
-		final double SQRMMtoSQRM = 1000000;  //1sqmm= 0.000001 sqm
 
 //1. calculate the square meters of carpet
-		double carpet1AreaSqMeter = (double) (carpet1.areaObj(carpet1B) / SQRMMtoSQRM);
-		double carpet2AreaSqMeter = (double) (carpet2.areaObj(carpet2B) / SQRMMtoSQRM);
+		double carpet1AreaSqMeter = (double) (carpet1.calcAreaInMillimeters(carpet1B) / SQRMMtoSQRM);
+		double carpet2AreaSqMeter = (double) (carpet2.calcAreaInMillimeters(carpet2B) / SQRMMtoSQRM);
 		System.out.println("Carpet 1: " + carpet1AreaSqMeter + "sq meter \nCarpet 2: " + carpet2AreaSqMeter + "sq meter");
 //2. Calculate the actual weight of 1 carpet in Kg
 		double carpet1WeightOneCarpet = carpet1AreaSqMeter * carpet1WeightPerSQM;
