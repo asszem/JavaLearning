@@ -233,6 +233,15 @@ Length 274m 2cm 3mm is greater than length 0m 0cm 0mm
 		);
 	}
 
+	//This object to use (double) cast to get the same result as Horton for Carpet2 area 17.8499999...
+	public double calcAreaInMeters(McmLengthAndras height){
+		final int CM_TO_METER=100;
+		final int MM_TO_METER=1000;
+		double carpetWidth=(double)this.getMeters()+(double)(this.getCentimeters())/CM_TO_METER+(double)(this.getMillimeters())/MM_TO_METER;
+		double carpetHeight=(double) height.getMeters()+(double)(height.getCentimeters())/CM_TO_METER+(double)(height.getMillimeters())/MM_TO_METER;
+		return carpetWidth*carpetHeight;
+	}
+
 	//Compare objects
 	static void compare(McmLengthAndras iObj1, McmLengthAndras iObj2) {
 		/*

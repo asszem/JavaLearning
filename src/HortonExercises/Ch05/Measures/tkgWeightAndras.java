@@ -26,7 +26,7 @@ public class tkgWeightAndras {
 		this(inputT * GRperTON + inputK * GRperKG + inputG);
 //		objID = objCount++;  //Azért nem kell, mert a this által meghívott konstruktor elvégzi ezt.
 	}
-
+	
 	public tkgWeightAndras(int inputGrams) {
 		tons = inputGrams / GRperTON; //a törtrészeket úgyis levágja
 		kilograms = (inputGrams - GRperTON * tons) / GRperKG; //kivonja a tonnákat. Ha negatív szám lesz, akkor az osztás eredménye nulla
@@ -45,7 +45,7 @@ public class tkgWeightAndras {
 	//Constructor that accepts double as Kilograms
 	public tkgWeightAndras(double inputKg) {
 		this ((int)Math.round(inputKg*1000));
-		System.out.println("double");
+//		System.out.println("double");
 	}
 
 	public tkgWeightAndras() {

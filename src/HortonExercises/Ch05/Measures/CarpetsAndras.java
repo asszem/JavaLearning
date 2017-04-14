@@ -17,7 +17,7 @@ public class CarpetsAndras {
 	final static double SQRMMtoSQRM = 1000000;  //1sqmm= 0.000001 sqm
 	McmLengthAndras carpetWidth;
 	McmLengthAndras carpetHeight;
-	double carpetWeightPerSQM;
+	double carpetWeightKgPerSQM;
 	int numberOfCarpets;
 	int carpetAreaInMillimeters;
 	double carpetAreaInMeters;
@@ -25,20 +25,38 @@ public class CarpetsAndras {
 	tkgWeightAndras totalWeight;
 
 	public void calculateArea() {
-		carpetAreaInMillimeters = carpetWidth.calcAreaInMillimeters(carpetHeight);
-		carpetAreaInMeters=(double) (carpetAreaInMillimeters/SQRMMtoSQRM);
+//		carpetAreaInMillimeters = carpetWidth.calcAreaInMillimeters(carpetHeight);
+//		carpetAreaInMeters=(double) (carpetAreaInMillimeters/SQRMMtoSQRM);
+		carpetAreaInMeters = carpetWidth.calcAreaInMeters(carpetHeight);
 	}
 
-	public void calculateSingleCarpetWeight(){
-
+	public void calculateSingleCarpetWeight() {
+		singleCarpetWeight = new tkgWeightAndras(carpetAreaInMeters * carpetWeightKgPerSQM);
 	}
 
 	public void calculateTotalWeight() {
+		//There are two working methods, they basically do the same
 
+//Method 1
+		//convert to gramm
+		final int TON_TO_GRAM = 1000000;
+		final int KG_TO_GRAM = 1000;
+		int oneCarpetInGrams = singleCarpetWeight.getTons() * TON_TO_GRAM + singleCarpetWeight.getKilograms() * KG_TO_GRAM + singleCarpetWeight.getGrams();
+		//multiply with total number of carpets
+		int totalGramms = oneCarpetInGrams * numberOfCarpets;
+		//create new weight based on total gramms
+		//totalWeight=new tkgWeightAndras(totalGramms);
+
+//Method2
+		totalWeight = new tkgWeightAndras(singleCarpetWeight.toGrams() * numberOfCarpets);
+
+//This was the root cause because it calculated only the kilos, not the grams
+		//totalWeight=new tkgWeightAndras(numberOfCarpets * (carpetAreaInMeters*carpetWeightKgPerSQM));
 	}
 
 	public static void main(String[] args) {
-//		McmLengthAndras carpet1 = new McmLengthAndras(4, 0, 0);
+		//<editor-fold desc="Original main procedure">
+/*
 		McmLengthAndras carpet1 = new McmLengthAndras(4, 0, 0);
 		McmLengthAndras carpet1B = new McmLengthAndras(2, 9, 0);
 		McmLengthAndras carpet2 = new McmLengthAndras(3, 57, 0);
@@ -66,7 +84,6 @@ public class CarpetsAndras {
 		System.out.println(carpet1TotalDisplay);
 		System.out.println(carpet2TotalDisplay);
 		/*
-		
 		Carpet 1: Size = 4m 0cm 0mm by 2m 9cm 0mm
           Weight per sq. m. = 1.25
           Area = 8.36 sq. m.
@@ -78,7 +95,7 @@ public class CarpetsAndras {
           Area = 17.849999999999998 sq. m.
           Weight = 0t 18kg 743g
           Weight of 60 carpets = 1t 124kg 580g
-		//TODO find out, neki miért 580 és nekem miért 550 jön ki?
 		 */
+		//</editor-fold>
 	}
 }
