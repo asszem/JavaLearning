@@ -32,18 +32,21 @@ public class E1_Andras {
 			"Who begins too much achieves little.",
 			"Who knows most says least.",
 			"A wise man sits on the hole in his carpet.",
-			"És ezt még én írtam hozzá"
-		};
-		Charset charset = Charset.defaultCharset();
+			"És ezt még én írtam hozzá",
+			"1",
+			"22",
+			"333"};
+		Charset charset = Charset.forName("UTF-16");
+//		Charset charset = Charset.defaultCharset();
 		Path p = Paths.get("E:\\javaTest", "Exercises", "H10", "Ex1");
 		System.out.println("path: " + p);
 
 		//Create a buffer to hold the line lenghts (4 bytes for each line in array)
-		ByteBuffer bb = ByteBuffer.allocate(sayings.length*4);
+		ByteBuffer bb = ByteBuffer.allocate(sayings.length * 4);
 		IntBuffer intB = bb.asIntBuffer();
 
 		//Add the length of each line to the intB buffer
-		for (String saying:sayings){
+		for (String saying : sayings) {
 			intB.put(saying.length());
 		}
 
