@@ -46,7 +46,7 @@ public class PrimesToFile3 {
 			primes[count++] = number;                                      // We got one!
 		}
 
-		Path file = Paths.get("E:\\javaTest\\H10\\primes.txt");
+		Path file = Paths.get("J:\\Writing Files\\primesMixed.bin");
 		try {
 			Files.createDirectories(file.getParent());                       // Make sure we have the directory
 		} catch (IOException e) {
