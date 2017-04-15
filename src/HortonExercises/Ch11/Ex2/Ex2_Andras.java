@@ -50,7 +50,7 @@ public class Ex2_Andras {
 		try (FileChannel fileChannel = (FileChannel) Files.newByteChannel(sourceFile, READ)) {
 			ByteBuffer byteBuffer = ByteBuffer.allocate(100);
 //			byteBuffer.position(byteBuffer.capacity()); //preparing for .compact
-byteBuffer.flip();
+			byteBuffer.flip();
 			sourceFileSize = fileChannel.size();
 			while (true) { //exit if EOF reached
 				//Read to the bytebuffer
@@ -80,8 +80,8 @@ byteBuffer.flip();
 					}
 					currentLong = byteBuffer.getLong();
 //generate the next string
-				readedStringsArrayList.add(currentString);
-				readedLongsArrayList.add(currentLong);
+					readedStringsArrayList.add(currentString);
+					readedLongsArrayList.add(currentLong);
 				}//end byteBuffer reading loop
 			}//end file channel reading loop
 
@@ -90,8 +90,13 @@ byteBuffer.flip();
 		}
 	}
 
-	public void displayPrime() {
-
+	public long displayPrime(int requestedNumber) {
+		if (requestedNumber>readedLongsArrayList.size()){
+			String errorMsg="Input number is greater than max size of "+readedLongsArrayList.size();
+			throw new IllegalArgumentException(errorMsg);
+		}
+		long result = (long) readedLongsArrayList.get(requestedNumber);
+		return result;
 	}
 
 	public static int getKeyboardInput() {
@@ -111,6 +116,9 @@ byteBuffer.flip();
 	public static void main(String[] args) {
 		Ex2_Andras testObject = new Ex2_Andras();
 		testObject.readPrimes();
+		int requestedPrime=getKeyboardInput();
+		long result=testObject.displayPrime(requestedPrime);
+		System.out.printf("The [%d] prime is: %d", requestedPrime, result);
 
 //		int input = getKeyboardInput();
 //		System.out.println("The input was:" + input);

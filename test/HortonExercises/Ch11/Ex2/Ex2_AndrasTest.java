@@ -37,25 +37,32 @@ public class Ex2_AndrasTest {
 	}
 
 	/**
-	 * Test of readPrimes method, of class Ex2_Andras.
-	 * Last result format:
-	 * [99] Sting length:[011] String:[prime = 541] Long:[541]
-	 * Let's just check the last long value
-	 * 
+	 * Test of readPrimes method, of class Ex2_Andras. Last result format: [99] Sting length:[011] String:[prime = 541] Long:[541] Let's just check the last long value
+	 *
 	 */
 	@Test
 	public void testReadPrimes() {
 		testObject.readPrimes();
-		long expResult=541L;
+		long expResult = 541L;
 		//get the last item 
-		int t=testObject.readedLongsArrayList.size();
-		int lastItemIndex=testObject.readedLongsArrayList.size()-1;
-		long actResult=(long)testObject.readedLongsArrayList.get(lastItemIndex);
+		int t = testObject.readedLongsArrayList.size();
+		int lastItemIndex = testObject.readedLongsArrayList.size() - 1;
+		long actResult = (long) testObject.readedLongsArrayList.get(lastItemIndex);
 		assertEquals(expResult, actResult);
 	}
 
+	@Test
+	public void testDisplayResult() {
+		testObject.readPrimes();
+		int requestedNumber = 99;
+		long expResult = 541L;
+		long actResult = (long) (testObject.displayPrime(requestedNumber));
+		assertEquals(expResult, actResult);
+
+	}
+
 	/**
-	 * Test of getKeyboardInput method, of class Ex2_Andras.
+	 * Test of getKeyboardInput method, of class Ex2_Andras. For some reason this doesnt seem to be working
 	 */
 	@Ignore
 	@Test
@@ -65,6 +72,5 @@ public class Ex2_AndrasTest {
 		int result = Ex2_Andras.getKeyboardInput();
 		assertEquals(expResult, result);
 	}
-
 
 }
