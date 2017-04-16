@@ -1,3 +1,4 @@
-Teszt 4/a: UTF-8 decoder:�
-Teszt 4/b: ISO8859_1 decoder:é
+Teszt 4/a: UTF-8 decoder:d
+Teszt 4/b: ISO8859_1 decoder:
+
 Teszt 4/c: Windows-1250 decoder:�

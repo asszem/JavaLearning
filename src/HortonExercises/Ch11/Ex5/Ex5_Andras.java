@@ -9,9 +9,11 @@ Horton, Chapter 11, p448
 package HortonExercises.Ch11.Ex5;
 
 import FilesAndDirectories.AllFileOperations;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,13 +47,10 @@ public class Ex5_Andras {
 	}
 
 	public static String getStringInput() {
-		scanner = new Scanner(System.in);
-		if (scanner.hasNext()) {
-			return scanner.next();
-		} else {
-			return null;
-		}
+		scanner = new Scanner(System.in,"ISO8859_1");
+		return scanner.nextLine();
 	}
+
 
 	public void enterData() {
 		String userInputName;
@@ -62,8 +61,8 @@ public class Ex5_Andras {
 			userInputName = getStringInput();
 			System.out.print("Enter address:");
 			userInputAddress = getStringInput();
-			boolean writeResult=writeData(userInputName, userInputAddress);
-			System.out.println("Writing was "+(writeResult?"Successfull":"Not successfull"));
+			boolean writeResult = writeData(userInputName, userInputAddress);
+			System.out.println("Writing was " + (writeResult ? "Successfull" : "Not successfull"));
 			System.out.print("Add another? y/n");
 			if (!getStringInput().equalsIgnoreCase("y")) {
 				break;
@@ -74,8 +73,8 @@ public class Ex5_Andras {
 	public boolean writeData(String userInputName, String userInputAddress) {
 		try {
 			BufferedWriter bufferedWriter = Files.newBufferedWriter(filename, Charset.forName("UTF-16"), WRITE, CREATE, APPEND);
-			Formatter  formattedToWrite=new Formatter();
-			formattedToWrite.format("[name]=%s[address]=%3$s%2$s", userInputName,System.lineSeparator(),userInputAddress);
+			Formatter formattedToWrite = new Formatter();
+			formattedToWrite.format("[name]=%s[address]=%3$s%2$s", userInputName, System.lineSeparator(), userInputAddress);
 			bufferedWriter.write(formattedToWrite.toString());
 			bufferedWriter.flush();
 			return true;
@@ -85,11 +84,21 @@ public class Ex5_Andras {
 		return false;
 	}
 
-	//TODO To be continued from here
 	public void readData() {
 		if (!Files.exists(filename)) {
 			throw new IllegalStateException("Source file does not exists");
 		}
+		try {
+			BufferedReader bufferedReader = Files.newBufferedReader(filename, Charset.forName("UTF-16"));
+			String currentLine;
+			while ((currentLine = bufferedReader.readLine()) != null) {
+				System.out.println(currentLine);
+
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
 	}
 
 	public void run(int startWithThis) {
@@ -119,7 +128,7 @@ public class Ex5_Andras {
 
 	public static void main(String[] args) {
 		Ex5_Andras instance = new Ex5_Andras();
-		instance.run(1);
+		instance.run(0);
 //AllFileOperations.createSingleFileWithParentDirectories(instance.filename);
 
 	}
