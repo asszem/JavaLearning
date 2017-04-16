@@ -106,12 +106,22 @@ public class Ex6_AndrasTest {
 		Path loadUserList = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Junit\\loadUserList_testcase.txt");
 		instance.mainFile = loadUserList;
 		//when
-		instance.loadUserList();
+		instance.loadUserList(); //call the method to get the userlist loaded to the userListARR inst. variable
 		String[][] actUserList = instance.userListARR;
 
 		//then
 		instance.mainFile = mainTestFile; //reste back to the original test file
-		assertEquals(expUserList, actUserList);
+		assertArrayEquals(expUserList, actUserList);
+	}
+
+	@Test
+	public void testAddToUserListArray() {
+// public static String[][] addToUserListArray(String[][] inputUserList, String[] arrayToAdd) {
+		String[][] startString = {{"ID01", "András", "Oláh", "Mordor road"}};
+		String[] stringToAdd = {"ID02", "Árvíztűrő FirstName", "Tükörfúrógép SecondName", "Second User Address"};
+		String[][] expString = {{"ID01", "András", "Oláh", "Mordor road"}, {"ID02", "Árvíztűrő FirstName", "Tükörfúrógép SecondName", "Second User Address"}};
+		String[][] actString=Ex6_Andras.addToUserListArray(startString, stringToAdd);
+		assertArrayEquals(expString, actString);
 	}
 
 	@Test
@@ -123,9 +133,12 @@ public class Ex6_AndrasTest {
 //		expArrays[instance.FIRST_NAME_INDEX].add("András");
 //		expArrays[instance.SECOND_NAME_INDEX].add("Oláh");
 //		expArrays[instance.ADDRESS_INDEX].add("Mordor road");
-		String[] expString= {"ID01", "András", "Oláh", "Mordor road"};
-		String[] actString=Ex6_Andras.splitReadedString(testString1);
+		String[] expString = {"ID01", "András", "Oláh", "Mordor road"};
+		String[] actString = Ex6_Andras.splitReadedString(testString1);
 		assertArrayEquals(expString, actString);
+		String[] expString2 = {"ID02", "Árvíztűrő FirstName", "Tükörfúrógép SecondName", "Second User Address"};
+		String[] actString2 = Ex6_Andras.splitReadedString(testString2);
+		assertArrayEquals(expString2, actString2);
 	}
 
 	@Ignore

@@ -48,7 +48,7 @@ public class Ex6_Andras {
 	Path indexFile = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Name And Address - Index.txt");
 	static Scanner scanner;
 	ArrayList[] userListAL = new ArrayList[4];
-	String[][] userListARR = new String[1][4]; //the length of this object holds all the entries created in one session
+	String[][] userListARR = new String[0][4]; //the length of this object holds all the entries created in one session
 	final static int USER_ID_INDEX = 0;
 	final static int FIRST_NAME_INDEX = 1;
 	final static int SECOND_NAME_INDEX = 2;
@@ -120,14 +120,15 @@ public class Ex6_Andras {
 [ID01][First Name][András][Second Name][Oláh][Address][Mordor road]
 [ID02][First Name][Árvíztűrő FirstName][Second Name][Tükörfúrógép SecondName][Address][Second User Address]
 		 */
-		int lineCounter = 0;
 		if (!Files.exists(mainFile)) {
 			return false;
 		}
 		try {
-			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName("UTF-16"));
-			while (bufferedReader.readLine() != null) {
-				lineCounter++;
+			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName("UTF-8"));
+			String currentLine;
+			while ((currentLine = bufferedReader.readLine()) != null) {
+				String[] currentLineSplit=splitReadedString(currentLine);
+				userListARR=addToUserListArray(userListARR, currentLineSplit);
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -135,37 +136,49 @@ public class Ex6_Andras {
 		return true;
 	}
 
-	public static String[] splitReadedString(String inputStringToSplit) {
-		String[] resultString = new String[4];
-		String s=inputStringToSplit;
-		String idValue=nextToken(1,s);
-		int parsedLength=idValue.length();
-		String firstName=nextToken(parsedLength+3,s);
-		parsedLength+=firstName.length();
-		String firstNameValue=nextToken(parsedLength+5,s);
-		parsedLength+=firstNameValue.length();
-		String secondName=nextToken(parsedLength+7,s);
-		parsedLength+=secondName.length();
-		String secondNameValue=nextToken(parsedLength+9,s);
-		parsedLength+=secondNameValue.length();
-		String address=nextToken(parsedLength+11,s);
-		parsedLength+=address.length();
-		String addressValue=nextToken(parsedLength+13,s); 
-		resultString[USER_ID_INDEX]=idValue;
-		resultString[FIRST_NAME_INDEX]=firstNameValue;
-		resultString[SECOND_NAME_INDEX]=secondNameValue;
-		resultString[ADDRESS_INDEX]=addressValue;
-		return resultString;
-	}
-	public static String nextToken(String inputString){
-		String nextToken=inputString.substring(1,inputString.indexOf("]"));
-		return nextToken;
-	}
-	public static String nextToken(int startPosition, String inputString){
-		String nextToken=inputString.substring(startPosition,inputString.indexOf("]",startPosition));
-		return nextToken;
+	//Increase the userList array with the new result
+	public static String[][] addToUserListArray(String[][] inputUserList, String[] arrayToAdd) {
+		String[][] newList = new String[inputUserList.length + 1][4];
+		//Copy the original array
+		for (int i = 0; i < inputUserList.length; i++) {
+			for (int j = 0; j < 4; j++) {
+				newList[i][j] = inputUserList[i][j];
+			}
+		}
+		//Add the new items
+		for (int i = 0; i < 4; i++) {
+			newList[newList.length - 1][i] = arrayToAdd[i];
+		}
+		return newList;
 	}
 
+	public static String[] splitReadedString(String inputStringToSplit) {
+		String[] resultString = new String[4];
+		String s = inputStringToSplit;
+		String idValue = nextToken(1, s);
+		int parsedLength = idValue.length();
+		String firstName = nextToken(parsedLength + 3, s);
+		parsedLength += firstName.length();
+		String firstNameValue = nextToken(parsedLength + 5, s);
+		parsedLength += firstNameValue.length();
+		String secondName = nextToken(parsedLength + 7, s);
+		parsedLength += secondName.length();
+		String secondNameValue = nextToken(parsedLength + 9, s);
+		parsedLength += secondNameValue.length();
+		String address = nextToken(parsedLength + 11, s);
+		parsedLength += address.length();
+		String addressValue = nextToken(parsedLength + 13, s);
+		resultString[USER_ID_INDEX] = idValue;
+		resultString[FIRST_NAME_INDEX] = firstNameValue;
+		resultString[SECOND_NAME_INDEX] = secondNameValue;
+		resultString[ADDRESS_INDEX] = addressValue;
+		return resultString;
+	}
+
+	public static String nextToken(int startPosition, String inputString) {
+		String nextToken = inputString.substring(startPosition, inputString.indexOf("]", startPosition));
+		return nextToken;
+	}
 
 	//Before writing data the existing list of data to be read from file to build the userList array and then add 
 	public boolean writeData(String userInputFirstName, String userInputSecondName, String userInputAddress) {
@@ -227,6 +240,7 @@ public class Ex6_Andras {
 		String testString1 = "[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]";
 		splitReadedString(testString1);
 		Ex6_Andras instance = new Ex6_Andras();
-//		instance.run(0);
+		instance.loadUserList();
+		instance.run(0);
 	}
 }
