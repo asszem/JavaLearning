@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -21,30 +24,51 @@ import org.junit.Ignore;
 public class Ex6_AndrasTest {
 
 	static Ex6_Andras instance = new Ex6_Andras();
-	static Path mainFile = Paths.get("J:\\Exercises\\Ch11\\Ex5\\Junit\\Junit-Name And Address - Main.txt");
-	static Path indexFile = Paths.get("J:\\Exercises\\Ch11\\Ex5\\Junit\\Junit-Name And Address - Index.txt");
+	static final Ex6_Andras reference = new Ex6_Andras();
+	static Path mainTestFile = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Junit\\Junit-Name And Address - Main.txt");
+	static Path indexTestFile = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Junit\\Junit-Name And Address - Index.txt");
 
 	public Ex6_AndrasTest() {
 	}
 
+	//This is not a test! this is a helper method, if a specific test method needs the files to be deleted
+	public static void deleteTestFiles() {
+		//Delete test files to make sure all test case start from 0 data
+		try {
+			Files.deleteIfExists(mainTestFile);
+			Files.deleteIfExists(indexTestFile);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	//Not a test, but a helper method to create test files
+	public static void createTestFiles() {
+		try {
+			//Check if test files exists, if not, create them
+			if (!Files.exists(mainTestFile) || !Files.exists(indexTestFile)) {
+				Files.createDirectories(mainTestFile.getParent());
+				Files.createFile(mainTestFile);
+				Files.createFile(indexTestFile);
+			}
+			//Copy latest production file to test file
+			Files.copy(instance.mainFile, mainTestFile, StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(instance.indexFile, indexTestFile, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	@BeforeClass
 	public static void setUpClass() {
-		//not to touch production data
-		instance.mainFile = mainFile;
-		instance.indexFile = indexFile;
+		createTestFiles();
+		//not to touch production data, the path replaced in test object to the test files
+		instance.mainFile = mainTestFile;
+		instance.indexFile = indexTestFile;
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		/*
-		//Delete test files to make sure all test case start from 0 data
-		try {
-			Files.deleteIfExists(mainFile);
-			Files.deleteIfExists(indexFile);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		 */
 	}
 
 	@Before
@@ -55,19 +79,60 @@ public class Ex6_AndrasTest {
 	public void tearDown() {
 	}
 
-	//TODO To be continued from here - setup manually existing result files to test
 	@Test
 	public void testExistingEntriesCounter() {
-	int expResult=4;
-	int actResult=instance.getExistingEntryNumberFromFile();
+		int expResult = 4;
+		//Create a test file that has exactly 4 lines
+		Path testFile4Lines = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Junit\\4_lines_testcase.txt");
+		instance.mainFile = testFile4Lines;
+		int actResult = instance.getMainFileLineCount();
+		instance.mainFile = mainTestFile; //reste back to the original test file
 		assertEquals(expResult, actResult);
+	}
+
+	@Test
+	public void testLoadUserList() {
+		//given
+		String[][] expUserList = new String[2][4];
+		expUserList[0][instance.USER_ID_INDEX] = "ID01";
+		expUserList[0][instance.FIRST_NAME_INDEX] = "András";
+		expUserList[0][instance.SECOND_NAME_INDEX] = "Oláh";
+		expUserList[0][instance.ADDRESS_INDEX] = "Mordor road";
+		expUserList[1][0] = "ID02";
+		expUserList[1][1] = "Árvíztűrő FirstName";
+		expUserList[1][2] = "Tükörfúrógép SecondName";
+		expUserList[1][3] = "Second User Address";
+
+		Path loadUserList = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Junit\\loadUserList_testcase.txt");
+		instance.mainFile = loadUserList;
+		//when
+		instance.loadUserList();
+		String[][] actUserList = instance.userListARR;
+
+		//then
+		instance.mainFile = mainTestFile; //reste back to the original test file
+		assertEquals(expUserList, actUserList);
+	}
+
+	@Test
+	public void testSplitReadedString() {
+		String testString1 = "[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]";
+		String testString2 = "[ID02][First Name][Árvíztűrő FirstName][Second Name][Tükörfúrógép SecondName][Address][Second User Address]";
+//		ArrayList[] expArrays=new ArrayList[4];
+//		expArrays[instance.USER_ID_INDEX].add("ID01");
+//		expArrays[instance.FIRST_NAME_INDEX].add("András");
+//		expArrays[instance.SECOND_NAME_INDEX].add("Oláh");
+//		expArrays[instance.ADDRESS_INDEX].add("Mordor road");
+		String[] expString= {"ID01", "András", "Oláh", "Mordor road"};
+		String[] actString=Ex6_Andras.splitReadedString(testString1);
+		assertArrayEquals(expString, actString);
 	}
 
 	@Ignore
 	@Test
 	public void testCreateNewObject() {
 		System.out.println("creating new object");
-		int newUserID = instance.userList.length + 1;
+		int newUserID = instance.userListARR.length + 1;
 		String userInputFirstName = "FirstName:ÁÁÁ";
 		String userInputSecondName = "SecondNameÉÉÉ";
 		String userInputAddress = "AddressTest";

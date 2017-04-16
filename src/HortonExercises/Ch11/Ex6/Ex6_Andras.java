@@ -1,21 +1,21 @@
 /*
 Requirements
-Modify the previous example to store an index to the name and address file in a separate file. 
-The index file should contain each person’s second name, plus the position where the corresponding name and address can be found in the name and address file. 
+Modify the previous example to store an index to the firstName and address file in a separate file. 
+The index file should contain each person’s second firstName, plus the position where the corresponding firstName and address can be found in the firstName and address file. 
 
-Provide support for an optional command argument allowing a person’s second name to be entered. 
-When the command-line argument is present, the program should then find the name and address 
+Provide support for an optional command argument allowing a person’s second firstName to be entered. 
+When the command-line argument is present, the program should then find the firstName and address 
 and output it to the command line.
 
 input:
 javac Ex6_Andras andras
 result:
-[name]=Andras Olah [address]=address
+[firstName]=Andras Olah [address]=address
 
 Mainfile
-[id]=1[name]=Andras Olah [address]=address
+[idValue]=1[firstName]=Andras Olah [address]=address
 Index file
-[id]=1[secondName]=Andras
+[idValue]=1[secondName]=Andras
 
 Horton, Ch11, p448
 
@@ -24,14 +24,19 @@ package HortonExercises.Ch11.Ex6;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardOpenOption.*;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,14 +44,15 @@ import java.util.Scanner;
  */
 public class Ex6_Andras {
 
-	Path mainFile = Paths.get("J:\\Exercises\\Ch11\\Ex5\\Name And Address - Main.txt");
-	Path indexFile = Paths.get("J:\\Exercises\\Ch11\\Ex5\\Name And Address - Index.txt");
+	Path mainFile = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Name And Address - Main.txt");
+	Path indexFile = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Name And Address - Index.txt");
 	static Scanner scanner;
-	String[][] userList; //the length of this object holds all the entries created in one session
-	final int USER_ID_INDEX=0;
-	final int FIRST_NAME_INDEX = 1;
-	final int SECOND_NAME_INDEX = 2;
-	final int ADDRESS_INDEX = 3;
+	ArrayList[] userListAL = new ArrayList[4];
+	String[][] userListARR = new String[1][4]; //the length of this object holds all the entries created in one session
+	final static int USER_ID_INDEX = 0;
+	final static int FIRST_NAME_INDEX = 1;
+	final static int SECOND_NAME_INDEX = 2;
+	final static int ADDRESS_INDEX = 3;
 	//userList[entry_index][USER_ID_INDEX]=UserID 123   <this is a string also
 	//userList[entry_index][FIRST_NAME_INDEX]=Olah
 	//userList[entry_index][SECOND_NAME_INDEX]=Andras
@@ -91,11 +97,82 @@ public class Ex6_Andras {
 		}
 	}
 
+	//Method returns number of existing entries by reading the mainFile
+	//Actually this method might be redundant
+	public int getMainFileLineCount() {
+		int lineCounter = 0;
+		if (!Files.exists(mainFile)) {
+			return 0;
+		}
+		try {
+			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName("UTF-16"));
+			while (bufferedReader.readLine() != null) {
+				lineCounter++;
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return lineCounter;
+	}
+
+	public boolean loadUserList() {
+		/* File structure:
+[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]
+[ID02][First Name][Árvíztűrő FirstName][Second Name][Tükörfúrógép SecondName][Address][Second User Address]
+		 */
+		int lineCounter = 0;
+		if (!Files.exists(mainFile)) {
+			return false;
+		}
+		try {
+			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName("UTF-16"));
+			while (bufferedReader.readLine() != null) {
+				lineCounter++;
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return true;
+	}
+
+	public static String[] splitReadedString(String inputStringToSplit) {
+		String[] resultString = new String[4];
+		String s=inputStringToSplit;
+		String idValue=nextToken(1,s);
+		int parsedLength=idValue.length();
+		String firstName=nextToken(parsedLength+3,s);
+		parsedLength+=firstName.length();
+		String firstNameValue=nextToken(parsedLength+5,s);
+		parsedLength+=firstNameValue.length();
+		String secondName=nextToken(parsedLength+7,s);
+		parsedLength+=secondName.length();
+		String secondNameValue=nextToken(parsedLength+9,s);
+		parsedLength+=secondNameValue.length();
+		String address=nextToken(parsedLength+11,s);
+		parsedLength+=address.length();
+		String addressValue=nextToken(parsedLength+13,s); 
+		resultString[USER_ID_INDEX]=idValue;
+		resultString[FIRST_NAME_INDEX]=firstNameValue;
+		resultString[SECOND_NAME_INDEX]=secondNameValue;
+		resultString[ADDRESS_INDEX]=addressValue;
+		return resultString;
+	}
+	public static String nextToken(String inputString){
+		String nextToken=inputString.substring(1,inputString.indexOf("]"));
+		return nextToken;
+	}
+	public static String nextToken(int startPosition, String inputString){
+		String nextToken=inputString.substring(startPosition,inputString.indexOf("]",startPosition));
+		return nextToken;
+	}
+
+
+	//Before writing data the existing list of data to be read from file to build the userList array and then add 
 	public boolean writeData(String userInputFirstName, String userInputSecondName, String userInputAddress) {
 		try {
 			BufferedWriter bufferedWriter = Files.newBufferedWriter(mainFile, Charset.forName("UTF-16"), WRITE, CREATE, APPEND);
 			Formatter formattedToWrite = new Formatter();
-			formattedToWrite.format("[name]=%s[address]=%3$s%2$s", userInputFirstName, System.lineSeparator(), userInputAddress);
+			formattedToWrite.format("ffsfasfasfas[name]=%s[address]=%3$s%2$s", userInputFirstName, System.lineSeparator(), userInputAddress);
 			bufferedWriter.write(formattedToWrite.toString());
 			bufferedWriter.flush();
 			return true;
@@ -119,15 +196,6 @@ public class Ex6_Andras {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	//Method returns number of existing entries
-	public int getExistingEntryNumberFromFile(){
-		int existingEntries=0;
-		if (!Files.exists(mainFile) ) {
-			return 0;	
-		}
-		return existingEntries;
 	}
 
 	public void run(int startWithThis) {
@@ -155,4 +223,10 @@ public class Ex6_Andras {
 		} while (userChoice != QUIT);
 	}
 
+	public static void main(String[] args) {
+		String testString1 = "[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]";
+		splitReadedString(testString1);
+		Ex6_Andras instance = new Ex6_Andras();
+//		instance.run(0);
+	}
 }

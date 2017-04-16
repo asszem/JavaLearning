@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class KeyboardInputSamples {
+public class KeyboardInputScannerAndBufferedReader {
 
 	//ÁRVÍZTŰRŐ compliant
 	public static String getStringInputUsingScanner() {
