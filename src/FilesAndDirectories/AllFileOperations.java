@@ -57,6 +57,8 @@ import java.nio.file.Path; //Interface
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import static java.nio.file.StandardOpenOption.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -171,6 +173,16 @@ public class AllFileOperations {
 		return false; //If this is reached the file was not created
 	}
 
+//Create single file and if required, all directories in the provided path
+	public static void createSingleFileWithParentDirectories(Path filename){
+		try {
+			Files.createDirectories(filename.getParent()); //if parent already exists, this does nothing
+			Files.createFile(filename);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 //Sets the path based on a String parameter
 	public void setPath(String pathToSet) {
 		this.objectPath = Paths.get(pathToSet);
