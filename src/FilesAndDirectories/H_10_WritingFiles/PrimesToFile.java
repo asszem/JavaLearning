@@ -52,7 +52,7 @@ public class PrimesToFile {
 				System.out.println("");
 			}
 		}
-		Path file = Paths.get("E:\\javaTest\\H10\\primes.bin");
+		Path file = Paths.get("J:\\Writing Files\\primesAsLong.bin");
 		try {
 			Files.createDirectories(file.getParent());      // Make sure we have the directory
 		} catch (IOException e) {
