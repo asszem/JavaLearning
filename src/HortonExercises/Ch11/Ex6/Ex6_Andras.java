@@ -58,7 +58,7 @@ public class Ex6_Andras {
 	final static int FIRST_NAME_INDEX = 1;
 	final static int SECOND_NAME_INDEX = 2;
 	final static int ADDRESS_INDEX = 3;
-	static String CharsetToUse="ISO8859_1";
+	static String CharsetToUse = "ISO8859_1";
 	//userList[entry_index][USER_ID_INDEX]=UserID 123   <this is a string also
 	//userList[entry_index][FIRST_NAME_INDEX]=Olah
 	//userList[entry_index][SECOND_NAME_INDEX]=Andras
@@ -125,7 +125,7 @@ public class Ex6_Andras {
 		return true;
 	}
 
-	//Increase the userList array with the new result
+	//Increase the size of userList array with the new result
 	public static String[][] addToUserListArray(String[][] inputUserList, String[] arrayToAdd) {
 		int newListLength;
 		if (inputUserList == null) {
@@ -150,6 +150,7 @@ public class Ex6_Andras {
 		return newList;
 	}
 
+	//Converts a String to String[] based on the information in [] in the string.
 	public static String[] splitReadedString(String inputStringToSplit) {
 		String[] resultString = new String[4];
 		String s = inputStringToSplit;
@@ -173,14 +174,16 @@ public class Ex6_Andras {
 		return resultString;
 	}
 
+	//Helper method for splittin the strng. Finds the next string between [ ] brackets on given position
 	public static String nextToken(int startPosition, String inputString) {
 		String nextToken = inputString.substring(startPosition, inputString.indexOf("]", startPosition));
 		return nextToken;
 	}
 
-	//Before writing data the existing list of data to be read from file to build the userList array and then add 
-	//"[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]";
+	//Before writing data the existing entries are read from file to build the userList array 
+	//UserID will be generated automatically based on length of data in input file
 	public boolean writeData(String userInputFirstName, String userInputSecondName, String userInputAddress) {
+	//"[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]";
 		try {
 			//Generate the string to be written
 			loadUserList(); //to get it updated and to generate the ID
@@ -195,7 +198,7 @@ public class Ex6_Andras {
 
 			//Generate the string to be written to the second file
 			Formatter formattedIndex = new Formatter();
-			formattedIndex.format("[%s][%s]", newID, userInputSecondName);
+			formattedIndex.format("[%s][%s]%s", newID, userInputSecondName, System.lineSeparator());
 			//Write the Index file
 			BufferedWriter bufferedWriterIndex = Files.newBufferedWriter(indexFile, Charset.forName("ISO8859_1"), WRITE, CREATE, APPEND);
 			bufferedWriterIndex.write(formattedIndex.toString());
@@ -221,6 +224,22 @@ public class Ex6_Andras {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	public void displayArgumentOnly(String secondNameToCheck) {
+		loadUserList();
+		boolean foundIt = false;
+		for (String[] userEntry : userListARR) {
+			if (userEntry[SECOND_NAME_INDEX].equals(secondNameToCheck)) {
+				System.out.printf("ID:%s%nFirst Name:%s%nSecond Name:%s%nAddress:%s", userEntry[USER_ID_INDEX], userEntry[FIRST_NAME_INDEX], userEntry[SECOND_NAME_INDEX], userEntry[ADDRESS_INDEX]);
+				foundIt = true;
+				break;
+			}
+		}
+		if (!foundIt) {
+			System.out.println("User not found in database");
+		}
+
 	}
 
 	public void run(int startWithThis) {
@@ -249,10 +268,10 @@ public class Ex6_Andras {
 	}
 
 	public static void main(String[] args) {
-		String testString1 = "[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]";
-//		splitReadedString(testString1);
 		Ex6_Andras instance = new Ex6_Andras();
-//		instance.loadUserList();
+		if (args.length != 0) {
+			instance.displayArgumentOnly(args[0]);
+		}
 		instance.run(0);
 	}
 }
