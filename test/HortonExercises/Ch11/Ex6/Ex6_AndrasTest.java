@@ -79,33 +79,25 @@ public class Ex6_AndrasTest {
 	public void tearDown() {
 	}
 
-	@Test
-	public void testExistingEntriesCounter() {
-		int expResult = 4;
-		//Create a test file that has exactly 4 lines
-		Path testFile4Lines = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Junit\\4_lines_testcase.txt");
-		instance.mainFile = testFile4Lines;
-		int actResult = instance.getMainFileLineCount();
-		instance.mainFile = mainTestFile; //reste back to the original test file
-		assertEquals(expResult, actResult);
-	}
 
+//	@Ignore //This test only fails because of encoding. If UTF-8 is used in loadUserList method, it works
 	@Test
 	public void testLoadUserList() {
 		//given
 		String[][] expUserList = new String[2][4];
-		expUserList[0][instance.USER_ID_INDEX] = "ID01";
+		expUserList[0][instance.USER_ID_INDEX] = "ID1";
 		expUserList[0][instance.FIRST_NAME_INDEX] = "András";
 		expUserList[0][instance.SECOND_NAME_INDEX] = "Oláh";
 		expUserList[0][instance.ADDRESS_INDEX] = "Mordor road";
-		expUserList[1][0] = "ID02";
+		expUserList[1][0] = "ID2";
 		expUserList[1][1] = "Árvíztűrő FirstName";
 		expUserList[1][2] = "Tükörfúrógép SecondName";
 		expUserList[1][3] = "Second User Address";
 
-		Path loadUserList = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Junit\\loadUserList_testcase.txt");
+		Path loadUserList = Paths.get("J:\\Exercises\\Ch11\\Ex6\\Junit\\Load_Userlist_Testcase.txt");
 		instance.mainFile = loadUserList;
 		//when
+		Ex6_Andras.CharsetToUse="UTF-8";
 		instance.loadUserList(); //call the method to get the userlist loaded to the userListARR inst. variable
 		String[][] actUserList = instance.userListARR;
 

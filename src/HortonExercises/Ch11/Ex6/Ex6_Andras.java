@@ -1,11 +1,16 @@
 /*
 Requirements
-Modify the previous example to store an index to the firstName and address file in a separate file. 
-The index file should contain each person’s second firstName, plus the position where the corresponding firstName and address can be found in the firstName and address file. 
 
-Provide support for an optional command argument allowing a person’s second firstName to be entered. 
-When the command-line argument is present, the program should then find the firstName and address 
-and output it to the command line.
+Modify the previous example to store an index to the name and address file in a separate file. 
+
+The index file should contain each person’s second name, plus the position where the corresponding name and address
+can be found in the name and address file. 
+
+Provide support for an optional command argument allowing a person’s second name to be entered. 
+
+When the command-line argument is present, the program should then find the name and 
+address and output it to the command line.
+
 
 input:
 javac Ex6_Andras andras
@@ -53,6 +58,7 @@ public class Ex6_Andras {
 	final static int FIRST_NAME_INDEX = 1;
 	final static int SECOND_NAME_INDEX = 2;
 	final static int ADDRESS_INDEX = 3;
+	static String CharsetToUse="ISO8859_1";
 	//userList[entry_index][USER_ID_INDEX]=UserID 123   <this is a string also
 	//userList[entry_index][FIRST_NAME_INDEX]=Olah
 	//userList[entry_index][SECOND_NAME_INDEX]=Andras
@@ -72,7 +78,7 @@ public class Ex6_Andras {
 	}
 
 	public static String getStringInput() {
-		scanner = new Scanner(System.in, "ISO8859_1");
+		scanner = new Scanner(System.in, CharsetToUse);
 		return scanner.nextLine();
 	}
 
@@ -97,24 +103,6 @@ public class Ex6_Andras {
 		}
 	}
 
-	//Method returns number of existing entries by reading the mainFile
-	//Actually this method might be redundant
-	public int getMainFileLineCount() {
-		int lineCounter = 0;
-		if (!Files.exists(mainFile)) {
-			return 0;
-		}
-		try {
-			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName("UTF-16"));
-			while (bufferedReader.readLine() != null) {
-				lineCounter++;
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		return lineCounter;
-	}
-
 	public boolean loadUserList() {
 		/* File structure:
 [ID01][First Name][András][Second Name][Oláh][Address][Mordor road]
@@ -123,12 +111,13 @@ public class Ex6_Andras {
 		if (!Files.exists(mainFile)) {
 			return false;
 		}
+		userListARR = null;
 		try {
-			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName("UTF-8"));
+			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName(CharsetToUse));
 			String currentLine;
 			while ((currentLine = bufferedReader.readLine()) != null) {
-				String[] currentLineSplit=splitReadedString(currentLine);
-				userListARR=addToUserListArray(userListARR, currentLineSplit);
+				String[] currentLineSplit = splitReadedString(currentLine);
+				userListARR = addToUserListArray(userListARR, currentLineSplit);
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -138,11 +127,20 @@ public class Ex6_Andras {
 
 	//Increase the userList array with the new result
 	public static String[][] addToUserListArray(String[][] inputUserList, String[] arrayToAdd) {
-		String[][] newList = new String[inputUserList.length + 1][4];
-		//Copy the original array
-		for (int i = 0; i < inputUserList.length; i++) {
-			for (int j = 0; j < 4; j++) {
-				newList[i][j] = inputUserList[i][j];
+		int newListLength;
+		if (inputUserList == null) {
+			newListLength = 1;
+		} else {
+			newListLength = inputUserList.length + 1;
+		}
+		String[][] newList = new String[newListLength][4];
+
+		if (inputUserList != null) {
+			//Copy the original array
+			for (int i = 0; i < inputUserList.length; i++) {
+				for (int j = 0; j < 4; j++) {
+					newList[i][j] = inputUserList[i][j];
+				}
 			}
 		}
 		//Add the new items
@@ -181,13 +179,27 @@ public class Ex6_Andras {
 	}
 
 	//Before writing data the existing list of data to be read from file to build the userList array and then add 
+	//"[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]";
 	public boolean writeData(String userInputFirstName, String userInputSecondName, String userInputAddress) {
 		try {
-			BufferedWriter bufferedWriter = Files.newBufferedWriter(mainFile, Charset.forName("UTF-16"), WRITE, CREATE, APPEND);
+			//Generate the string to be written
+			loadUserList(); //to get it updated and to generate the ID
+			String newID = "ID" + (userListARR.length + 1);
 			Formatter formattedToWrite = new Formatter();
-			formattedToWrite.format("ffsfasfasfas[name]=%s[address]=%3$s%2$s", userInputFirstName, System.lineSeparator(), userInputAddress);
-			bufferedWriter.write(formattedToWrite.toString());
-			bufferedWriter.flush();
+			formattedToWrite.format("[%s][First Name][%s][Second Name][%s][Address][%s]%s", newID, userInputFirstName, userInputSecondName, userInputAddress, System.lineSeparator());
+
+			//Write the main file
+			BufferedWriter bufferedWriterMain = Files.newBufferedWriter(mainFile, Charset.forName("ISO8859_1"), WRITE, CREATE, APPEND);
+			bufferedWriterMain.write(formattedToWrite.toString());
+			bufferedWriterMain.flush();
+
+			//Generate the string to be written to the second file
+			Formatter formattedIndex = new Formatter();
+			formattedIndex.format("[%s][%s]", newID, userInputSecondName);
+			//Write the Index file
+			BufferedWriter bufferedWriterIndex = Files.newBufferedWriter(indexFile, Charset.forName("ISO8859_1"), WRITE, CREATE, APPEND);
+			bufferedWriterIndex.write(formattedIndex.toString());
+			bufferedWriterIndex.flush();
 			return true;
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -200,7 +212,7 @@ public class Ex6_Andras {
 			throw new IllegalStateException("Source file does not exists");
 		}
 		try {
-			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName("UTF-16"));
+			BufferedReader bufferedReader = Files.newBufferedReader(mainFile, Charset.forName(CharsetToUse));
 			String currentLine;
 			while ((currentLine = bufferedReader.readLine()) != null) {
 				System.out.println(currentLine);
@@ -238,9 +250,9 @@ public class Ex6_Andras {
 
 	public static void main(String[] args) {
 		String testString1 = "[ID01][First Name][András][Second Name][Oláh][Address][Mordor road]";
-		splitReadedString(testString1);
+//		splitReadedString(testString1);
 		Ex6_Andras instance = new Ex6_Andras();
-		instance.loadUserList();
+//		instance.loadUserList();
 		instance.run(0);
 	}
 }
