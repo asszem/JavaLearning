@@ -7,8 +7,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static java.nio.file.StandardOpenOption.*;
 
 /**
  *
@@ -24,6 +23,7 @@ public class ObjectSerialization implements Serializable {
 	String writeObjectTestString;
 	String writeByteArrayTestString;
 	String writeCharsTestString;
+	transient String transientString;
 	int numberToWrite;
 	java.util.Random rndGenerator = new java.util.Random();	//reference a serializable class
 	double[] rndNumbers;
@@ -31,9 +31,10 @@ public class ObjectSerialization implements Serializable {
 	//Constructor
 	ObjectSerialization(String objectName) {
 		this.objectName = objectName;
-		String writeObjectTestString = "Árvíztűrő tükörfúrógép writeObject()";
-		String writeByteArrayTestString = "Árvíztűrő tükörfúrógép byte[] array";
-		String writeCharsTestString = "Árvíztűrő tükörfúrógép char array";
+		writeObjectTestString = "Árvíztűrő tükörfúrógép writeObject()";
+		writeByteArrayTestString = "Árvíztűrő tükörfúrógép byte[] array";
+		writeCharsTestString = "Árvíztűrő tükörfúrógép char array";
+		transientString = "This is a transientString and should be null";
 		numberToWrite = 42;
 		//Generate a random length array with random numbers using Random class's nextInt method
 		rndNumbers = new double[3 + rndGenerator.nextInt(4)]; // Array size 3 to 6 (3+rnd 0,1,2,3)
@@ -49,17 +50,13 @@ public class ObjectSerialization implements Serializable {
 			ex.printStackTrace();
 		}
 		try (
-				ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(targetFile)))) {
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(targetFile, WRITE, CREATE, APPEND)))) {
 			objectOutputStream.writeObject(this); //to write the calling object to the file
 			System.out.println(this);
 			System.out.println("Object written to file " + targetFile);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	public Object deserializeObject() {
-		return this.getClass();
 	}
 
 	//Create a method to easily display the content of the object. Also use the debugger to verify
@@ -80,8 +77,15 @@ public class ObjectSerialization implements Serializable {
 	}
 
 	public static void main(String[] args) {
-		Path targetFolder = Paths.get("J:\\Serializing Objects\\");
+		Path targetFolder = Paths.get("J:\\Serialising Objects\\");
 		ObjectSerialization obj1 = new ObjectSerialization("obj 1");
+		ObjectSerialization obj2 = new ObjectSerialization("obj 2");
+		ObjectSerialization obj3 = new ObjectSerialization("obj 3");
 		obj1.serializeObject(targetFolder.resolve("obj1.bin"));
+		obj2.serializeObject(targetFolder.resolve("obj2.bin"));
+		obj3.serializeObject(targetFolder.resolve("obj3.bin"));
+		obj1.serializeObject(targetFolder.resolve("objAll.bin"));
+		obj2.serializeObject(targetFolder.resolve("objAll.bin"));
+		obj3.serializeObject(targetFolder.resolve("objAll.bin"));
 	}
 }

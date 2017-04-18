@@ -21,38 +21,56 @@ Creating new ObjectOutputStream
 
 	Notes
 		Data from the buffer is written to the file whenever the buffer is full, or when the stream is closed. By default, the buffer has a capacity of 2048 bytes. 
-	Conditions to write
+	Conditions to Serialize (write)
 		1) The class must be declared as public.
 		2) The class must implement the Serializable interface.
 		3) If the class has a direct or indirect base class that is not serializable, then that base class must have a default constructor
-		+1
+		+1 (optional)
 		4) Define serialVersionUID which identifies a version number for the class that is used to verify that the same class definition is used
 			during the deserialization process when objects are read from the file as when objects were written to the file.
 			This ensures that using the incorrect version of the class to read objects from a file is flagged. 
 			Example:
 				private static final long serialVersionUID = 9002L;
-			- any access modifier is ok
-			- value is not important
-			- changing the value when class definition changes is important
-	Exceptions 
-		Besides the usual IOException, two more exceptions might be thrown. Catch them BEFORE the IOEXception
-			InvalidClassException 
-			NotSerializableException
-	writeObject()
-		The call to writeObject() takes care of writing everything to the stream that is necessary to reconstitute the object later in a read operation. 
-		This includes information about the class and all its superclasses, including their version IDs, the contents and types of the data members of the class. 
-		This works even when the data members are themselves class objects as long as they are objects of classes that implement the Serializable interface. 
-		writeObject() call causes the writeObject() method to be called for each object that is a data member
-		and this mechanism continues recursively until everything that makes up our object has been written to the stream. 
-		Each independent object that you write to the stream requires a separate call to the writeObject() method, 
-		but the objects that are members of an object are taken care of automatically. 
-	writing strings
-		1) writeObject(String)  - preserves the String object
-		2) write(byte[] array)  - info that the characters belonged to a String object is lost
-		3) writeChar(int ch)	- info that the characters belonged to a String object is lost
-
-
+				- any access modifier is ok
+				- value is not important
+				- changing the value when class definition changes is important
+	Conditions to serialize non-serializable superclass
+		1) Each superclass that is not serializable must have a public no-arg constructor — a constructor with no parameters.
+		2) Your class must be declared as implementing the Serializable interface.
+		3) Your class must take responsibility for serializing and deserializing the fields for the superclasses that are not serializable.
+	transient fields
+		Declaring a data member as transient prevents the writeObject() method from attempting to write the data member to the stream. 
+		When the class object is read back, the object is created properly, including any members that you declared as transient. 
+		The transient class members just won't have their values set, because they were not written to the stream. 
+		Unless you arrange for something to be done about it, the transient fields are null.
+		Use it when field is not meaningful long term or out of context — objects that represent the current time, or today's date, for example
+	Writing Objects
+		writeObject()
+			The call to writeObject() takes care of writing everything to the stream that is necessary to reconstitute the object later in a read operation. 
+			This includes information about the class and all its superclasses, including their version IDs, the contents and types of the data members of the class. 
+			This works even when the data members are themselves class objects as long as they are objects of classes that implement the Serializable interface. 
+			writeObject() call causes the writeObject() method to be called for each object that is a data member
+			and this mechanism continues recursively until everything that makes up our object has been written to the stream. 
+			Each independent object that you write to the stream requires a separate call to the writeObject() method, 
+			but the objects that are members of an object are taken care of automatically. 
+		writing strings
+			1) writeObject(String)  - preserves the String object
+			2) write(byte[] array)  - info that the characters belonged to a String object is lost
+			3) writeChar(int ch)	- info that the characters belonged to a String object is lost
+		Exceptions thrown
+			Besides the usual IOException, two more exceptions might be thrown. Catch them BEFORE the IOEXception
+				InvalidClassException 
+				NotSerializableException
+	Reading Objects
+		Opening the stream
+			try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(file)))){ ...
+				The default option for newInputStream is READ
+		Reading the object
+			Object myObject = objectIn.readObject();
+				If you do not have a full and accurate class definition for each type of object that you want to read from the stream
+				the stream object does not know how to create the object and the read fails.
+			The readObject() method returns a reference to the object as type Object, so you need to cast it to the appropriate class type to use it.
+				MyClass theObject = (MyClass)(objectIn.readObject());
 
 Source
-
 	Horton, Chapter 12, p461 - Serializing Objects
