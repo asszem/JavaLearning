@@ -1,0 +1,58 @@
+Serialization
+	Writing objects and the fields they contain to a byte stream (even primitive arrays)
+	Static member data is not included
+	Try-with-Resources can be used, because InputStream/OutputStream implements Autocloseable
+
+Class
+	InputStream  implements Autocloseable   <-- abstract class
+		ObjectInputStream implements ObjectInput, ObjectStreamConstants extends InputStream 
+
+	OutputStream implements AutoCloseable, Flushable   <-- abstract class
+		ObjectOutputStream implements ObjectOutput, ObjectStreamConstants extends OutputStream
+	
+			ObjectInput/ObjectOutput interfaces extend the DataInput/DataOutput interfaces
+			that declare methods for reading and writing data of the primitive types and add the methods for reading and writing objects
+
+			ObjectStreamConstants interface defines constants that are used to identify elements of an object in the stream
+
+Creating new ObjectOutputStream
+	try(ObjectOutputStream objectOut = new ObjectOutputStream(new BufferedOutputStream( Files.newOutputStream(file)))) {...
+		objectOut.writeObject()...
+
+	Notes
+		Data from the buffer is written to the file whenever the buffer is full, or when the stream is closed. By default, the buffer has a capacity of 2048 bytes. 
+	Conditions to write
+		1) The class must be declared as public.
+		2) The class must implement the Serializable interface.
+		3) If the class has a direct or indirect base class that is not serializable, then that base class must have a default constructor
+		+1
+		4) Define serialVersionUID which identifies a version number for the class that is used to verify that the same class definition is used
+			during the deserialization process when objects are read from the file as when objects were written to the file.
+			This ensures that using the incorrect version of the class to read objects from a file is flagged. 
+			Example:
+				private static final long serialVersionUID = 9002L;
+			- any access modifier is ok
+			- value is not important
+			- changing the value when class definition changes is important
+	Exceptions 
+		Besides the usual IOException, two more exceptions might be thrown. Catch them BEFORE the IOEXception
+			InvalidClassException 
+			NotSerializableException
+	writeObject()
+		The call to writeObject() takes care of writing everything to the stream that is necessary to reconstitute the object later in a read operation. 
+		This includes information about the class and all its superclasses, including their version IDs, the contents and types of the data members of the class. 
+		This works even when the data members are themselves class objects as long as they are objects of classes that implement the Serializable interface. 
+		writeObject() call causes the writeObject() method to be called for each object that is a data member
+		and this mechanism continues recursively until everything that makes up our object has been written to the stream. 
+		Each independent object that you write to the stream requires a separate call to the writeObject() method, 
+		but the objects that are members of an object are taken care of automatically. 
+	writing strings
+		1) writeObject(String)  - preserves the String object
+		2) write(byte[] array)  - info that the characters belonged to a String object is lost
+		3) writeChar(int ch)	- info that the characters belonged to a String object is lost
+
+
+
+Source
+
+	Horton, Chapter 12, p461 - Serializing Objects

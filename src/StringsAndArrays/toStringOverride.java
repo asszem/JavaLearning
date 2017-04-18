@@ -48,22 +48,43 @@ import PracticeAndTest.Practice.Kutyak;
  * @author Andras Olah (olahandras78@gmail.com)
  */
 public class toStringOverride {
+
 	String objVar1 = "String instance változó";
 	int objVar2 = 42;
 	boolean objVar3 = true;
+	String objID;
 
-	/*Uncomment the override to test difference*/
+	/*
 	@Override
 	public String toString(){
 		String returnText="Az objektum változói: \nobjVar1 = "+objVar1+"\nobjVar2="+objVar2+"\nobjVar3="+objVar3;
 		return returnText;
 	}
+	 */
+
+	//Create the return string with a StringBuffer
+	@Override
+	public String toString() {
+		StringBuffer strBuf = new StringBuffer();
+		strBuf.append("["+objID+"] "+objVar1);
+		strBuf.append("\n").append(String.valueOf("["+objID+"] "+objVar2));
+		for (int i = 0; i < 5; ++i) {
+			strBuf.append("\n["+objID+"] "+"numbers[")
+					.append(String.valueOf(i))
+					.append("] = ")
+					.append(Math.random() * 5);
+		}
+		strBuf.append("\n["+objID+"] "+"Boolean: " + objVar3);
+		return strBuf.toString();
+	}
 
 	public static void main(String[] args) {
 		toStringOverride objektum = new toStringOverride();
+		objektum.objID="ID01";
 		System.out.println(objektum);
 
 		toStringOverride objektum2 = new toStringOverride();
+		objektum2.objID="ID02";
 		objektum2.objVar1 = "Ez a második objektum";
 		objektum2.objVar2 = 21;
 		objektum2.objVar3 = false;
@@ -71,7 +92,7 @@ public class toStringOverride {
 
 		//Ha másik osztályon nincs toString() override:
 		Kutyak bloki = new Kutyak(12, "hím", "bernáthegyi", "Blöki");
-		System.out.println(bloki);		
+		System.out.println(bloki);
 		int numberTest = 123;
 		System.out.println(Integer.toString(numberTest));
 	}
