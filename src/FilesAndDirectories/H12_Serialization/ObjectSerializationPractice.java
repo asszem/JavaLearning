@@ -8,13 +8,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardOpenOption.*;
+import java.util.ArrayList;
 
 /**
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
 //TODO add completed and cleaned method to Files and Directories main folder
-public class ObjectSerialization implements Serializable {
+public class ObjectSerializationPractice implements Serializable {
 //write an int, a double and  a String
 //write an object of another class
 
@@ -29,7 +30,7 @@ public class ObjectSerialization implements Serializable {
 	double[] rndNumbers;
 
 	//Constructor
-	ObjectSerialization(String objectName) {
+	public ObjectSerializationPractice(String objectName) {
 		this.objectName = objectName;
 		writeObjectTestString = "Árvíztűrő tükörfúrógép writeObject()";
 		writeByteArrayTestString = "Árvíztűrő tükörfúrógép byte[] array";
@@ -43,17 +44,20 @@ public class ObjectSerialization implements Serializable {
 		}
 	}
 
-	public void serializeObject(Path targetFile) {
+	//Changed to static method so it can write multiple objects in one stream without append
+	public static void serializeObject(Path targetFile, ArrayList objectsToWrite) {
 		try {
 			Files.createDirectories(targetFile.getParent());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		try (
-				ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(targetFile, WRITE, CREATE, APPEND)))) {
-			objectOutputStream.writeObject(this); //to write the calling object to the file
-			System.out.println(this);
-			System.out.println("Object written to file " + targetFile);
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(targetFile)))) {
+			//write all objects from arraylist
+			for (int i = 0; i < objectsToWrite.size(); i++) {
+				objectOutputStream.writeObject(objectsToWrite.get(i));
+			}
+			System.out.printf("%d object%swritten to file ", objectsToWrite.size(), (objectsToWrite.size() > 1) ? "s are " : " is ", targetFile);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -62,6 +66,7 @@ public class ObjectSerialization implements Serializable {
 	//Create a method to easily display the content of the object. Also use the debugger to verify
 	@Override
 	public String toString() {
+		System.out.println("Object name: " + objectName);
 		System.out.printf("[%s] Class name: %s%n", objectName, this.getClass().getName());
 		System.out.printf("[%s] Obj UID: %d%n", objectName, serialVersionUID);
 		System.out.printf("[%s] writeObject()%s%n", objectName, writeObjectTestString);
@@ -73,19 +78,19 @@ public class ObjectSerialization implements Serializable {
 		for (double number : rndNumbers) {
 			System.out.printf("\t[%d]=%f%n", counter++, number);
 		}
+		System.out.printf("[%s] transient variable=%s%n", objectName, transientString);
 		return super.toString(); //return the same as superclass, we just change the display
 	}
 
 	public static void main(String[] args) {
 		Path targetFolder = Paths.get("J:\\Serialising Objects\\");
-		ObjectSerialization obj1 = new ObjectSerialization("obj 1");
-		ObjectSerialization obj2 = new ObjectSerialization("obj 2");
-		ObjectSerialization obj3 = new ObjectSerialization("obj 3");
-		obj1.serializeObject(targetFolder.resolve("obj1.bin"));
-		obj2.serializeObject(targetFolder.resolve("obj2.bin"));
-		obj3.serializeObject(targetFolder.resolve("obj3.bin"));
-		obj1.serializeObject(targetFolder.resolve("objAll.bin"));
-		obj2.serializeObject(targetFolder.resolve("objAll.bin"));
-		obj3.serializeObject(targetFolder.resolve("objAll.bin"));
+		ObjectSerializationPractice obj1 = new ObjectSerializationPractice("obj 1");
+		ObjectSerializationPractice obj2 = new ObjectSerializationPractice("obj 2");
+		ObjectSerializationPractice obj3 = new ObjectSerializationPractice("obj 3");
+		ArrayList objectsToWrite =new ArrayList();
+		objectsToWrite.add(obj1);
+		objectsToWrite.add(obj2);
+		objectsToWrite.add(obj3);
+		serializeObject(targetFolder.resolve("objALL.bin"), objectsToWrite);
 	}
 }
