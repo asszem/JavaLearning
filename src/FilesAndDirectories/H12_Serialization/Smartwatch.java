@@ -11,14 +11,14 @@ import java.util.Formatter;
 public class Smartwatch extends GadgetOwner implements Serializable {
 
 	public String watchType;
-	public int watchOSVersion;
+	public double watchOSVersion;
 	private int watchPINCode;
 	transient String timestamp;
 
 	public Smartwatch() {
 		watchType = "Pebble";
-		watchOSVersion = 2;
-		watchPINCode = 4;
+		watchOSVersion = 2.0;
+		watchPINCode = 6666;
 		timestamp = "Never!";
 	}
 
@@ -30,7 +30,7 @@ public class Smartwatch extends GadgetOwner implements Serializable {
 	@Override
 	public String toString() {
 		Formatter returnStr = new Formatter();
-		returnStr.format("Owner=%s%nWatch type=%s%nWatch OS Version=%d%nWatch PIN Code=%d%nTimestamp=%s%n", gadgetOwnerName, watchType, watchOSVersion, watchPINCode, timestamp);
+		returnStr.format("Owner=%s%nWatch type=%s%nWatch OS Version=%f%nWatch PIN Code=%d%nTimestamp=%s%n", gadgetOwnerName, watchType, watchOSVersion, watchPINCode, timestamp);
 		return returnStr.toString();
 	}
 }

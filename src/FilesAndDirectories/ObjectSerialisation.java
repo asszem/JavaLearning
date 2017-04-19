@@ -50,7 +50,7 @@ public class ObjectSerialisation {
 	 * @param sourceFile
 	 * @return an ArrayList of all objects readed from the file
 	 */
-	public static ArrayList readObject(Path sourceFile) {
+	public static ArrayList readObjects(Path sourceFile) {
 		if (Files.notExists(sourceFile)) {
 			System.out.println("File does not exists");
 			return null;
@@ -71,14 +71,28 @@ public class ObjectSerialisation {
 		return readedObjects;
 	}
 
+	public static Object readObject(Path sourceFile) {
+		if (Files.notExists(sourceFile)) {
+			System.out.println("File does not exists");
+			return null;
+		}
+		Object readedObject = null;  //this is a reference to be used 
+		try (ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(sourceFile)))) {
+			readedObject = objectInputStream.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return readedObject;
+	}
+
 	public static void main(String[] args) {
 		Path objectFile = Paths.get("J:\\Serialising Objects\\SerialiseMe.bin");
 		FilesAndDirectories.H12_Serialization.ObjectSerializationPractice obj1 = new FilesAndDirectories.H12_Serialization.ObjectSerializationPractice("SerialiseMe!");
 		ArrayList writeArray = new ArrayList();
 		writeArray.add(obj1);
 		serializeObject(objectFile, writeArray);
-		ArrayList readArray =new ArrayList();
-		readArray=readObject(objectFile);
+		ArrayList readArray = new ArrayList();
+		readArray = readObjects(objectFile);
 		System.out.println("Input object:");
 		System.out.println(writeArray.get(0));
 		System.out.println("\n");
