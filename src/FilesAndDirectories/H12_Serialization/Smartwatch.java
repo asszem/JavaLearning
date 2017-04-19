@@ -10,6 +10,7 @@ import java.util.Formatter;
  */
 public class Smartwatch extends GadgetOwner implements Serializable {
 
+	private static final long serialVersionUID=0001L;
 	public String watchType;
 	public double watchOSVersion;
 	private int watchPINCode;

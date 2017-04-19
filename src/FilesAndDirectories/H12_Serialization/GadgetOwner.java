@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class GadgetOwner implements Serializable {
 
+	private static final long serialVersionUID=0001L;
 	public String gadgetOwnerName;
 	public Mobile mobile;
 	public Smartwatch smartwatch;
@@ -66,10 +67,10 @@ public class GadgetOwner implements Serializable {
 
 		//<editor-fold desc="Read back, determine class and cast it to mobile">
 		Object readedBack = ObjectSerialisation.readObject(targetFile);
-		String classSimpleName= readedBack.getClass().getSimpleName();
-		Mobile readedBackMobile=null;  //prepare the reference
-		if (classSimpleName.equals("Mobile")){
-			readedBackMobile=(Mobile) readedBack;
+		String classSimpleName = readedBack.getClass().getSimpleName();
+		Mobile readedBackMobile = null;  //prepare the reference
+		if (classSimpleName.equals("Mobile")) {
+			readedBackMobile = (Mobile) readedBack;
 		}
 		System.out.println(readedBackMobile);
 		//</editor-fold>

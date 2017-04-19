@@ -10,6 +10,7 @@ import java.util.Formatter;
  */
 public class Mobile extends GadgetOwner implements Serializable {
 
+	private static final long serialVersionUID=0001L;
 	public String mobileType;
 	public int mobileNumber;
 	private int mobilePINCode;
