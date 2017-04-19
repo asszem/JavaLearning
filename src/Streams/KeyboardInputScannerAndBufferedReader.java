@@ -1,16 +1,24 @@
 package Streams;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.StreamTokenizer;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class KeyboardInputScannerAndBufferedReader {
+
+	/*
+	Supported Encodng - Charset codes:
+	https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html
+	 */
+	public static String charset = "Windows-1250";
 
 	//ÁRVÍZTŰRŐ compliant
 	public static String getStringInputUsingScanner() {
@@ -25,17 +33,51 @@ public class KeyboardInputScannerAndBufferedReader {
 
 	//ÁRVÍZTŰRŐ compliant
 	public static String getStringUsingBufferedReader() {
-		String charSet="ISO8859_1";
-		String returnString=null;
+		String charSet = "ISO8859_1";
+		String returnString = null;
 		try {
-			BufferedReader bufferedReader= new BufferedReader(new InputStreamReader (System.in, charSet));
-			returnString=bufferedReader.readLine();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in, charSet));
+			returnString = bufferedReader.readLine();
 		} catch (UnsupportedEncodingException ex) {
 			ex.printStackTrace();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		return returnString;
+	}
+
+	/**
+	 * Reads a line with Scanner from provided InputStream and writes result to a file or displays to the console
+	 * <br>
+	 * <br>
+	 * The inputStream must be opened before calling the method.
+	 * <br> {@code ByteArrayInputStream bais = new ByteArrayInputStream("String".getBytes(charset)) }
+	 * <br>
+	 * The output stream will be opened by the method, unless the second parameter was "<i>console</i>"
+	 *
+	 * @param inputStream {@code System.in} for keyboard input from console, {@code ByteArrayInputStream} for code input
+	 * @param outputStreamFile Filename to write result, or "<i>console</i>" to write result to console
+	 * @return a String that was provided to the inputStream
+	 */
+	public static String getStringUsingScannerWithInputOutputStreamParameter(InputStream inputStream, String outputStreamFile) {
+		System.out.printf("Charset: %s%ninputstream: %s%noutput stream: %s%n", charset, inputStream, outputStreamFile);
+		System.out.print("Enter something:");
+		Scanner sc = new Scanner(inputStream, charset);
+		String result = sc.nextLine();
+		switch (outputStreamFile) {
+			case "console":
+				System.out.println("The input was: " + result);
+				break;
+			default:  //if "console" was not the parameter
+				try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(outputStreamFile), charset)) {
+					osw.write(result);
+					osw.flush();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+				break;
+		}
+		return result;
 	}
 
 	public static int getNumberUsingStreamTokenizer() {
@@ -74,8 +116,14 @@ public class KeyboardInputScannerAndBufferedReader {
 		return inputCharacter;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException {
 //		get_INT_OnlyUsingScanner();
-System.out.println(getStringUsingBufferedReader());
+//		System.out.println(getStringUsingBufferedReader());
+//		getStringUsingScannerWithInputOutputStreamParameter(System.in, System.out);
+		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("Árvíztűrő tükörfúrógép".getBytes(charset));
+		String outputFile = "J:\\outputstreamwriter.txt";
+		getStringUsingScannerWithInputOutputStreamParameter(byteArrayInputStream, "console");
+		 byteArrayInputStream = new ByteArrayInputStream("Árvíztűrő tükörfúrógép 2".getBytes(charset));
+		getStringUsingScannerWithInputOutputStreamParameter(byteArrayInputStream, outputFile);
 	}
 }
