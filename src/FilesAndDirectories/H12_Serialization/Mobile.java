@@ -30,7 +30,7 @@ public class Mobile extends GadgetOwner implements Serializable {
 	@Override
 	public String toString() {
 		Formatter returnStr = new Formatter();
-		returnStr.format("Owner=%s%nMobile type=%s%nPhone number=%d%nMobile PIN Code=%d%nTimestamp=%s%n", gadgetOwnerName, mobileType, mobileNumber, mobilePINCode, timestamp);
+		returnStr.format("Displaying Mobile Info%nOwner=%s%nMobile type=%s%nPhone number=%d%nMobile PIN Code=%d%nTimestamp=%s%n", gadgetOwnerName, mobileType, mobileNumber, mobilePINCode, timestamp);
 		return returnStr.toString();
 	}
 

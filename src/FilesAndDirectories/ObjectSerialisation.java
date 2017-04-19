@@ -17,16 +17,16 @@ import java.util.ArrayList;
  */
 public class ObjectSerialisation {
 
-	//Changed to static method so it can write multiple objects in one stream without append
 	/**
-	 * Serializes all objects passed in the ArrayList
+	 * Serializes multiple objects passed in the ArrayList parameter
 	 *
-	 * The objects must be in a SERIALIZABLE class
+	 * This is a static method so it can write multiple objects in one output stream without APPEND Writing multiple times from multiple streams with append to the same file will
+	 * cause AC exception The objects must be in a SERIALIZABLE class
 	 *
-	 * @param targetFile the path
+	 * @param targetFile the file to write the objects
 	 * @param objectsToWrite An ArrayList that holds all the objects to write
 	 */
-	public static void serializeObject(Path targetFile, ArrayList objectsToWrite) {
+	public static void serializeObjects(Path targetFile, ArrayList objectsToWrite) {
 		try {
 			Files.createDirectories(targetFile.getParent());
 		} catch (IOException ex) {
@@ -45,7 +45,28 @@ public class ObjectSerialisation {
 	}
 
 	/**
-	 * Deserializes (reads) objecst from the source file. Object class are not readed
+	 * Serializes single object passed in as parameter
+	 *
+	 * @param targetFile the file to write the objects
+	 * @param objectsToWrite the Object to write
+	 */
+	public static void serializeObject(Path targetFile, Object objectsToWrite) {
+		try {
+			Files.createDirectories(targetFile.getParent());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try (
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(targetFile)))) {
+			objectOutputStream.writeObject(objectsToWrite);
+			System.out.printf("Object is written to file %s%n", targetFile);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	/**
+	 * Deserializes (reads) multiple objects from a source file.
 	 *
 	 * @param sourceFile
 	 * @return an ArrayList of all objects readed from the file
@@ -71,6 +92,12 @@ public class ObjectSerialisation {
 		return readedObjects;
 	}
 
+	/**
+	 * Deserializes (reads) a single object from a source file
+	 *
+	 * @param sourceFile the file to read from
+	 * @return an Object reference to the readed object
+	 */
 	public static Object readObject(Path sourceFile) {
 		if (Files.notExists(sourceFile)) {
 			System.out.println("File does not exists");
@@ -90,7 +117,7 @@ public class ObjectSerialisation {
 		FilesAndDirectories.H12_Serialization.ObjectSerializationPractice obj1 = new FilesAndDirectories.H12_Serialization.ObjectSerializationPractice("SerialiseMe!");
 		ArrayList writeArray = new ArrayList();
 		writeArray.add(obj1);
-		serializeObject(objectFile, writeArray);
+		serializeObjects(objectFile, writeArray);
 		ArrayList readArray = new ArrayList();
 		readArray = readObjects(objectFile);
 		System.out.println("Input object:");

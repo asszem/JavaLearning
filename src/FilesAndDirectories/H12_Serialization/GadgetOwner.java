@@ -42,7 +42,7 @@ public class GadgetOwner implements Serializable {
 		Path targetFile = Paths.get("J:\\Serialising Objects\\GadgetOwners\\geek1.bin");
 		ArrayList objectsContainerArrayList = new ArrayList();
 		objectsContainerArrayList.add(geek1);
-		ObjectSerialisation.serializeObject(targetFile, objectsContainerArrayList);
+		ObjectSerialisation.serializeObjects(targetFile, objectsContainerArrayList);
 		//</editor-fold>
 
 		//<editor-fold desc="Read geek1 from file">
@@ -57,6 +57,21 @@ public class GadgetOwner implements Serializable {
 		System.out.println(geek1Readed);
 		System.out.println(geek1Readed.mobile);
 		System.out.println(geek1Readed.smartwatch);
+		//</editor-fold>
+
+		//<editor-fold desc="Write only a mobile class to a file">
+		targetFile = Paths.get("J:\\Serialising Objects\\GadgetOwners\\geek1_mobile.bin");
+		ObjectSerialisation.serializeObject(targetFile, geek1.mobile);
+		//</editor-fold>
+
+		//<editor-fold desc="Read back, determine class and cast it to mobile">
+		Object readedBack = ObjectSerialisation.readObject(targetFile);
+		String classSimpleName= readedBack.getClass().getSimpleName();
+		Mobile readedBackMobile=null;  //prepare the reference
+		if (classSimpleName.equals("Mobile")){
+			readedBackMobile=(Mobile) readedBack;
+		}
+		System.out.println(readedBackMobile);
 		//</editor-fold>
 
 	}
