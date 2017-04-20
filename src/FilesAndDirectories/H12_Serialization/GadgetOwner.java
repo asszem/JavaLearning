@@ -21,6 +21,10 @@ public class GadgetOwner implements Serializable {
 	public GadgetOwner() {
 	}
 
+	public GadgetOwner(String ownerName){
+		gadgetOwnerName=ownerName;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer returnStr = new StringBuffer();
