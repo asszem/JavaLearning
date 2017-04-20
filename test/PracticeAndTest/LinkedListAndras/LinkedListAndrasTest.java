@@ -7,6 +7,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import FilesAndDirectories.H12_Serialization.GadgetOwner;
+import FilesAndDirectories.H12_Serialization.Mobile;
+import FilesAndDirectories.H12_Serialization.Smartwatch;
 
 /**
  *
@@ -18,9 +21,17 @@ public class LinkedListAndrasTest {
 
 	public LinkedListAndrasTest() {
 	}
+	static GadgetOwner[] gadgetOwners = new GadgetOwner[10];
 
 	@BeforeClass
 	public static void setUpClass() {
+		//Create an array of 10 Gadget Owner objects, with unique identifier in each
+		for (int i = 0; i < 10; i++) {
+			gadgetOwners[i] = new GadgetOwner("TestOwner Number #" + i);
+			gadgetOwners[i].mobile = new Mobile(gadgetOwners[i].gadgetOwnerName);
+			gadgetOwners[i].smartwatch = new Smartwatch(gadgetOwners[i].gadgetOwnerName);
+		}
+		System.out.println("GadgetOwner objects created");
 	}
 
 	@AfterClass
@@ -36,40 +47,46 @@ public class LinkedListAndrasTest {
 	}
 
 	/**
-	 * Test of setPointerPosition method, of class LinkedListAndras.
-	 * The method should return -1 when a not existing position was added to the parameter to set
+	 * Test of setPointerPosition method, of class LinkedListAndras. The method should return -1 when a not existing position was added to the parameter to set
 	 */
 	@Test
 	public void testSetPointerPosition() {
-		System.out.println("setPointerPosition");
+		System.out.println("setPointerPosition test");
 		boolean result;
 		result = testInstance.setPointerPosition(5000);
 		assertFalse(result);
-		System.out.println("setPointerPosition over tested OK, result: " + testInstance.getPointerPosition());
+		System.out.println("setPointerPosition over tested OK, result: " + testInstance.getListItemNumberPointer());
 		result = testInstance.setPointerPosition(-100000);
 		assertFalse(result);
-		System.out.println("setPointerPosition under tested OK, result: " + testInstance.getPointerPosition());
+		System.out.println("setPointerPosition under tested OK, result: " + testInstance.getListItemNumberPointer());
 		result = testInstance.setPointerPosition(0);
 		assertTrue(result);
-		System.out.println("setPointerPosition 0 tested OK, result: " + testInstance.getPointerPosition());
+		System.out.println("setPointerPosition 0 tested OK, result: " + testInstance.getListItemNumberPointer());
 //Uncomment this when the add method completed
 //		result = testInstance.setPointerPosition(1);
 //		assertTrue(result);
 	}
 
-
 	/**
 	 * Test of addItem method, of class LinkedListAndras.
 	 */
-	@Ignore
 	@Test
 	public void testAddItem() {
-		System.out.println("addItem");
-		Object objectToAdd = null;
+		System.out.println("addItem test");
+		Object objectToAdd = gadgetOwners[0];
 		LinkedListAndras instance = new LinkedListAndras();
+		int positionBefore = instance.getListItemNumberPointer();
+		int counterBefore = instance.getListItemTotal();
 		instance.addItem(objectToAdd);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		int positionAfter = instance.getListItemNumberPointer();
+		int counterAfter = instance.getListItemTotal();
+		GadgetOwner resultObject = (GadgetOwner) instance.getItem(positionAfter); //the position is updated to the position of the new item
+		assertEquals(positionBefore, positionAfter - 1); //position after value is greater with 1 
+		System.out.println("addItem position test OK");
+		assertEquals(counterBefore, counterAfter - 1); //counter after value is greater with 1 
+		System.out.println("addItem counter test OK");
+		assertEquals(objectToAdd, resultObject);  //The result object equals the input object
+		System.out.println("addItem object test OK");
 	}
 
 	/**
@@ -81,7 +98,7 @@ public class LinkedListAndrasTest {
 		System.out.println("removeItem");
 		Object objectToRemove = null;
 		LinkedListAndras instance = new LinkedListAndras();
-		instance.removeItem(objectToRemove);
+//		instance.removeItem(objectToRemove);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
 	}
@@ -89,17 +106,22 @@ public class LinkedListAndrasTest {
 	/**
 	 * Test of getItem method, of class LinkedListAndras.
 	 */
-	@Ignore
 	@Test
 	public void testGetItem() {
-		System.out.println("getItem");
-		int indexToGet = 0;
+		System.out.println("getItem test");
 		LinkedListAndras instance = new LinkedListAndras();
-		Object expResult = null;
-		Object result = instance.getItem(indexToGet);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		Object objectToAdd;
+		//add all 10 objects to the list
+		for (int i = 0; i < 10; i++) {
+			instance.addItem(gadgetOwners[i]);
+		}
+		//test objcet 2 and 7
+		int testIndex = 2; //test index= 2, item number = 3
+		for (; testIndex < 10; testIndex++) {
+			GadgetOwner resultObject = (GadgetOwner) instance.getItem(testIndex+1);
+			assertEquals(gadgetOwners[testIndex], resultObject);  //The result object equals the input object
+			System.out.printf("get item %d OK%n", testIndex);
+		}
 	}
 
 	/**
