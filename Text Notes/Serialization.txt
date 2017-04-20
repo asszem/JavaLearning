@@ -61,6 +61,11 @@ Creating new ObjectOutputStream
 			Besides the usual IOException, two more exceptions might be thrown. Catch them BEFORE the IOEXception
 				InvalidClassException 
 				NotSerializableException
+	resetting streams
+		If the same objects are to be written/read multiple time to the same file, it needs to be .reset() otherwise only the first version will be referenced
+		After the reset the output stream object has no knowledge of what was previously written and so it will write an object that otherwise would be ignored as a duplicate reference.
+		When an ObjectInputStream object reads a "reset marker" it too clears its record of what has been read, so that subsequent object read operations are as if the stream started at that point
+			
 	Reading Objects
 		Opening the stream
 			try (ObjectInputStream objectIn = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(file)))){ ...
