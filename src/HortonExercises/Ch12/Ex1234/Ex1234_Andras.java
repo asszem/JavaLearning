@@ -9,11 +9,22 @@ After the file exists new entries should be appended to the file
 Ex2
 Extend the previous example to optionally list all the names and addresses contained within the fi le on the
 command line.
- */
-package HortonExercises.Ch12.Ex1;
 
+Ex3
+
+Extend the previous example to add an index based on the person's name for each person entered at the
+keyboard to locate the corresponding Person object in the object fi le. The index fi le contains entries of
+type IndexEntry, each of which encapsulates a name and a fi le position in the object fi le. The index fi le
+should be a separate fi le from the original fi le containing Person objects.
+Note: You might fi nd it easiest to delete the previous fi le before you run this example so that the object
+fi le can be reconstructed along with the index fi le. You can't get the fi le position in an object stream in the
+same way as you can with a channel. However, you can use the sequence number for an object as the
+index — the fi rst object being 1, the second being 2, and so on.
+ */
+package HortonExercises.Ch12.Ex1234;
+
+import FilesAndDirectories.AppendableObjectOutputStream;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,10 +32,7 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.READ;
-import static java.nio.file.StandardOpenOption.WRITE;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -32,7 +40,7 @@ import java.util.Scanner;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class Ex1_Andras {
+public class Ex1234_Andras {
 
 	public static String getKeyboardInput() {
 		//Charset encodings

@@ -9,7 +9,7 @@ After the file exists new entries should be appended to the file
 
 
  */
-package HortonExercises.Ch12.Ex1;
+package HortonExercises.Ch12.Ex1234;
 
 import java.io.Serializable;
 

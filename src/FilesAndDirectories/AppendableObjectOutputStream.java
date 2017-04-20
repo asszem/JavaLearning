@@ -1,5 +1,5 @@
 
-package HortonExercises.Ch12.Ex1;
+package FilesAndDirectories;
 // Derived stream class to allow appending to an existing object file
 /*
   The ObjectOutputStream constructor write a header to the file, regardless of
