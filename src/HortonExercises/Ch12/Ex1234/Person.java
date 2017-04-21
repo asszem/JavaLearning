@@ -1,4 +1,3 @@
-
 /*
 Requirement
 
@@ -58,7 +57,7 @@ public class Person implements Serializable {
 		this.personAddress = personAddress;
 	}
 
-	private class Name implements Serializable {
+	public class Name implements Serializable {
 
 		private static final long serialVersionUID = 0001L;
 		String name;
