@@ -18,43 +18,43 @@ import java.io.Serializable;
  */
 public class Person implements Serializable {
 
-	private Name personName;
-	private Address personAddress;
+	private Name personNameObject;
+	private Address personAddressObject;
 	private static final long serialVersionUID = 0001L;
 
 	public Person(String name, String address) {
-		personName = new Name();
-		personAddress = new Address();
-		personName.name = name;
-		personAddress.address = address;
+		personNameObject = new Name();
+		personAddressObject = new Address();
+		personNameObject.name = name;
+		personAddressObject.address = address;
 	}
 
 	/**
-	 * @return the personName
+	 * @return the personNameObject
 	 */
-	public Name getPersonName() {
-		return personName;
+	public Name getPersonNameObject() {
+		return personNameObject;
 	}
 
 	/**
-	 * @param personName the personName to set
+	 * @param personNameObject the personNameObject to set
 	 */
-	public void setPersonName(Name personName) {
-		this.personName = personName;
+	public void setPersonNameObject(Name personNameObject) {
+		this.personNameObject = personNameObject;
 	}
 
 	/**
-	 * @return the personAddress
+	 * @return the personAddressObject
 	 */
-	public Address getPersonAddress() {
-		return personAddress;
+	public Address getPersonAddressObject() {
+		return personAddressObject;
 	}
 
 	/**
-	 * @param personAddress the personAddress to set
+	 * @param personAddressObject the personAddressObject to set
 	 */
-	public void setPersonAddress(Address personAddress) {
-		this.personAddress = personAddress;
+	public void setPersonAddressObject(Address personAddressObject) {
+		this.personAddressObject = personAddressObject;
 	}
 
 	public class Name implements Serializable {
@@ -72,8 +72,8 @@ public class Person implements Serializable {
 	@Override
 	public String toString() {
 		StringBuffer returnStr= new StringBuffer();
-		returnStr.append("Name: ").append(personName.name);
-		returnStr.append("\nAddress: ").append(personAddress.address);
+		returnStr.append("Name: ").append(personNameObject.name);
+		returnStr.append("\nAddress: ").append(personAddressObject.address);
 		return returnStr.toString();
 	}
 }

@@ -67,7 +67,7 @@ public class Ex1234_Andras implements Filepaths {
 		return newPerson;
 	}
 
-	public static void writeObject(Person personToWrite, Path fileToWrite) {
+	public static void writePersonFile(Person personToWrite, Path fileToWrite) {
 		boolean append = false;
 		if (Files.exists(fileToWrite)) {
 			append = true;
@@ -88,6 +88,27 @@ public class Ex1234_Andras implements Filepaths {
 		}
 	}
 
+	public static void writeIndexEntryFile(Person personToWrite, Path fileToWrite) {
+		boolean append = false;
+		if (Files.exists(fileToWrite)) {
+			append = true;
+		} else {
+			try {
+				//Create the folder
+				Files.createDirectories(fileToWrite.getParent());
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		try (ObjectOutputStream objectOut = AppendableObjectOutputStream.newObjectOutputStream(fileToWrite, append)) {
+			objectOut.writeObject(new IndexEntry(personToWrite.getPersonNameObject()));
+			objectOut.reset();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+
+		}
+	}
+
 	public static ArrayList readAllObjectsFromFile(Path sourceFile) {
 		if (Files.notExists(sourceFile)) {
 			System.out.println("File does not exists");
@@ -95,10 +116,19 @@ public class Ex1234_Andras implements Filepaths {
 		}
 		ArrayList readedObjects = new ArrayList();
 		try (ObjectInputStream objectsIn = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(sourceFile, READ)))) {
-			Person readedObject = null;  //this is a reference to be used 
+			IndexEntry readedIndexEntryObject = null;
+			Person readedPersonObject = null;  //this is a reference to be used 
 			while (true) {  //repeat until exception - to read all objects
-				readedObject = (Person) objectsIn.readObject();
-				readedObjects.add(readedObject);
+				//determine the class of the readed object
+				Object readedObject = objectsIn.readObject();
+				if (readedObject.getClass().getSimpleName().equals("Person")) {
+					readedPersonObject = (Person) readedObject;
+					readedObjects.add(readedPersonObject);
+				}
+				if (readedObject.getClass().getSimpleName().equals("IndexEntry")) {
+					readedIndexEntryObject = (IndexEntry) readedObject;
+					readedObjects.add(readedIndexEntryObject);
+				}
 			}
 		} catch (EOFException eof) {
 			//this is expected, this will break the reading cycle
@@ -111,8 +141,13 @@ public class Ex1234_Andras implements Filepaths {
 	public static void main(String[] args) {
 //		Path personFile=Paths.get("J:/Serialising Objects/Exercises/Ex1");
 		Person newPerson = createPersonObject();
-		writeObject(newPerson, personFile);
+		writePersonFile(newPerson, personFile);
+		writeIndexEntryFile(newPerson, indexFile);
 		ArrayList allObjects = readAllObjectsFromFile(personFile);
+		for (int i = 0; i < allObjects.size(); i++) {
+			System.out.println(allObjects.get(i));
+		}
+		allObjects = readAllObjectsFromFile(indexFile);
 		for (int i = 0; i < allObjects.size(); i++) {
 			System.out.println(allObjects.get(i));
 		}

@@ -32,7 +32,12 @@ public class IndexEntry implements Serializable, Filepaths {
 	public IndexEntry(Person.Name newNameObject){
 		nameObject=newNameObject;
 		ArrayList personFileObjectCount = Ex1234_Andras.readAllObjectsFromFile(personFile);
-		//TODO to be continued 
-		filePosition=personFileObjectCount.size()+1;
+		filePosition=personFileObjectCount.size(); //Because position starts from 0
+	}
+
+	public String toString(){
+		StringBuffer strbuff=new StringBuffer();
+		strbuff.append("Index entry:\n").append(" Name = ").append(nameObject.name).append("\n Position =  ").append(filePosition);
+		return strbuff.toString();
 	}
 }
