@@ -3,8 +3,8 @@ Requirement
 
 Define a Person class to encapsulate a person's name and address, with the name and address being fields
 of type Name and Address. Write a program to allow names and addresses to be entered from the keyboard
-and stored as Person objects in a file. 
-After the file exists new entries should be appended to the file
+and stored as Person objects in a personFile. 
+After the personFile exists new entries should be appended to the personFile
 
 Ex2
 Extend the previous example to optionally list all the names and addresses contained within the fi le on the
@@ -13,13 +13,17 @@ command line.
 Ex3
 
 Extend the previous example to add an index based on the person's name for each person entered at the
-keyboard to locate the corresponding Person object in the object fi le. The index fi le contains entries of
-type IndexEntry, each of which encapsulates a name and a fi le position in the object fi le. The index fi le
-should be a separate fi le from the original fi le containing Person objects.
-Note: You might fi nd it easiest to delete the previous fi le before you run this example so that the object
-fi le can be reconstructed along with the index fi le. You can't get the fi le position in an object stream in the
-same way as you can with a channel. However, you can use the sequence number for an object as the
-index — the fi rst object being 1, the second being 2, and so on.
+keyboard to locate the corresponding Person object in the object personFile. 
+
+The index personFile contains entries of type IndexEntry, each of which encapsulates
+a name and a personFile position in the object personFile. 
+
+The index personFile should be a separate personFile from the original personFile containing Person objects.
+
+Note: You might find it easiest to delete the previous personFile before you run this example so that the object
+personFile can be reconstructed along with the index personFile. You can't get the personFile position in an object stream in the
+same way as you can with a channel. 
+However, you can use the sequence number for an object as the index — the first object being 1, the second being 2, and so on.
  */
 package HortonExercises.Ch12.Ex1234;
 
@@ -35,12 +39,14 @@ import java.nio.file.Paths;
 import static java.nio.file.StandardOpenOption.READ;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class Ex1234_Andras {
+public class Ex1234_Andras implements Filepaths {
 
 	public static String getKeyboardInput() {
 		//Charset encodings
@@ -65,8 +71,15 @@ public class Ex1234_Andras {
 		boolean append = false;
 		if (Files.exists(fileToWrite)) {
 			append = true;
+		} else {
+			try {
+				//Create the folder
+				Files.createDirectories(fileToWrite.getParent());
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
-		try (ObjectOutputStream objectOut = AppendableObjectOutputStream.newObjectOutputStream(fileToWrite, append)){
+		try (ObjectOutputStream objectOut = AppendableObjectOutputStream.newObjectOutputStream(fileToWrite, append)) {
 			objectOut.writeObject(personToWrite);
 			objectOut.reset();
 		} catch (IOException ex) {
@@ -96,11 +109,10 @@ public class Ex1234_Andras {
 	}
 
 	public static void main(String[] args) {
-		Path file = Paths.get("J:\\Serialising Objects\\Exercises\\Ex1\\person.bin");
-//		Path file=Paths.get("J:/Serialising Objects/Exercises/Ex1");
+//		Path personFile=Paths.get("J:/Serialising Objects/Exercises/Ex1");
 		Person newPerson = createPersonObject();
-		writeObject(newPerson, file);
-		ArrayList allObjects = readAllObjectsFromFile(file);
+		writeObject(newPerson, personFile);
+		ArrayList allObjects = readAllObjectsFromFile(personFile);
 		for (int i = 0; i < allObjects.size(); i++) {
 			System.out.println(allObjects.get(i));
 		}
