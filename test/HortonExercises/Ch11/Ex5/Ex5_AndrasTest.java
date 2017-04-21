@@ -34,7 +34,6 @@ public class Ex5_AndrasTest {
 	public void tearDown() {
 	}
 
-	//TODO Learn how to write test case for keyboard inputs with System.setIn ...
 	@Test
 	public void testKeyboardInput() {
 	int expResult=2;

@@ -1,7 +1,5 @@
 package HortonExercises.Ch06.Shapes_Ex6;
-//TODO na ezt teljesen átnézni. 
-//TODO fejből írni egy Linked List programot
-//TODO megírni az equals-t ami érték és nem hashcode alapján hasonlítja össze az osztályokat. 
+// fejből írni egy Linked List programot -- 2017-04-20-án megírtam fejbpl a LinkedListAndras-t! :-)
 
 // Chapter 6 Exercise 6
 /*

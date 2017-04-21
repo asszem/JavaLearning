@@ -1,4 +1,3 @@
-//TODO nested classt csinálni a hörcsögöknek, hogy lehessen gyakorolni a static/nem statik elérést
 package ClassesAndObjects;
 
 public class Horcsog {

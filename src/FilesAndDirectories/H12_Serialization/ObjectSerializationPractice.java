@@ -14,7 +14,6 @@ import java.util.ArrayList;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-//TODO add completed and cleaned method to Files and Directories main folder
 public class ObjectSerializationPractice implements Serializable {
 //write an int, a double and  a String
 //write an object of another class
