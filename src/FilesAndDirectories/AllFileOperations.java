@@ -82,6 +82,20 @@ public class AllFileOperations {
 		}
 	}
 
+//Return true if the file exists and it's size is not zero
+	public boolean checkIfFileExistsAndNonZeroSize(Path fileToCheck) {
+		try {
+			// If the file exists and its size is non-zero, it contains data so we are appending
+			if (Files.exists(fileToCheck) && Files.readAttributes(fileToCheck, BasicFileAttributes.class).size() > 0) {
+				return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		return false;
+	}
+
 //Prints out the content of the directory
 	public static void listDir(Path dirPath, String filter) {
 		System.out.println("\n*****ListDir method started*****");
@@ -174,7 +188,7 @@ public class AllFileOperations {
 	}
 
 //Create single file and if required, all directories in the provided path
-	public static void createSingleFileWithParentDirectories(Path filename){
+	public static void createSingleFileWithParentDirectories(Path filename) {
 		try {
 			Files.createDirectories(filename.getParent()); //if parent already exists, this does nothing
 			Files.createFile(filename);
@@ -182,7 +196,7 @@ public class AllFileOperations {
 			ex.printStackTrace();
 		}
 	}
-	
+
 //Sets the path based on a String parameter
 	public void setPath(String pathToSet) {
 		this.objectPath = Paths.get(pathToSet);

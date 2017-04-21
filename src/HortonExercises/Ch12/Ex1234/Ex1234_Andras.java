@@ -12,18 +12,27 @@ command line.
 
 Ex3
 
-Extend the previous example to add an index based on the person's name for each person entered at the
-keyboard to locate the corresponding Person object in the object personFile. 
+	Extend the previous example to add an index based on the person's name for each person entered at the
+	keyboard to locate the corresponding Person object in the object personFile. 
 
-The index personFile contains entries of type IndexEntry, each of which encapsulates
-a name and a personFile position in the object personFile. 
+	The index personFile contains entries of type IndexEntry, each of which encapsulates
+	a name and a personFile position in the object personFile. 
 
-The index personFile should be a separate personFile from the original personFile containing Person objects.
+	The index personFile should be a separate personFile from the original personFile containing Person objects.
 
-Note: You might find it easiest to delete the previous personFile before you run this example so that the object
-personFile can be reconstructed along with the index personFile. You can't get the personFile position in an object stream in the
-same way as you can with a channel. 
-However, you can use the sequence number for an object as the index — the first object being 1, the second being 2, and so on.
+	Note: You might find it easiest to delete the previous personFile before you run this example so that the object
+	personFile can be reconstructed along with the index personFile.
+	You can't get the personFile position in an object stream in the
+	same way as you can with a channel. 
+	However, you can use the sequence number for an object as the index
+	the first object being 1, the second being 2, and so on.
+
+Ex4
+Use the index file to provide random direct access to the object file for querying random names entered
+from the keyboard. Entering a name from the keyboard should result in the address for the individual, or
+a message indicating the entry is not present in the fi le. The process is to fi rst search the index fi le for
+an object with a name fi eld matching the keyboard entry. When an IndexEntry is found, you use the
+sequence number it contains to retrieve the appropriate Person object.
  */
 package HortonExercises.Ch12.Ex1234;
 
@@ -35,12 +44,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import static java.nio.file.StandardOpenOption.READ;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -138,18 +144,39 @@ public class Ex1234_Andras implements Filepaths {
 		return readedObjects;
 	}
 
+	public static void run() {
+		while (true) {
+			System.out.println("(A)dd new entry, (L)ist all entries, (S)earch, (Q)uit");
+			System.out.print("Choose:");
+			String userChoice = getKeyboardInput();
+			switch (userChoice) {
+				case "a":
+					Person newPerson = createPersonObject();
+					writePersonFile(newPerson, personFile);
+					writeIndexEntryFile(newPerson, indexFile);
+					System.out.println("New entry added");
+					break;
+				case "l":
+					ArrayList allObjects = readAllObjectsFromFile(personFile);
+					for (int i = 0; i < allObjects.size(); i++) {
+						System.out.println(allObjects.get(i));
+					}
+					allObjects = readAllObjectsFromFile(indexFile);
+					for (int i = 0; i < allObjects.size(); i++) {
+						System.out.println(allObjects.get(i));
+					}
+					break;
+				case "s":
+					break;
+				case "q":
+					System.exit(0);
+					break;
+			}
+		}
+
+	}
+
 	public static void main(String[] args) {
-//		Path personFile=Paths.get("J:/Serialising Objects/Exercises/Ex1");
-		Person newPerson = createPersonObject();
-		writePersonFile(newPerson, personFile);
-		writeIndexEntryFile(newPerson, indexFile);
-		ArrayList allObjects = readAllObjectsFromFile(personFile);
-		for (int i = 0; i < allObjects.size(); i++) {
-			System.out.println(allObjects.get(i));
-		}
-		allObjects = readAllObjectsFromFile(indexFile);
-		for (int i = 0; i < allObjects.size(); i++) {
-			System.out.println(allObjects.get(i));
-		}
+		run();
 	}
 }
