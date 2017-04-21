@@ -144,12 +144,31 @@ public class Ex1234_Andras implements Filepaths {
 		return readedObjects;
 	}
 
+	public static Person searchPersonObjectByName(String searchForName) {
+		Person returnPersonObject = null;
+		ArrayList readIndexFileObjects = new ArrayList();
+		readIndexFileObjects = readAllObjectsFromFile(indexFile);
+		int positionInPersonFile = -1; //this value must be changed if valid position found
+		for (int i = 0; i < readIndexFileObjects.size(); i++) {
+			IndexEntry currentEntryObject = (IndexEntry) readIndexFileObjects.get(i);
+			if (currentEntryObject.nameObject.name.equals(searchForName)) {
+				positionInPersonFile = currentEntryObject.getPosition();
+				break; //no need to search further, found the position
+			}
+		}
+		if (positionInPersonFile>-1){ //A match was found, positionInPersonFile points to the object
+			ArrayList readPersonFileObjects=readAllObjectsFromFile(personFile);
+			returnPersonObject=(Person) readPersonFileObjects.get(positionInPersonFile-1); //-1 because array index is 0
+		}
+		return returnPersonObject;
+	}
+
 	public static void run() {
 		while (true) {
 			System.out.println("(A)dd new entry, (L)ist all entries, (S)earch, (Q)uit");
 			System.out.print("Choose:");
 			String userChoice = getKeyboardInput();
-			switch (userChoice) {
+			switch (userChoice.toLowerCase()) {
 				case "a":
 					Person newPerson = createPersonObject();
 					writePersonFile(newPerson, personFile);
@@ -167,6 +186,14 @@ public class Ex1234_Andras implements Filepaths {
 					}
 					break;
 				case "s":
+					System.out.print("Enter the name that you are looking for: ");
+					String userNameToLookFor = getKeyboardInput();
+					Person foundPerson = searchPersonObjectByName(userNameToLookFor);
+					if (foundPerson == null) {
+						System.out.println("Person not found");
+					} else {
+						System.out.println(foundPerson);
+					}
 					break;
 				case "q":
 					System.exit(0);
