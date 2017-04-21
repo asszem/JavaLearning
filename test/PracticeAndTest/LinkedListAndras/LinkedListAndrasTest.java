@@ -7,9 +7,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import FilesAndDirectories.H12_Serialization.GadgetOwner;
-import FilesAndDirectories.H12_Serialization.Mobile;
-import FilesAndDirectories.H12_Serialization.Smartwatch;
+import FilesAndDirectories.H_Ch12_Serialization.GadgetOwner;
+import FilesAndDirectories.H_Ch12_Serialization.Mobile;
+import FilesAndDirectories.H_Ch12_Serialization.Smartwatch;
 
 /**
  *

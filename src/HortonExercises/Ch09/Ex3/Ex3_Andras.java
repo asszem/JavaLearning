@@ -7,7 +7,7 @@ The names of the file copies should have _old appended to them and no files in t
  */
 package HortonExercises.Ch09.Ex3;
 
-import FilesAndDirectories.H_Ch9_FilesAndDirectories.DirectoryStreams;
+import FilesAndDirectories.H_Ch09_FilesAndDirectories.DirectoryStreams;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;

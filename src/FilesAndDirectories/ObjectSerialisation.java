@@ -114,7 +114,7 @@ public class ObjectSerialisation {
 
 	public static void main(String[] args) {
 		Path objectFile = Paths.get("J:\\Serialising Objects\\SerialiseMe.bin");
-		FilesAndDirectories.H12_Serialization.ObjectSerializationPractice obj1 = new FilesAndDirectories.H12_Serialization.ObjectSerializationPractice("SerialiseMe!");
+		FilesAndDirectories.H_Ch12_Serialization.ObjectSerializationPractice obj1 = new FilesAndDirectories.H_Ch12_Serialization.ObjectSerializationPractice("SerialiseMe!");
 		ArrayList writeArray = new ArrayList();
 		writeArray.add(obj1);
 		serializeObjects(objectFile, writeArray);
