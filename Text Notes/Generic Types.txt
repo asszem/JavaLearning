@@ -17,6 +17,9 @@ General Forms
 			class MobilePhones<T, V, Users<T>>
 	Upper Bounded Class
 		class class-name<T extends superclass>
+	Generic Method
+		<access modifier> <type-param-list> return-type method-name(param-list) {method body...}
+			Example: public static <T extends Comparable<T>, V extends T> boolean thisIsTheName(T firstParameterOfTypeT, V secondParameterOfTypeV)
 
 Generic or parameterized types
 	A generic (or parameterized) type is a class or interface type definition that has one or more type PARAMETERS. 

@@ -1,4 +1,4 @@
-package ClassesAndObjects.H_Ch13_GenericTypes.LinkedListGeneric;
+package ClassesAndObjects.H_Ch13_GenericTypes;
 
 /**
  *
