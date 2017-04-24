@@ -1,70 +1,79 @@
+/*
+For better understanding renamed variables and moved fields to the top of class declarations
+*/
 package ClassesAndObjects.H_Ch13_GenericTypes.LinkedListGeneric;
 
 public class LinkedList<T> {
-  // Default constructor - creates an empty list
-  public LinkedList() {}
 
-  // Constructor to create a list containing one object
-  public LinkedList(T item) {
-    if(item != null) {
-      current = end = start = new ListItem(item);                      // item is the start and end
-    }
-  }
+	private ListItem startListItemObject = null;                                       // First ListItem in the list
+	private ListItem endListItemObject = null;                                         // Last ListItem in the list
+	private ListItem currentListItemObject = null;                                     // The currentListItemObject itemTypeT for iterating
 
-  // Construct a linked list from an array of objects
-  public LinkedList(T[] items) {
-    if(items != null) {
-      // Add the items to the list
-      for(int i = 0; i < items.length; ++i) {
-        addItem(items[i]);
-      }
-      current = start;
-    }
-  }
+	// Default constructor - creates an empty list
+	public LinkedList() {
+	}
 
-  // Add an item object to the list
-  public void addItem(T item) {
-    ListItem newEnd = new ListItem(item);                              // Create a new ListItem
-    if(start == null) {                                                // Is the list empty?
-      start = end = newEnd;                                            // Yes, so new element is start and end
-    } else {                                                           // No, so append new element
-      end.next = newEnd;                                               // Set next variable for old end
-      end = newEnd;                                                    // Store new item as end
-    }
-  }
-  // Get the first object in the list
-  public T getFirst() {
-    current = start;
-    return start == null ? null : start.item;
-  }
+	// Constructor to create a list containing one object
+	public LinkedList(T item) {
+		if (item != null) {
+			currentListItemObject = endListItemObject = startListItemObject = new ListItem(item);                      // itemTypeT is the startListItemObject and endListItemObject
+		}
+	}
 
-  // Get the next object in the list
-  public T getNext() {
-    if(current != null) {
-      current = current.next;                                          // Get the reference to the next item
-    }
-    return current == null ? null : current.item;
-  }
+	// Construct a linked list from an array of objects
+	public LinkedList(T[] items) {
+		if (items != null) {
+			// Add the items to the list
+			for (int i = 0; i < items.length; ++i) {
+				addItem(items[i]);
+			}
+			currentListItemObject = startListItemObject;
+		}
+	}
 
-  private ListItem start = null;                                       // First ListItem in the list
-  private ListItem end = null;                                         // Last ListItem in the list
-  private ListItem current = null;                                     // The current item for iterating
+	// Add an itemTypeT object to the list
+	public void addItem(T item) {
+		ListItem newEnd = new ListItem(item);                              // Create a new ListItem
+		if (startListItemObject == null) {                                 // Is the list empty?
+			 // Yes, so new element is startListItemObject and endListItemObject
+			startListItemObject = endListItemObject = newEnd;   
+		} else {        												   // No, so append new element
+			// Set nextListItemObject variable for old endListItemObject
+			endListItemObject.nextListItemObject = newEnd;                    
+			endListItemObject = newEnd;                                    // Store new itemTypeT as endListItemObject
+		}
+	}
 
-  private class ListItem {
+	// Get the first object in the list. The object type will be the argument given when instantiating class
+	public T getFirst() {
+		currentListItemObject = startListItemObject;
+		return startListItemObject == null ? null : startListItemObject.itemTypeT;
+	}
 
-    // Constructor
-    public ListItem(T item) {
-      this.item = item;                                                // Store the item
-      next = null;                                                     // Set next as end point
-    }
+	// Get the nextListItemObject object in the list
+	public T getNext() {
+		if (currentListItemObject != null) {
+			currentListItemObject = currentListItemObject.nextListItemObject;                                          // Get the reference to the nextListItemObject itemTypeT
+		}
+		return currentListItemObject == null ? null : currentListItemObject.itemTypeT;
+	}
 
-    // Return class name & object
-    @Override
-    public String toString() {
-      return "ListItem " + item ;
-    }
+	private class ListItem {
 
-    ListItem next;                                                     // Refers to next item in the list
-    T item;                                                            // The item for this ListItem
-  }
+		ListItem nextListItemObject;                            // Refers to nextListItemObject itemTypeT in the list
+		T itemTypeT;                                            // The itemTypeT for this ListItem
+
+		// Constructor
+		public ListItem(T item) {
+			this.itemTypeT = item;                              // Store the itemTypeT
+			nextListItemObject = null;                          // Set nextListItemObject as endListItemObject point
+		}
+
+		// Return class name & object
+		@Override
+		public String toString() {
+			return "ListItem " + itemTypeT;
+		}
+
+	}
 }

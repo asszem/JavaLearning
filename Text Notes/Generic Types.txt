@@ -32,15 +32,24 @@ Implementing a generic class
 Instantiating a Generic type
 	When you create a particular type from the generic type definition by supplying an argument value for T ('String' for example)
 	the argument is substituted for every occurrence of T in the generic type specification.
+	The compiler uses the type argument String that you supplied to replace every instance of the type variable, T
+	in the generic type definition to arrive at the notional class type definition for LinkedList<String>.
+	The angled brackets<> without a type specification between are often referred to as the DIAMOND OPERATOR
 	Example:
-		LinkedList<String> stringsOnly; 					//All 'T' will be replaced to 'String'
-			public LinkedList(String item) {...} 			//Constructor
-			public LinkedList(String[] items) {...}			//Constructor
-			public void addItem(String item) {...}			//Method
-			public String getFirst() {...}		  		    //Method
-			public String getNext() {...}				    //Method
-			public ListItem(String item) {...}				//Method
-			String item; 									//Instance variable
+		LinkedList<String> stringsOnly = new LinkedList<>(); 	//All 'T' will be replaced to 'String'
+			public LinkedList(String item) {...} 				//Constructor
+			public LinkedList(String[] items) {...}				//Constructor
+			public void addItem(String item) {...}				//Method
+			public String getFirst() {...}						//Method
+			public String getNext() {...}						//Method
+			public ListItem(String item) {...}					//Method
+			String item;										//Instance variable
+	Example 2
+		LinkedList<LinkedList<String>> linkedLists = new LinkedList<>();  //The type argument here is another generic type class: LinkedList<String>
+	Example 3
+		LinkedList<String> strings = new LinkedList<String>(); 	//this works also, but the second <String> part is redundant
+																//Netbeans will give a warning of redundant type argument
+
 
 Naming convention
 	The convention in Java is to use single letters as type parameter names. 

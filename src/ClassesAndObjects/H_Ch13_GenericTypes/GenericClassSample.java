@@ -65,9 +65,6 @@ public class GenericClassSample<T> {
 			System.out.println(genericClasses.get(i));
 			System.out.println("");
 		}
-		//Use get methods
-		//TODO to be continued - find out why this doesnt work
-		genericClassForStrings.getClass().getField(genericVariable);
 
 	}
 
