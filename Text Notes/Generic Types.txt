@@ -1,7 +1,59 @@
+***Summary***
+/write this part at the end of the chapter when I know what the most improtant parts are
 
+***Details***
 
+Generic or parameterized types
+	A generic (or parameterized) type, is a class or interface type definition that has one or more type PARAMETERS. 
+	You define an actual class or interface type from a generic type by supplying a type ARGUMENT for each of the type parameters that the generic type has.
 
+Type safe
+	A class that always prevents you from accidentally adding objects of the wrong typek
 
+Generic Class definition 
+	The type parameter goes between <> after class/interface/(method) name
+	Occurrences of the type parameter name in the definition of a generic type are called TYPE VARIABLES because
+	they are replaced by a value that is a type in a similar way to how method parameters are replaced by the arguments that you supply.
+	Example:
+		public class LinkedList<T> {              // T is the type variable or type parameter
+			// Generic type definition...
+		}
+Implementing a generic class
+	Example
+		public class LinkedList<T> {
+			public LinkedList(T item) {...} 			//Constructor
+			public LinkedList(T[] items) {...}			//Constructor
+			public void addItem(T item) {...}			//Method
+			public T getFirst() {...}		  		    //Method
+			public T getNext() {...}				    //Method
+			public ListItem(T item) {...}				//Method
+			T item; 									//Instance variable
 
+Instantiating a Generic type
+	When you create a particular type from the generic type definition by supplying an argument value for T ('String' for example)
+	the argument is substituted for every occurrence of T in the generic type specification.
+	Example:
+		LinkedList<String> stringsOnly; 					//All 'T' will be replaced to 'String'
+			public LinkedList(String item) {...} 			//Constructor
+			public LinkedList(String[] items) {...}			//Constructor
+			public void addItem(String item) {...}			//Method
+			public String getFirst() {...}		  		    //Method
+			public String getNext() {...}				    //Method
+			public ListItem(String item) {...}				//Method
+			String item; 									//Instance variable
+
+Naming convention
+	The convention in Java is to use single letters as type parameter names. 
+	So it can be differentiated from a class name (starts with Capital) or variable/method name (starts with lowerCase)
+		T - type parameter
+		ClassName - class name
+		methodName() - method name
+		variableName - variable name
+		FINAL_VARIABLE - final variable name
+	Typicall type parameters
+		T is used to indicate a parameter is a TYPE (String, Point, MobilePhone, etc)
+		N is used for a parameter that is a NUMERICAL value
+		K is used for a parameter that is a KEY
+		V is used for a type parameter that is a VALUE
 Source
 	Horton, Chapter 13

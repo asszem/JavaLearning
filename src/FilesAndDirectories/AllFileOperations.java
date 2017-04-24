@@ -67,6 +67,8 @@ import java.util.logging.Logger;
 public class AllFileOperations {
 
 	Path objectPath; //Sets an instance variable called objectPath
+	Path userDir = Paths.get(System.getProperty("user.dir")); //the java project root dir
+	Path homeDir = Paths.get(System.getProperty("user.home")); //the windows home dir
 
 //Prints out the filesystem properties
 	public static void printFileSystemProperties() {
