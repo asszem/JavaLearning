@@ -33,7 +33,7 @@ public class GenericClassSample<T> {
 	@Override
 	public String toString(){
 		StringBuilder returnStr=new StringBuilder();
-		returnStr.append("Class name: ").append(this.getClass().getSimpleName());
+		returnStr.append("Runtime Class name: ").append(this.getClass().getSimpleName());
 		returnStr.append("\nType variable: ").append(this.getClass().getTypeParameters()[0]);
 		returnStr.append("\nGeneric variable value= ").append(genericVariable);
 		return returnStr.toString();
@@ -49,7 +49,7 @@ public class GenericClassSample<T> {
 		GenericClassSample<Integer> genericClassForIntegers2= new GenericClassSample<>(123456);
 		//Use setter methods -> note that appropriate arguments must be provided
 		genericClassForStrings.setGenericVariable("Updated with setter method");
-		genericClassForIntegers.setGenericVariable(42);
+		genericClassForIntegers.setGenericVariable(42); //autoboxing, casts int 42 to wrapper class Integer
 
 		
 		//Instantiate a String type class that has only the ArrayList reference
@@ -65,6 +65,15 @@ public class GenericClassSample<T> {
 			System.out.println(genericClasses.get(i));
 			System.out.println("");
 		}
+
+		//Generating compiler warning
+		GenericClassSample<String> stringTypeGCS =new GenericClassSample<>();
+		Object obj = (Object) stringTypeGCS;  //cast the string generic cast to Object 
+		System.out.println("String cast to object:");
+		System.out.println(obj);
+		GenericClassSample<Double> doubleTypeGCS;
+		doubleTypeGCS = (GenericClassSample<Double>)obj;
+
 
 	}
 

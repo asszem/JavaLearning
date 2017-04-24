@@ -2,6 +2,8 @@ package ClassesAndObjects.H_Ch13_GenericTypes.LinkedListGeneric;
 
 public class PolyLine {
 
+	//The PolyLine class creates the LinkedList<Point> type from the LinkedList<T> generic type
+	//that implements a linked list of Point objects:
 	private LinkedList<Point> polyline;                   // The linked list of points, instantiated as type POINT
 
 	// Construct a polyline from an array of coordinate pairs

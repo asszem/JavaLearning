@@ -1,14 +1,29 @@
 ***Summary***
 /write this part at the end of the chapter when I know what the most improtant parts are
 
+	type argument
+	type parameter
+	type safe
+	upper boundary
+	lower boundary
+	wildcard arguments / bounded wildcards
+	generic methods
+
 ***Details***
 
+General Forms
+	Generic Class
+		class class-name<type-param-list>
+			class MobilePhones<T, V, Users<T>>
+	Upper Bounded Class
+		class class-name<T extends superclass>
+
 Generic or parameterized types
-	A generic (or parameterized) type, is a class or interface type definition that has one or more type PARAMETERS. 
-	You define an actual class or interface type from a generic type by supplying a type ARGUMENT for each of the type parameters that the generic type has.
+	A generic (or parameterized) type is a class or interface type definition that has one or more type PARAMETERS. 
+	You define an actual class or interface type from a generic type by supplying a TYPE ARGUMENT for each of the type parameters that the generic type has.
 
 Type safe
-	A class that always prevents you from accidentally adding objects of the wrong typek
+	A class that always prevents you from accidentally adding objects of the wrong type
 
 Generic Class definition 
 	The type parameter goes between <> after class/interface/(method) name
@@ -18,6 +33,7 @@ Generic Class definition
 		public class LinkedList<T> {              // T is the type variable or type parameter
 			// Generic type definition...
 		}
+
 Implementing a generic class
 	Example
 		public class LinkedList<T> {
@@ -29,7 +45,7 @@ Implementing a generic class
 			public ListItem(T item) {...}				//Method
 			T item; 									//Instance variable
 
-Instantiating a Generic type
+Instantiating a Generic type class
 	When you create a particular type from the generic type definition by supplying an argument value for T ('String' for example)
 	the argument is substituted for every occurrence of T in the generic type specification.
 	The compiler uses the type argument String that you supplied to replace every instance of the type variable, T
@@ -49,7 +65,44 @@ Instantiating a Generic type
 	Example 3
 		LinkedList<String> strings = new LinkedList<String>(); 	//this works also, but the second <String> part is redundant
 																//Netbeans will give a warning of redundant type argument
+	Example 4
+		LinkedList<Double> temperature = new LinkedList<>(); 	//use the 'Double' wrapper class to store double type primitive value
+	Example 5
+		LinkedList<T, V> ...						//multiple type parameters can be used
+			LinkedList<String, Double> obj1;
+			LinkedLIst<Integer, Integer> obj2;		//type arguments can be the same
 
+Type Erasure & leftmost bound
+	Type Erasure
+		Type Erasure is the process when all occurrences of the type variable T are eliminated and replaced by type 'Object' when instantiating LinkeList<Point> polyline;
+		You end up with a notional(képzeletbeli) class where all 'T' replaced to 'Object'
+		The type parameter following the class name ('T') in the original generic type definition has been removed, and all
+		occurrences of the type variable 'Point' within the class definition have been replaced by type Object. 
+	Why 'Object'?
+		Type Object is chosen by the compiler to replace the type variable because type Object is the ultimate superclass class from which type Point is derived.
+		The type that the compiler selects to replace a type variable is the LEFTMOST BOUND of the type variable. 
+	What's the point and why not just define Object anyways?
+		To ensure complie-time type safety for the compiler. 
+			When you use an object of type LinkedList<Point> in your code, the compiler checks that you use it only to store objects of type Point
+			The compiler flags any attempt to store objects of other types as an error. 
+			When you call methods for an object of type LinkedList<Point>, the compiler ensures that you supply references only of type Point
+			where the original method parameter was specified as the type parameter
+	What is LEFTMOST BOUND?
+		Type Object is the DEFAULT LEFTMOST BOUND that applies to any class type because all classes have type Object as their ultimate superclass. 
+	Why and how specify different leftmost bound?
+		<TBW>
+
+Upper Bound & Lower Bound
+	Upper bound 
+		The upper bound declares the superclass from which all type argumetns must be derived. T can be replaced only by superclass or subclasses of superclass. 
+		Inclusive upper limit, as superclass is included
+		Example:
+			class MobilePhone<T, V extends T> {...			//V must be either type T or subclass of T
+
+
+
+Runtime Class Type
+	All types that you generate from a given generic type share the same class name at run time.
 
 Naming convention
 	The convention in Java is to use single letters as type parameter names. 
@@ -64,5 +117,7 @@ Naming convention
 		N is used for a parameter that is a NUMERICAL value
 		K is used for a parameter that is a KEY
 		V is used for a type parameter that is a VALUE
-Source
+
+Sources
 	Horton, Chapter 13
+	Herbert Schildt, Beginners Guide, 6th Edition, Chapter 13, Generics
