@@ -19,16 +19,15 @@ General Forms
 		class class-name<T extends superclass>
 	Generic Method
 		<access modifier> <type-param-list> return-type method-name(param-list) {method body...}
-			Example: public static <T extends Comparable<T>, V extends T> boolean thisIsTheName(T firstParameterOfTypeT, V secondParameterOfTypeV)
+			Example: 
+				public static <T extends Comparable<T>, V extends T> boolean thisIsTheName(T firstParameterOfTypeT, V secondParameterOfTypeV)
 
 Generic or parameterized types
-	A generic (or parameterized) type is a class or interface type definition that has one or more type PARAMETERS. 
+	A generic (or parameterized) type is a class or interface type definition that has one or more TYPE PARAMETERS. 
 	You define an actual class or interface type from a generic type by supplying a TYPE ARGUMENT for each of the type parameters that the generic type has.
+	Type safe - A class that always prevents you from accidentally adding objects of the wrong type
 
-Type safe
-	A class that always prevents you from accidentally adding objects of the wrong type
-
-Generic Class definition 
+Generic Class Definition 
 	The type parameter goes between <> after class/interface/(method) name
 	Occurrences of the type parameter name in the definition of a generic type are called TYPE VARIABLES because
 	they are replaced by a value that is a type in a similar way to how method parameters are replaced by the arguments that you supply.
@@ -37,7 +36,7 @@ Generic Class definition
 			// Generic type definition...
 		}
 
-Implementing a generic class
+Generic Class Implementation
 	Example
 		public class LinkedList<T> {
 			public LinkedList(T item) {...} 			//Constructor
@@ -48,11 +47,11 @@ Implementing a generic class
 			public ListItem(T item) {...}				//Method
 			T item; 									//Instance variable
 
-Instantiating a Generic type class
+Generic Class Instantiaton
 	When you create a particular type from the generic type definition by supplying an argument value for T ('String' for example)
 	the argument is substituted for every occurrence of T in the generic type specification.
 	The compiler uses the type argument String that you supplied to replace every instance of the type variable, T
-	in the generic type definition to arrive at the notional class type definition for LinkedList<String>.
+	in the generic type definition to arrive at the notional (képzeletbeli) class type definition for LinkedList<String>.
 	The angled brackets<> without a type specification between are often referred to as the DIAMOND OPERATOR
 	Example:
 		LinkedList<String> stringsOnly = new LinkedList<>(); 	//All 'T' will be replaced to 'String'
@@ -75,7 +74,7 @@ Instantiating a Generic type class
 			LinkedList<String, Double> obj1;
 			LinkedLIst<Integer, Integer> obj2;		//type arguments can be the same
 
-Type Erasure & leftmost bound
+Type Erasure & Leftmost Bound
 	Type Erasure
 		Type Erasure is the process when all occurrences of the type variable T are eliminated and replaced by type 'Object' when instantiating LinkeList<Point> polyline;
 		You end up with a notional(képzeletbeli) class where all 'T' replaced to 'Object'
@@ -85,7 +84,7 @@ Type Erasure & leftmost bound
 		Type Object is chosen by the compiler to replace the type variable because type Object is the ultimate superclass class from which type Point is derived.
 		The type that the compiler selects to replace a type variable is the LEFTMOST BOUND of the type variable. 
 	What's the point and why not just define Object anyways?
-		To ensure complie-time type safety for the compiler. 
+		To ensure COMPILE-TIME TYPE SAFETY for the compiler. 
 			When you use an object of type LinkedList<Point> in your code, the compiler checks that you use it only to store objects of type Point
 			The compiler flags any attempt to store objects of other types as an error. 
 			When you call methods for an object of type LinkedList<Point>, the compiler ensures that you supply references only of type Point
@@ -95,17 +94,42 @@ Type Erasure & leftmost bound
 	Why and how specify different leftmost bound?
 		<TBW>
 
+Scope of Type parameter
+	The scope of a type parameter is the entire generic class definition but excluding any STATIC MEMBERS or INITIALIZERS in the class.
+
+Static Methods
+	Static methods cannot have parameters or return types that correspond to a class type parameter
+	and you must not use the class type parameters in the bodies of static method definitions.
+		Example 1 - Bad
+			static T boolean notGood(T input) {...
+		Example 2 - Good
+			static <V> V (V input) {...
+
+Static Fields
+	All types produced from a given generic type share the same runtime type. Consequently they do not have their own independent static fields. 
+	Any static fields you define in a generic type are shared among all instances of it. 
+	Static fields in generic type definitions are best avoided.
+
+
 Upper Bound & Lower Bound
-	Upper bound 
-		The upper bound declares the superclass from which all type argumetns must be derived. T can be replaced only by superclass or subclasses of superclass. 
-		Inclusive upper limit, as superclass is included
+	Upper bound <T extends UpperBoundClass>
+		T can be replaced only by superclass or subclasses of superclass. 
+		The upper bound declares the superclass from which all type argumetns must be derived.  Inclusive upper limit, as superclass is included.
+		The EXTENDS keyword must be used, regardless of whether the type parameter bound is a class or an interface
 		Example:
 			class MobilePhone<T, V extends T> {...			//V must be either type T or subclass of T
+		Example 2:
+			class LinkedList<T extends Serializable> implements Serializable {	  //the type paramter class must implement serializable as well, so everything can be serialized
+		Example 3: 
+			class MyType<T extends FancyClass & Serializable & MyInterface>   	//Multiple bounds: FancyClass class and Serializable and MyInterface interface
 
+	Lower bound <T super LowerBoundClass>
+		Only LowerBoundClass and it's super classes are acceptable
 
 
 Runtime Class Type
 	All types that you generate from a given generic type share the same class name at run time.
+	Because all types that you produce from a generic type have the same runtime type, you cannot use the INSTANCEOF operator to test for such types.
 
 Naming convention
 	The convention in Java is to use single letters as type parameter names. 
@@ -120,6 +144,7 @@ Naming convention
 		N is used for a parameter that is a NUMERICAL value
 		K is used for a parameter that is a KEY
 		V is used for a type parameter that is a VALUE
+		E is used for a parameter that is an ELEMENT
 
 Sources
 	Horton, Chapter 13

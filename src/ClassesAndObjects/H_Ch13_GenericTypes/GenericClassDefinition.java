@@ -8,15 +8,15 @@ import java.util.ArrayList;
  * @author Andras Olah (olahandras78@gmail.com)
  * @param <T> type parameter
  */
-public class GenericClassSample<T> {
+public class GenericClassDefinition<T> {
 	T genericVariable; //type will be provided when the class is instantiated, and 'T' will be replaced to it
 
 	//No-args constructor
-	public GenericClassSample(){
+	public GenericClassDefinition(){
 	}
 
 	//Constructor with a type variable
-	public GenericClassSample(T constructorInput){
+	public GenericClassDefinition(T constructorInput){
 		genericVariable= constructorInput;  //the variable can be anything that was given as type argument
 	}
 
@@ -28,6 +28,15 @@ public class GenericClassSample<T> {
 	//Setter method for the generic variable
 	public void setGenericVariable(T newValue){
 		genericVariable=newValue;
+	}
+
+	//Static method CAN't use class definition type parameters!
+//	static T V notGood(R parameter){
+
+	//Static method can have their own parameteres
+	public static <V> V isSomething(V input){
+		System.out.println("Input argument class: " + input.getClass().getSimpleName());
+		return input;
 	}
 
 	@Override
@@ -42,18 +51,18 @@ public class GenericClassSample<T> {
 	public static void main(String[] args) {
 		ArrayList genericClasses =new ArrayList();
 		//Instantiation without arguments
-		GenericClassSample<String> genericClassForStrings =new GenericClassSample<>();
-		GenericClassSample<Integer> genericClassForIntegers = new GenericClassSample<>();
+		GenericClassDefinition<String> genericClassForStrings =new GenericClassDefinition<>();
+		GenericClassDefinition<Integer> genericClassForIntegers = new GenericClassDefinition<>();
 		//Instantiation with arguments
-		GenericClassSample<String> genericClassForStrings2 =new GenericClassSample<>("String argument to constructor");
-		GenericClassSample<Integer> genericClassForIntegers2= new GenericClassSample<>(123456);
+		GenericClassDefinition<String> genericClassForStrings2 =new GenericClassDefinition<>("String argument to constructor");
+		GenericClassDefinition<Integer> genericClassForIntegers2= new GenericClassDefinition<>(123456);
 		//Use setter methods -> note that appropriate arguments must be provided
 		genericClassForStrings.setGenericVariable("Updated with setter method");
 		genericClassForIntegers.setGenericVariable(42); //autoboxing, casts int 42 to wrapper class Integer
 
 		
 		//Instantiate a String type class that has only the ArrayList reference
-		genericClasses.add(new GenericClassSample<>("New String class to arrayList"));
+		genericClasses.add(new GenericClassDefinition<>("New String class to arrayList"));
 		//Add the existing classes to the ArrayList
 		genericClasses.add(genericClassForStrings);
 		genericClasses.add(genericClassForStrings2);
@@ -67,12 +76,12 @@ public class GenericClassSample<T> {
 		}
 
 		//Generating compiler warning
-		GenericClassSample<String> stringTypeGCS =new GenericClassSample<>();
+		GenericClassDefinition<String> stringTypeGCS =new GenericClassDefinition<>();
 		Object obj = (Object) stringTypeGCS;  //cast the string generic cast to Object 
 		System.out.println("String cast to object:");
 		System.out.println(obj);
-		GenericClassSample<Double> doubleTypeGCS;
-		doubleTypeGCS = (GenericClassSample<Double>)obj;
+		GenericClassDefinition<Double> doubleTypeGCS;
+		doubleTypeGCS = (GenericClassDefinition<Double>)obj;
 
 
 	}
