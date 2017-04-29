@@ -17,7 +17,7 @@ public class BoundedWildcards {
 		}
 	}
 
-	//Instantiation of this class must extend to GenericInnerClass and implement the Serializable interface
+	//Instantiation of this class must extend to Alfa and implement the Serializable interface
 	class MultipleTypeParameterBounds<X extends Alfa & Serializable> {
 	}
 
@@ -43,7 +43,7 @@ public class BoundedWildcards {
 		//Create a BoundedWildcard objects that will hold the inner classes
 		BoundedWildcards instance = new BoundedWildcards();
 
-//		MultipleTypeParameterBounds<Alfa> error = new MultipleTypeParameterBounds<Alfa>();  //ERROR - ALFA is not within bounds
+//		MultipleTypeParameterBounds<Alfa> error = new MultipleTypeParameterBounds<Alfa>();  //ERROR - ALFA is not implementing Serializable!
 		MultipleTypeParameterBounds<Gamma> correct =instance.new MultipleTypeParameterBounds<>();
 
 		//Create instances of the inner classes

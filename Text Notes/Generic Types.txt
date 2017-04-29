@@ -131,6 +131,19 @@ Runtime Class Type
 	All types that you generate from a given generic type share the same class name at run time.
 	Because all types that you produce from a generic type have the same runtime type, you cannot use the INSTANCEOF operator to test for such types.
 
+Implementing Iterable<T>
+	Implementing Iterable<T> will make the class eligible to run the collection based for-loop
+	An iterator is a one-time use object so you need to recreate it each time.
+	Steps
+		1. The class must be generic and implement Iterable<T>
+		2. A public Iterator<T> iterate() method must @Override (implement) the method from the Iterable<T> interface. This must return an Iterator<T> type object
+		3. A subclass needs to be created, that implements Iterator<T> interface
+		4. Two methods from Iterator<T> must be implemented in this subclass: HasNext and T next()
+		5. A collection-based for loop can now be called for the instances of the generic class. 
+	Notes
+		Netbeans will create skeleton for mandatory implementations
+		When overriden methods not fully implemented yet, a runtime exception can be thrown
+
 Naming convention
 	The convention in Java is to use single letters as type parameter names. 
 	So it can be differentiated from a class name (starts with Capital) or variable/method name (starts with lowerCase)
