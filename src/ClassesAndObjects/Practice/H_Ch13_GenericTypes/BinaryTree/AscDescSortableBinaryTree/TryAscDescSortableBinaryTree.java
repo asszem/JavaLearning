@@ -1,6 +1,6 @@
-package ClassesAndObjects.Practice.H_Ch13_GenericTypes.BinaryTree.BinaryTreeDeault;
+package ClassesAndObjects.Practice.H_Ch13_GenericTypes.BinaryTree.AscDescSortableBinaryTree;
 
-public class TryBinaryTree {
+public class TryAscDescSortableBinaryTree {
   public static void main(String[] args) {
     int[] numbers = new int[30];
     for(int i = 0 ; i < numbers.length ; ++i) {
@@ -18,13 +18,15 @@ public class TryBinaryTree {
     }
 
     // Create the tree and add the integers to it
-    BinaryTree<Integer> tree = new BinaryTree<>();
+    AscDescSortableBinaryTree<Integer> tree = new AscDescSortableBinaryTree<>();
     for(int number:numbers) {
-      tree.add(number);
+      tree.add(number);									//numbers are autoboxed to INTEGER, that implements Comparable<Integer>
     }
 
     // Get sorted values
-    LinkedList<Integer> values = tree.sort();
+	boolean ASCENDING=true;
+	boolean DESCENDING=false;
+    LinkedList<Integer> values = tree.sort(ASCENDING);
     count = 0;
     System.out.println("\nSorted values are:");
     for(Integer value : values) {
@@ -49,13 +51,13 @@ public class TryBinaryTree {
     }
 
     // Create the tree and insert the words
-    BinaryTree<String> cache = new BinaryTree<>();
+    AscDescSortableBinaryTree<String> cache = new AscDescSortableBinaryTree<>();
     for(String word : words) {
       cache.add(word);
     }
 
     // Sort the words
-    LinkedList<String> sortedWords = cache.sort();
+    LinkedList<String> sortedWords = cache.sort(DESCENDING);
 
     // List the sorted words
     System.out.println("\nSorted word sequence:");
