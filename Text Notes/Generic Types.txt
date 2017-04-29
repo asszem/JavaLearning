@@ -74,7 +74,7 @@ Generic Class Instantiaton
 			LinkedList<String, Double> obj1;
 			LinkedLIst<Integer, Integer> obj2;		//type arguments can be the same
 
-Type Erasure & Leftmost Bound
+Type Erasure & Leftmost Bound & Raw Type
 	Type Erasure
 		Type Erasure is the process when all occurrences of the type variable T are eliminated and replaced by type 'Object' when instantiating LinkeList<Point> polyline;
 		You end up with a notional(képzeletbeli) class where all 'T' replaced to 'Object'
@@ -91,12 +91,29 @@ Type Erasure & Leftmost Bound
 			where the original method parameter was specified as the type parameter
 	What is LEFTMOST BOUND?
 		Type Object is the DEFAULT LEFTMOST BOUND that applies to any class type because all classes have type Object as their ultimate superclass. 
-	Why and how specify different leftmost bound?
-		<TBW>
+	Raw Type
+		Implementing a generic type without type parameter.
+		In the absence of any explicit type parameter bounds, every type parameter T is implicitly bounded by type oBJECT
+		All occurrences of T in a generic type definition are replaced by Object to produce the raw type.
+		Example
+			LinkedList rawList = new LinkedList();
+		Description
+			The class that corresponds to the raw type is produced by removing the type parameters from the generic type definition and replacing each instance of a type variable in the definition by 
+			the LEFTMOST BOUND of its corresponding type parameter. 
+			This process of mapping from a generic type to a non-generic type is called TYPE ERASURE because all occurrences of the type variable are effectively erased from the generic class definition. 
+			A raw type exists as a consequence of implementing generic types using type erasure.	
+	Why and how specify different leftmost bound? 
+		When you implement a RAW interface in an ordinary class without specifying a type argument, your class is implementing the raw type
+		so the methods in the interface are declared with parameters and/or return types of type Object.
+			Example Horton p. 489
+				This class type definition retunrs a Serializable type object as raw type:
+					class SerializableGenericLinkedList<T extends Serializable> implements Serializable {
+				This class type definition returns an Object type object as raw type:	
+					class LinkedList<T extends Object & Serializable> implements Serializable {
+	
 
 Scope of Type parameter
 	The scope of a type parameter is the entire generic class definition but excluding any STATIC MEMBERS or INITIALIZERS in the class.
-
 Static Methods
 	Static methods cannot have parameters or return types that correspond to a class type parameter
 	and you must not use the class type parameters in the bodies of static method definitions.
@@ -109,7 +126,6 @@ Static Fields
 	All types produced from a given generic type share the same runtime type. Consequently they do not have their own independent static fields. 
 	Any static fields you define in a generic type are shared among all instances of it. 
 	Static fields in generic type definitions are best avoided.
-
 
 Upper Bound & Lower Bound
 	Upper bound <T extends UpperBoundClass>
@@ -125,7 +141,6 @@ Upper Bound & Lower Bound
 
 	Lower bound <T super LowerBoundClass>
 		Only LowerBoundClass and it's super classes are acceptable
-
 
 Runtime Class Type
 	All types that you generate from a given generic type share the same class name at run time.

@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class BoundedWildcards {
+public class BoundedGenericWildcards {
 
 	public class GenericInnerClass<T> {
 
@@ -41,7 +41,7 @@ public class BoundedWildcards {
 
 	public static void main(String[] args) {
 		//Create a BoundedWildcard objects that will hold the inner classes
-		BoundedWildcards instance = new BoundedWildcards();
+		BoundedGenericWildcards instance = new BoundedGenericWildcards();
 
 //		MultipleTypeParameterBounds<Alfa> error = new MultipleTypeParameterBounds<Alfa>();  //ERROR - ALFA is not implementing Serializable!
 		MultipleTypeParameterBounds<Gamma> correct =instance.new MultipleTypeParameterBounds<>();

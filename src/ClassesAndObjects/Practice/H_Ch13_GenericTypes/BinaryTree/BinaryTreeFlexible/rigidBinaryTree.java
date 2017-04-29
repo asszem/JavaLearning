@@ -1,6 +1,6 @@
 package ClassesAndObjects.Practice.H_Ch13_GenericTypes.BinaryTree.BinaryTreeFlexible;
 
-public class BinaryTree<T extends Comparable<T>> {
+public class rigidBinaryTree<T extends Comparable<T>> {
 
   // Add a value to the tree
   public void add(T value) {
