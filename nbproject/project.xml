@@ -6,6 +6,8 @@
             <name>JavaLearning</name>
             <source-roots>
                 <root id="src.dir"/>
+                <root id="src.practice.dir" name="Practice and Try"/>
+                <root id="src.exercise.dir" name="Exercises"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>

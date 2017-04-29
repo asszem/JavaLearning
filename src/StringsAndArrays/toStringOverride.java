@@ -41,7 +41,7 @@ Webes források:
  */
 package StringsAndArrays;
 
-import PracticeAndTest.Practice.Kutyak;
+import PracticeAndTry.Practice.Kutyak;
 
 /**
  *

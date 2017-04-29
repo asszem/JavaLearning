@@ -1,5 +1,6 @@
 package PracticeAndTest.LinkedListAndras;
 
+import ClassesAndObjects.LinkedLists.AndrasLinkedLists.BasicLinkedListAndras;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,7 +18,7 @@ import FilesAndDirectories.H_Ch12_Serialization.Smartwatch;
  */
 public class LinkedListAndrasTest {
 
-	static LinkedListAndras testInstance = new LinkedListAndras();
+	static BasicLinkedListAndras testInstance = new BasicLinkedListAndras();
 
 	public LinkedListAndrasTest() {
 	}
@@ -47,7 +48,7 @@ public class LinkedListAndrasTest {
 	}
 
 	/**
-	 * Test of setPointerPosition method, of class LinkedListAndras. The method should return -1 when a not existing position was added to the parameter to set
+	 * Test of setPointerPosition method, of class BasicLinkedListAndras. The method should return -1 when a not existing position was added to the parameter to set
 	 */
 	@Test
 	public void testSetPointerPosition() {
@@ -68,13 +69,13 @@ public class LinkedListAndrasTest {
 	}
 
 	/**
-	 * Test of addItem method, of class LinkedListAndras.
+	 * Test of addItem method, of class BasicLinkedListAndras.
 	 */
 	@Test
 	public void testAddItem() {
 		System.out.println("addItem test");
 		Object objectToAdd = gadgetOwners[0];
-		LinkedListAndras instance = new LinkedListAndras();
+		BasicLinkedListAndras instance = new BasicLinkedListAndras();
 		int positionBefore = instance.getListItemNumberPointer();
 		int counterBefore = instance.getListItemTotal();
 		instance.addItem(objectToAdd);
@@ -90,26 +91,26 @@ public class LinkedListAndrasTest {
 	}
 
 	/**
-	 * Test of removeItem method, of class LinkedListAndras.
+	 * Test of removeItem method, of class BasicLinkedListAndras.
 	 */
 	@Ignore
 	@Test
 	public void testRemoveItem() {
 		System.out.println("removeItem");
 		Object objectToRemove = null;
-		LinkedListAndras instance = new LinkedListAndras();
+		BasicLinkedListAndras instance = new BasicLinkedListAndras();
 //		instance.removeItem(objectToRemove);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
 	}
 
 	/**
-	 * Test of getItem method, of class LinkedListAndras.
+	 * Test of getItem method, of class BasicLinkedListAndras.
 	 */
 	@Test
 	public void testGetItem() {
 		System.out.println("getItem test");
-		LinkedListAndras instance = new LinkedListAndras();
+		BasicLinkedListAndras instance = new BasicLinkedListAndras();
 		Object objectToAdd;
 		//add all 10 objects to the list
 		for (int i = 0; i < 10; i++) {
@@ -125,14 +126,14 @@ public class LinkedListAndrasTest {
 	}
 
 	/**
-	 * Test of main method, of class LinkedListAndras.
+	 * Test of main method, of class BasicLinkedListAndras.
 	 */
 	@Ignore
 	@Test
 	public void testMain() {
 		System.out.println("main");
 		String[] args = null;
-		LinkedListAndras.main(args);
+		BasicLinkedListAndras.main(args);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
 	}

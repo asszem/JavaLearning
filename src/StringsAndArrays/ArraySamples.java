@@ -35,11 +35,11 @@ public class ArraySamples {
 
 	public static void main(String[] args) {
 
-		ClassesAndObjects.Horcsog[] tombHorcsog = new ClassesAndObjects.Horcsog[3]; //Létrehoz egy 3 elemű tömbváltozót, ami a Hörcsög osztályra hivatkozik! 
-		tombHorcsog[0] = new ClassesAndObjects.Horcsog("Tömbi1", "Tömbi1 értéke hivatkozva", "fekete", "tömbös", 200); //értéket ad az első tömbnek
-		tombHorcsog[1] = new ClassesAndObjects.Horcsog("Tömbi2", tombHorcsog[0].getGender(), "lila", "tömbörű", 21); //értéket ad az első tömbnek
-		ClassesAndObjects.Horcsog[][] ketDHorcsog = new ClassesAndObjects.Horcsog[3][2];
-		ketDHorcsog[0][0] = new ClassesAndObjects.Horcsog();
+		ClassesAndObjects.Practice.Horcsog[] tombHorcsog = new ClassesAndObjects.Practice.Horcsog[3]; //Létrehoz egy 3 elemű tömbváltozót, ami a Hörcsög osztályra hivatkozik! 
+		tombHorcsog[0] = new ClassesAndObjects.Practice.Horcsog("Tömbi1", "Tömbi1 értéke hivatkozva", "fekete", "tömbös", 200); //értéket ad az első tömbnek
+		tombHorcsog[1] = new ClassesAndObjects.Practice.Horcsog("Tömbi2", tombHorcsog[0].getGender(), "lila", "tömbörű", 21); //értéket ad az első tömbnek
+		ClassesAndObjects.Practice.Horcsog[][] ketDHorcsog = new ClassesAndObjects.Practice.Horcsog[3][2];
+		ketDHorcsog[0][0] = new ClassesAndObjects.Practice.Horcsog();
 		tombHorcsog[2] = tombHorcsog[1];
 		tombHorcsog[2].setName("Tömb Hörcsög új neve");
 		System.out.println(tombHorcsog[0].toString());
