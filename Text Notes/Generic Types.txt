@@ -78,6 +78,8 @@ Generic Class Definition
 			class Delta							out bound			out bound
 
 Generic Class Implementation
+	Generic Constructors
+		
 	Static Methods and Static Fields in a Generic Class
 		Static Methods
 			Static methods cannot have parameters or return types that correspond to a class type parameter
@@ -90,7 +92,7 @@ Generic Class Implementation
 			All types produced from a given generic type share the same runtime type. Consequently they do not have their own independent static fields. 
 			Any static fields you define in a generic type are shared among all instances of it. 
 			Static fields in generic type definitions are best avoided.
-	Example
+	Example of valid generic class definitions
 		public class LinkedList<T> {
 			public LinkedList(T item) {...} 			//Constructor
 			public LinkedList(T[] items) {...}			//Constructor
@@ -139,7 +141,6 @@ Generic Class Instantiaton
 		Example 6
 			LinkedList<?> wildCardList = new LinkedList<Double>();
 			LinkedList<?> wildCardList = new LinkedList<String>();
-
 
 Type Erasure & Leftmost Bound & Raw Type
 	Type Erasure
