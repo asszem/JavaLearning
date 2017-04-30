@@ -1,5 +1,4 @@
-/*
-Requirement: 
+/* Requirement: 
 
 A stack is a container that stores objects in a manner indicated by its name — a vertical stack where only
 the object at the top of the stack is accessible. 
@@ -8,6 +7,7 @@ It works rather like a sprung stack of plates in a cafeteria.
 Only the top plate is at counter level and, therefore, is the only one you can access. 
 When you add a plate to the stack, the existing plates are pushed down so the new plate is now the one that you can access.
 
+Ex 1
 Define a generic Stack<> type with a method push() that adds the object that is passed as an argument
 to the top of the stack, and with a method pop() that removes and returns the object that is currently at
 the top of the stack. 
@@ -17,6 +17,10 @@ The pop() method should return null when the stack is empty.
 Demonstrate the operation of your Stack<> implementation by storing and retrieving 10 strings and 10 Double objects in
 stacks of a suitable type.
 
+Ex2 
+
+Implement and demonstrate a listAll() method in the Stack<> class definition that will list the objects in
+the stack.
  */
 package HortonExercises.Ch13.Ex1;
 
@@ -29,7 +33,6 @@ public class Stack_Andras<T> {
 	StackItem<T> rootStackItem;
 	StackItem<T> topStackItem;
 
-	//Constructor
 	public Stack_Andras() {
 		rootStackItem = null;
 		topStackItem = null;
@@ -73,6 +76,22 @@ public class Stack_Andras<T> {
 		}
 	}
 
+	public void listAll() {
+		if (rootStackItem == null) {
+			System.out.println("The stack is empty");			//The stack is empty
+		} else {
+			StackItem<T> currentStackItem = topStackItem;
+			System.out.print("Top");
+			int counter = 1;
+			while (currentStackItem.prevStackItem != null) { 		//Display everything from the top
+				System.out.println("Item #" + counter++ + "=\t" + currentStackItem.objectInStack);
+				currentStackItem = currentStackItem.prevStackItem;
+			}
+			System.out.print("Root");
+			System.out.println("Item #" + counter++ + "=\t" + currentStackItem.objectInStack); //Display the final item 
+		}
+	}
+
 	private class StackItem<T> {
 
 		T objectInStack;
@@ -82,7 +101,6 @@ public class Stack_Andras<T> {
 	}
 
 	public static void main(String[] args) {
-//Demonstrate the operation of your Stack<> implementation by storing and retrieving 10 strings and 10 Double objects in stacks of a suitable type.
 		//Instantinate objects of type string and double
 		Stack_Andras<String> stringStack = new Stack_Andras<>();
 		Stack_Andras<Double> doubleStack = new Stack_Andras<>();
@@ -93,33 +111,28 @@ public class Stack_Andras<T> {
 		for (int i = 0; i < numbers.length; i++) {
 			numbers[i] = Math.random() * 100;
 		}
-		//Display the content of String array for verification
-		System.out.println("Original String Array:");
-		for (int i=0;i<numbers.length;i++){
-			System.out.println(strings[i]);
-		}
-		//Display the content of String array for verification
-		System.out.println("Original Double Array:");
-		for (int i=0;i<numbers.length;i++){
-			System.out.println(numbers[i]);
-		}
+
+		stringStack.listAll();
+		doubleStack.listAll();
 
 		//push all data to stack
 		for (int i = 0; i < numbers.length; i++) {
 			stringStack.push(strings[i]);
 			doubleStack.push(numbers[i]);
 		}
-		
-		//pop all data from Strings
-		System.out.println("Pop from String array");
-		for (int i=0;i<numbers.length;i++){
-			System.out.println(stringStack.pop());	
-		}
 
-		//pop all data from Numbers
-		System.out.println("Pop from Double array");
-		for (int i=0;i<numbers.length;i++){
-			System.out.println(doubleStack.pop());	
+		stringStack.listAll();
+		doubleStack.listAll();
+		
+		stringStack=new Stack_Andras<>();
+		for (int i = 0; i < numbers.length; i++) {
+			System.out.println("Iteration: " + i);
+			stringStack.push(strings[i]);
+			stringStack.listAll();
+			stringStack.pop();
+//			if (i%2==0) stringStack.pop();
+			stringStack.listAll();
+			System.out.println("");
 		}
 	}
 }
