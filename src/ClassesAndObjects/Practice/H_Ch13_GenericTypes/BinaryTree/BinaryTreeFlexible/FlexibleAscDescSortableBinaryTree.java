@@ -1,7 +1,9 @@
 /*
-Variables renamed and comments extended for better understanding
-Ascending and Descending sort method added
-Class updated to accept any type of objects as long as their superclass extends to Comparable<>
+Class updated with renamed variables and comments extended for better understanding
+Class updated with introducing Ascending and Descending sort methods
+Class updated to allow being instantinated by any type of objects as long as their superclass extends to Comparable<>
+	public class FlexibleAscDescSortableBinaryTree<T extends Comparable<? super T>> {
+Class updated to have the add() method accept an argument of any type that is type T, or a subclass of T. (p489)
 
 */
 package ClassesAndObjects.Practice.H_Ch13_GenericTypes.BinaryTree.BinaryTreeFlexible;
@@ -33,7 +35,8 @@ public class FlexibleAscDescSortableBinaryTree<T extends Comparable<? super T>> 
 	private Node rootNode;                                                   // The rootNode node
 
 	// Add a objectToNode to the tree
-	public void add(T objectToNode) {
+	// Parameterized method, accepts any objects that is T or subclass of T
+	public <E extends T> void add(E objectToNode) {
 		if (rootNode == null) {                                               // If there's no rootNode node
 			rootNode = new Node(objectToNode);                                // store it in the rootNode
 		} else {                                                              // Otherwise...
@@ -52,7 +55,8 @@ public class FlexibleAscDescSortableBinaryTree<T extends Comparable<? super T>> 
 
 	
 	 */
-	private void add(T objectToNode, Node currentNode) {
+	// Parameterized method, accepts any objects that is T or subclass of T
+	private <E extends T> void add(E objectToNode, Node currentNode) {
 		int comparison = currentNode.objectInNode.compareTo(objectToNode);
 		if (comparison == 0) {                                              // If it is equal to the current currentNode
 			++currentNode.countIdentical;                                   // just increment the countIdentical

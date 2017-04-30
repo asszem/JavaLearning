@@ -191,6 +191,7 @@ Generic or Parameterized Methods
 	You can define a method with its own independent set of one or more type parameters, in which case you have a parameterized method, which is also referred to as a generic method. 
 	You can define parameterized methods in an ordinary class. 
 	The scope of a type parameter for a method is the method itself,
+	The type parameter list for a generic method always appears between angled brackets and should follow any modifiers such as public and static, and should precede the return type.
 	General form:
 		<access modifier> <type-param-list> return-type method-name(param-list) {method body...}
 
