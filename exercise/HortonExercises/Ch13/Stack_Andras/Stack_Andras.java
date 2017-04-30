@@ -21,8 +21,10 @@ Ex2
 
 Implement and demonstrate a listAll() method in the Stack<> class definition that will list the objects in
 the stack.
+
  */
-package HortonExercises.Ch13.Ex1;
+package HortonExercises.Ch13.Stack_Andras;
+
 
 /**
  *
@@ -30,8 +32,8 @@ package HortonExercises.Ch13.Ex1;
  */
 public class Stack_Andras<T> {
 
-	StackItem<T> rootStackItem;
-	StackItem<T> topStackItem;
+	public StackItem<T> rootStackItem;
+	public StackItem<T> topStackItem;
 
 	public Stack_Andras() {
 		rootStackItem = null;
@@ -101,38 +103,5 @@ public class Stack_Andras<T> {
 	}
 
 	public static void main(String[] args) {
-		//Instantinate objects of type string and double
-		Stack_Andras<String> stringStack = new Stack_Andras<>();
-		Stack_Andras<Double> doubleStack = new Stack_Andras<>();
-
-		//Create test data for 10 strings and 10 random number
-		String[] strings = {"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"};
-		Double[] numbers = new Double[10];
-		for (int i = 0; i < numbers.length; i++) {
-			numbers[i] = Math.random() * 100;
-		}
-
-		stringStack.listAll();
-		doubleStack.listAll();
-
-		//push all data to stack
-		for (int i = 0; i < numbers.length; i++) {
-			stringStack.push(strings[i]);
-			doubleStack.push(numbers[i]);
-		}
-
-		stringStack.listAll();
-		doubleStack.listAll();
-		
-		stringStack=new Stack_Andras<>();
-		for (int i = 0; i < numbers.length; i++) {
-			System.out.println("Iteration: " + i);
-			stringStack.push(strings[i]);
-			stringStack.listAll();
-			stringStack.pop();
-//			if (i%2==0) stringStack.pop();
-			stringStack.listAll();
-			System.out.println("");
-		}
 	}
 }

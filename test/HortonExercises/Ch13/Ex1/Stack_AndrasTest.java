@@ -1,5 +1,6 @@
 package HortonExercises.Ch13.Ex1;
 
+import HortonExercises.Ch13.Stack_Andras.Stack_Andras;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,7 +34,7 @@ public class Stack_AndrasTest {
 	}
 
 	/**
-	 * Test of pop method, of class Stack_Andras.
+	 * Test of pop method returns null when the stack is empty
 	 */
 	@Test
 	public void testPopWhenStackIsEmpty() {
@@ -43,7 +44,7 @@ public class Stack_AndrasTest {
 	}
 
 	/**
-	 * Test of push method, of class Stack_Andras.
+	 * Test of push method adds the correct value to the top of stack
 	 */
 	@Test
 	public void testPush() {
@@ -64,7 +65,7 @@ public class Stack_AndrasTest {
 	}
 
 	/**
-	 * Test of push method, of class Stack_Andras.
+	 * Test of pop method returns correct value from top of stack
 	 */
 	@Test
 	public void testPopFromNonEmptyStack() {
@@ -84,9 +85,8 @@ public class Stack_AndrasTest {
 		assertEquals(expPopString, actPopString);
 	}
 
-
 	/**
-	 * Test of push method, of class Stack_Andras.
+	 * Test of pop method removes the last item from stack
 	 */
 	@Test
 	public void testPopRemovesLastStackItem() {
