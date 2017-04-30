@@ -3,6 +3,8 @@ package ClassesAndObjects.Practice.H_Ch13_GenericTypes.BinaryTree.BinaryTreeFlex
 public class TryFlexibleBinaryTree {
 
 	public static void main(String[] args) {
+		//Create a raw type with leftmost bound which is in this case: <? super T> -> any object that extends to T
+		FlexibleAscDescSortableBinaryTree rawTest =new FlexibleAscDescSortableBinaryTree<>();
 
 	//	rigidBinaryTree<Manager> people = new rigidBinaryTree<>(); //ERROR
 		FlexibleAscDescSortableBinaryTree<Manager> people = new FlexibleAscDescSortableBinaryTree<>(); 

@@ -1,4 +1,4 @@
-package PracticeAndTry.Practice;
+package Practice;
 /*<editor-fold desc="Array Lists info">
 ArrayList<Integer> weeklyTemperatures = new ArrayList<Integer>();
 weeklyTemperatures.add(10); // Index: 0

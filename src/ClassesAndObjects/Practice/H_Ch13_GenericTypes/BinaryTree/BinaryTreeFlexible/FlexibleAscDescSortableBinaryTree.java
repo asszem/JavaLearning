@@ -1,7 +1,7 @@
 /*
 Variables renamed and comments extended for better understanding
 Ascending and Descending sort method added
-Class updated to accept any type of objects as long as they superclass extend to Comparable<T>
+Class updated to accept any type of objects as long as their superclass extends to Comparable<>
 
 */
 package ClassesAndObjects.Practice.H_Ch13_GenericTypes.BinaryTree.BinaryTreeFlexible;

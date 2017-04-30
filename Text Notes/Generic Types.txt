@@ -1,5 +1,5 @@
 ***Summary***
-/write this part at the end of the chapter when I know what the most improtant parts are
+	/write this part at the end of the chapter when I know what the most improtant parts are
 
 	type argument
 	type parameter
@@ -11,32 +11,85 @@
 
 ***Details***
 
-General Forms
+General Forms & Naming convention
 	Generic Class
 		class class-name<type-param-list>
-			class MobilePhones<T, V, Users<T>>
-	Upper Bounded Class
-		class class-name<T extends superclass>
+			Example:
+				class MobilePhones<T, V, Users<T extends Comparable<? extends Comparable<T>>>
+	Bounded Class
+		class class-name<T extends classname & interfacename & interfacename>
 	Generic Method
 		<access modifier> <type-param-list> return-type method-name(param-list) {method body...}
 			Example: 
 				public static <T extends Comparable<T>, V extends T> boolean thisIsTheName(T firstParameterOfTypeT, V secondParameterOfTypeV)
+	Naming convention
+		The convention in Java is to use single letters as type parameter names. 
+		So it can be differentiated from a class name (starts with Capital) or variable/method name (starts with lowerCase)
+			T - type parameter
+			ClassName - class name
+			methodName() - method name
+			variableName - variable name
+			FINAL_VARIABLE - final variable name
+		Typicall type parameters
+			T is used to indicate a parameter is a TYPE (String, Point, MobilePhone, etc)
+			N is used for a parameter that is a NUMERICAL value
+			K is used for a parameter that is a KEY
+			V is used for a type parameter that is a VALUE
+			E is used for a parameter that is an ELEMENT
 
-Generic or parameterized types
-	A generic (or parameterized) type is a class or interface type definition that has one or more TYPE PARAMETERS. 
-	You define an actual class or interface type from a generic type by supplying a TYPE ARGUMENT for each of the type parameters that the generic type has.
-	Type safe - A class that always prevents you from accidentally adding objects of the wrong type
+Generic or Parameterized Class or Interface
+	Description 
+		A generic (or parameterized) type is a class or interface type definition that has one or more TYPE PARAMETERS. 
+		You define an actual class or interface type from a generic type by supplying a TYPE ARGUMENT for each of the type parameters that the generic type has.
+	Type safe
+		Type safe - A class that always prevents you from accidentally adding objects of the wrong type
+	Runtime Class Type
+		All types that you generate from a given generic type share the same class name at run time.
+		Because all types that you produce from a generic type have the same runtime type, you cannot use the INSTANCEOF operator to test for such types.
 
 Generic Class Definition 
-	The type parameter goes between <> after class/interface/(method) name
-	Occurrences of the type parameter name in the definition of a generic type are called TYPE VARIABLES because
-	they are replaced by a value that is a type in a similar way to how method parameters are replaced by the arguments that you supply.
-	Example:
-		public class LinkedList<T> {              // T is the type variable or type parameter
-			// Generic type definition...
-		}
+	Type Parameter
+		The type parameter goes between <> after class/interface/(method) name
+	Scope of Type Parameter
+		The scope of a type parameter is the entire generic class definition but excluding any STATIC MEMBERS or INITIALIZERS in the class.
+	Type Variable
+		Occurrences of the type parameter name in the definition of a generic type are called TYPE VARIABLES because
+		they are replaced by a value that is a type in a similar way to how method parameters are replaced by the arguments that you supply.
+		Example:
+			public class LinkedList<T> {              // T is the type variable or type parameter
+	Upper Bound & Lower Bound of Type Parameters
+		Upper bound <T extends UpperBoundClass>
+			T can be replaced only by superclass or subclasses of superclass. 
+			The upper bound declares the superclass from which all type argumetns must be derived.  Inclusive upper limit, as superclass is included.
+			The EXTENDS keyword must be used, regardless of whether the type parameter bound is a class or an interface
+			Example:
+				class MobilePhone<T, V extends T> {...			//V must be either type T or subclass of T
+			Example 2:
+				class LinkedList<T extends Serializable> implements Serializable {	  //the type paramter class must implement serializable as well, so everything can be serialized
+			Example 3: 
+				class MyType<T extends FancyClass & Serializable & MyInterface>   	//Multiple bounds: FancyClass class and Serializable and MyInterface interface
+		Lower bound <T super LowerBoundClass>
+			Only LowerBoundClass and it's super classes are acceptable
+		Example
+												<T extends Alfa>  	<T super Beta>
+			class Alfa							in bound			in bound
+			class Beta extends Alfa				in bound			in bound
+			class Gamma extends Alfa			in bound			out bound
+			class Delta							out bound			out bound
 
 Generic Class Implementation
+	Static Methods and Static Fields in a Generic Class
+		Static Methods
+			Static methods cannot have parameters or return types that correspond to a class type parameter
+			and you must not use the class type parameters in the bodies of static method definitions.
+				Example 1 - Bad
+					static T boolean notGood(T input) {...
+				Example 2 - Good
+					static <V> V (V input) {...
+		Static Fields
+			All types produced from a given generic type share the same runtime type. Consequently they do not have their own independent static fields. 
+			Any static fields you define in a generic type are shared among all instances of it. 
+			Static fields in generic type definitions are best avoided.
 	Example
 		public class LinkedList<T> {
 			public LinkedList(T item) {...} 			//Constructor
@@ -48,31 +101,45 @@ Generic Class Implementation
 			T item; 									//Instance variable
 
 Generic Class Instantiaton
-	When you create a particular type from the generic type definition by supplying an argument value for T ('String' for example)
-	the argument is substituted for every occurrence of T in the generic type specification.
-	The compiler uses the type argument String that you supplied to replace every instance of the type variable, T
-	in the generic type definition to arrive at the notional (képzeletbeli) class type definition for LinkedList<String>.
-	The angled brackets<> without a type specification between are often referred to as the DIAMOND OPERATOR
-	Example:
-		LinkedList<String> stringsOnly = new LinkedList<>(); 	//All 'T' will be replaced to 'String'
-			public LinkedList(String item) {...} 				//Constructor
-			public LinkedList(String[] items) {...}				//Constructor
-			public void addItem(String item) {...}				//Method
-			public String getFirst() {...}						//Method
-			public String getNext() {...}						//Method
-			public ListItem(String item) {...}					//Method
-			String item;										//Instance variable
-	Example 2
-		LinkedList<LinkedList<String>> linkedLists = new LinkedList<>();  //The type argument here is another generic type class: LinkedList<String>
-	Example 3
-		LinkedList<String> strings = new LinkedList<String>(); 	//this works also, but the second <String> part is redundant
-																//Netbeans will give a warning of redundant type argument
-	Example 4
-		LinkedList<Double> temperature = new LinkedList<>(); 	//use the 'Double' wrapper class to store double type primitive value
-	Example 5
-		LinkedList<T, V> ...						//multiple type parameters can be used
-			LinkedList<String, Double> obj1;
-			LinkedLIst<Integer, Integer> obj2;		//type arguments can be the same
+	Description
+		When you create a particular type from the generic type definition by supplying an argument value for T ('String' for example)
+		the argument is substituted for every occurrence of T in the generic type specification.
+		The compiler uses the type argument String that you supplied to replace every instance of the type variable, T
+		in the generic type definition to arrive at the notional (képzeletbeli) class type definition for LinkedList<String>.
+	Diamond Operator
+		The angled brackets<> without a type specification between are often referred to as the DIAMOND OPERATOR
+	Wildcards as Type Parameter ARGUMENTS
+ 		Description
+			A ? wildcard type represents any class or interface type.
+			Instead of supplying a specific type as the type argument for a generic type, you can specify the argument as ?
+		Restriction
+			If a reference is the result of a wildcard type argument, the actual type of the reference stored is not known
+			so you cannot use this variable to call methods specific to the object that it references.
+	Instantiation samples
+		Example:
+			LinkedList<String> stringsOnly = new LinkedList<>(); 	//All 'T' will be replaced to 'String'
+				public LinkedList(String item) {...} 				//Constructor
+				public LinkedList(String[] items) {...}				//Constructor
+				public void addItem(String item) {...}				//Method
+				public String getFirst() {...}						//Method
+				public String getNext() {...}						//Method
+				public ListItem(String item) {...}					//Method
+				String item;										//Instance variable
+		Example 2
+			LinkedList<LinkedList<String>> linkedLists = new LinkedList<>();  //The type argument here is another generic type class: LinkedList<String>
+		Example 3
+			LinkedList<String> strings = new LinkedList<String>(); 	//this works also, but the second <String> part is redundant
+																	//Netbeans will give a warning of redundant type argument
+		Example 4
+			LinkedList<Double> temperature = new LinkedList<>(); 	//use the 'Double' wrapper class to store double type primitive value
+		Example 5
+			LinkedList<T, V> ...						//multiple type parameters can be used
+				LinkedList<String, Double> obj1;
+				LinkedList<Integer, Integer> obj2;		//type arguments can be the same
+		Example 6
+			LinkedList<?> wildCardList = new LinkedList<Double>();
+			LinkedList<?> wildCardList = new LinkedList<String>();
+
 
 Type Erasure & Leftmost Bound & Raw Type
 	Type Erasure
@@ -92,59 +159,59 @@ Type Erasure & Leftmost Bound & Raw Type
 	What is LEFTMOST BOUND?
 		Type Object is the DEFAULT LEFTMOST BOUND that applies to any class type because all classes have type Object as their ultimate superclass. 
 	Raw Type
-		Implementing a generic type without type parameter.
-		In the absence of any explicit type parameter bounds, every type parameter T is implicitly bounded by type oBJECT
-		All occurrences of T in a generic type definition are replaced by Object to produce the raw type.
-		Example
-			LinkedList rawList = new LinkedList();
 		Description
+			Raw Type is when implementing a generic type without a type parameter.
 			The class that corresponds to the raw type is produced by removing the type parameters from the generic type definition and replacing each instance of a type variable in the definition by 
 			the LEFTMOST BOUND of its corresponding type parameter. 
 			This process of mapping from a generic type to a non-generic type is called TYPE ERASURE because all occurrences of the type variable are effectively erased from the generic class definition. 
 			A raw type exists as a consequence of implementing generic types using type erasure.	
-	Why and how specify different leftmost bound? 
-		When you implement a RAW interface in an ordinary class without specifying a type argument, your class is implementing the raw type
-		so the methods in the interface are declared with parameters and/or return types of type Object.
-			Example Horton p. 489
-				This class type definition retunrs a Serializable type object as raw type:
-					class SerializableGenericLinkedList<T extends Serializable> implements Serializable {
-				This class type definition returns an Object type object as raw type:	
+
+		Raw Type if there is no type parameter BOUNDS
+			In the absence of any explicit type parameter BOUNDS every type parameter T is implicitly bounded by type OBJECT. 
+			All occurrences of T in a generic type definition are replaced by Object to produce the raw type.
+				Example
+					class LinkedList<T> {...
+					LinkedList rawList = new LinkedList(); 		//All occurences of T replaced by Object
+			
+		Raw Type if there are  type parameter BOUNDS
+				Example 1
+					class LinkedList<T extends <Comparable<T>> {...
+					LinkedList rawList = new LinkedList();		//All occurences of T replaced by Comparable as it has no type bounds
+				Example 2 
+					class LinkedList<T extends <Comparable<? extends T>>
+					LinkedList rawList = new LinkedList();		//All occurences of T replaced by <? extends T>
+				Example 3 (Horton p489)
+					class LinkedList<T extends Serializable> implements Serializable {
+					LinkedList rawList = new LinkedList();		//All occurences of T replaced by Serializable (as serializable is the leftmost bound)
+				Example 4
 					class LinkedList<T extends Object & Serializable> implements Serializable {
-	
+					LinkedList rawList = new LinkedList();		//All occurences of T replaced by Object (as Object is now the leftmost bound)
 
-Scope of Type parameter
-	The scope of a type parameter is the entire generic class definition but excluding any STATIC MEMBERS or INITIALIZERS in the class.
-Static Methods
-	Static methods cannot have parameters or return types that correspond to a class type parameter
-	and you must not use the class type parameters in the bodies of static method definitions.
-		Example 1 - Bad
-			static T boolean notGood(T input) {...
-		Example 2 - Good
-			static <V> V (V input) {...
+Generic or Parameterized Methods
+	You can define a method with its own independent set of one or more type parameters, in which case you have a parameterized method, which is also referred to as a generic method. 
+	You can define parameterized methods in an ordinary class. 
+	The scope of a type parameter for a method is the method itself,
+	General form:
+		<access modifier> <type-param-list> return-type method-name(param-list) {method body...}
 
-Static Fields
-	All types produced from a given generic type share the same runtime type. Consequently they do not have their own independent static fields. 
-	Any static fields you define in a generic type are shared among all instances of it. 
-	Static fields in generic type definitions are best avoided.
-
-Upper Bound & Lower Bound
-	Upper bound <T extends UpperBoundClass>
-		T can be replaced only by superclass or subclasses of superclass. 
-		The upper bound declares the superclass from which all type argumetns must be derived.  Inclusive upper limit, as superclass is included.
-		The EXTENDS keyword must be used, regardless of whether the type parameter bound is a class or an interface
-		Example:
-			class MobilePhone<T, V extends T> {...			//V must be either type T or subclass of T
+Arrays of Parameterized Types
+	Arrays of elements that are of a type produced from a generic type are not allowed. 
+	You can create arrays of a generic type only using a wildcard specification that is unbounded. 
+		Example 1:
+			LinkedList<String>[] lists = new LinkedList<>[10]; 	// Will not compile
+			LinkedList<?>[] lists = new LinkedList<?>[10]; 		// OK
 		Example 2:
-			class LinkedList<T extends Serializable> implements Serializable {	  //the type paramter class must implement serializable as well, so everything can be serialized
-		Example 3: 
-			class MyType<T extends FancyClass & Serializable & MyInterface>   	//Multiple bounds: FancyClass class and Serializable and MyInterface interface
-
-	Lower bound <T super LowerBoundClass>
-		Only LowerBoundClass and it's super classes are acceptable
-
-Runtime Class Type
-	All types that you generate from a given generic type share the same class name at run time.
-	Because all types that you produce from a generic type have the same runtime type, you cannot use the INSTANCEOF operator to test for such types.
+			public class MyType<T> {
+			// Constructor
+			public MyType() {
+				data = new T[10]; 								// Not allowed!!
+			}
+			// The methods and data members of the type…
+				private T[] data; 								// This is OK
+		Example 3:
+			BinaryTree<?>[] trees = {new BinaryTree<Integer>(), new BinaryTree<String>()};  //OK
+			LinkedList<?>[] lists = new LinkedList<?>[trees.length];						//OK
+			((BinaryTree<Integer>)trees[0]).add(12345);										//OK, must be casted to Integer to add
 
 Implementing Iterable<T>
 	Implementing Iterable<T> will make the class eligible to run the collection based for-loop
@@ -159,21 +226,6 @@ Implementing Iterable<T>
 		Netbeans will create skeleton for mandatory implementations
 		When overriden methods not fully implemented yet, a runtime exception can be thrown
 
-Naming convention
-	The convention in Java is to use single letters as type parameter names. 
-	So it can be differentiated from a class name (starts with Capital) or variable/method name (starts with lowerCase)
-		T - type parameter
-		ClassName - class name
-		methodName() - method name
-		variableName - variable name
-		FINAL_VARIABLE - final variable name
-	Typicall type parameters
-		T is used to indicate a parameter is a TYPE (String, Point, MobilePhone, etc)
-		N is used for a parameter that is a NUMERICAL value
-		K is used for a parameter that is a KEY
-		V is used for a type parameter that is a VALUE
-		E is used for a parameter that is an ELEMENT
-
-Sources
+***Sources***
 	Horton, Chapter 13
 	Herbert Schildt, Beginners Guide, 6th Edition, Chapter 13, Generics

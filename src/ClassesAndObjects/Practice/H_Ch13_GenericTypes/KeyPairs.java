@@ -1,4 +1,4 @@
-package ClassesAndObjects.GenericTypes;
+package ClassesAndObjects.Practice.H_Ch13_GenericTypes;
 
 /**
  * Example of using multiple type variables

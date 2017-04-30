@@ -1,14 +1,11 @@
-package PracticeAndTry;
 
-import PracticeAndTry.Practice.InterfaceTest;
-import static PracticeAndTry.Practice.InterfaceTest.VERS;
 
 /**
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
 //this is redundant, only for testing purposes that a class can implement multiple interfaces
-public class RunTest implements PracticeAndTry.Practice.InterfaceTest, PracticeAndTry.Practice.InterfaceMethodsTest {
+public class RunTest implements Practice.InterfaceTest {
 //Since this class impelemnts InterfaceTest, which extends to InterfaceMethods
 //All methods needs to be declared here
 

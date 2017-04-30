@@ -1,4 +1,4 @@
-package PracticeAndTry.Practice;
+package Practice;
 
 /**
  *
