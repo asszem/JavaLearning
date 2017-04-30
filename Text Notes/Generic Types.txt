@@ -69,7 +69,7 @@ Generic Class Definition
 			Example 3: 
 				class MyType<T extends FancyClass & Serializable & MyInterface>   	//Multiple bounds: FancyClass class and Serializable and MyInterface interface
 		Lower bound <T super LowerBoundClass>
-			Only LowerBoundClass and it's super classes are acceptable
+			Only LowerBoundClass and it's super classes are acceptable. 
 		Example
 												<T extends Alfa>  	<T super Beta>
 			class Alfa							in bound			in bound
@@ -195,8 +195,17 @@ Generic or Parameterized Methods
 		<access modifier> <type-param-list> return-type method-name(param-list) {method body...}
 
 Arrays of Parameterized Types
-	Arrays of elements that are of a type produced from a generic type are not allowed. 
-	You can create arrays of a generic type only using a wildcard specification that is unbounded. 
+	Restrictions	
+		Cannot instantiate an array whose element type is a type parameter 
+			Example:
+				T[] data = new T[10]; //Wrong
+		Cannot create an array of type-specific generic reference
+			Example
+				LinkedList<String> lists = new LinkedList<String>[10] //Wrong
+		You can create arrays of a generic type only using a wildcard specification that is unbounded. 
+			Example
+				LinkedList<?>[] lists = new LinkedList<?>[trees.length];						//OK
+	Examples
 		Example 1:
 			LinkedList<String>[] lists = new LinkedList<>[10]; 	// Will not compile
 			LinkedList<?>[] lists = new LinkedList<?>[10]; 		// OK

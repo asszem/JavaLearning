@@ -1,3 +1,6 @@
+/*
+This also includes the TryWildCard example from Horton when the ListAll method is updated to accept any type of Type Arguments
+*/
 package ClassesAndObjects.Practice.H_Ch13_GenericTypes.BinaryTree.BinaryTreeFlexible;
 
 public class TryFlexibleBinaryTree {
