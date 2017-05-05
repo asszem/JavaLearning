@@ -41,8 +41,6 @@ Webes források:
  */
 package StringsAndArrays;
 
-import PracticeAndTry.Practice.Kutyak;
-
 /**
  *
  * @author Andras Olah (olahandras78@gmail.com)
@@ -95,5 +93,19 @@ public class toStringOverride {
 		System.out.println(bloki);
 		int numberTest = 123;
 		System.out.println(Integer.toString(numberTest));
+	}
+}
+
+class Kutyak{
+	public int eletkor;
+	public String nem;
+	public String faj;
+	public String nev;
+
+	public Kutyak(int eletkor, String nem, String faj, String nev){
+		this.eletkor=eletkor;
+		this.nem=nem;
+		this.faj=faj;
+		this.nev=nev;
 	}
 }
