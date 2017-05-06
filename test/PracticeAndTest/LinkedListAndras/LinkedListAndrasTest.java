@@ -1,6 +1,6 @@
 package PracticeAndTest.LinkedListAndras;
 
-import ClassesAndObjects.LinkedLists.AndrasLinkedLists.BasicLinkedListAndras;
+import ClassesAndObjects.Practice.H_Ch13_GenericTypes.HortonsHomemadeLinkedLists.AndrasLinkedLists.BasicLinkedListAndras;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

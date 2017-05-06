@@ -1,7 +1,7 @@
 /*
 For better understanding renamed variables and moved fields to the top of class declarations
 */
-package ClassesAndObjects.LinkedLists.GenericLinkedList;
+package ClassesAndObjects.Practice.H_Ch13_GenericTypes.HortonsHomemadeLinkedLists.GenericLinkedList;
 
 public class GenericLinkedList<T> {
 

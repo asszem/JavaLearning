@@ -1,29 +1,23 @@
-package ClassesAndObjects.LinkedLists.IterableGenericLinkedList;
+package ClassesAndObjects.Practice.H_Ch13_GenericTypes.HortonsHomemadeLinkedLists.SerializableGenericLinkedList;
 
-import java.util.Iterator;
+import java.io.Serializable;
 
-public class IterableGenericLinkedList<T> implements Iterable<T> {
-
-  // Returns an iterator for this list
-  public Iterator<T> iterator() {
-    return new ListIterator();                                         // Create iterator of the inner class type
-  }
-
+class SerializableGenericLinkedList<T extends Serializable> implements Serializable {
   // Default constructor - creates an empty list
-  public IterableGenericLinkedList() {}
+  public SerializableGenericLinkedList() {}
 
   // Constructor to create a list containing one object
-  public IterableGenericLinkedList(T item) {
+  public SerializableGenericLinkedList(T item) {
     if(item != null) {
       current = end = start = new ListItem(item);                      // item is the start and end
     }
   }
 
   // Construct a linked list from an array of objects
-  public IterableGenericLinkedList(T[] items) {
+  public SerializableGenericLinkedList(T[] items) {
     if(items != null) {
       // Add the items to the list
-      for(int i = 0; i < items.length; ++i) {
+      for(int i = 0; i < items.length; i++) {
         addItem(items[i]);
       }
       current = start;
@@ -57,8 +51,9 @@ public class IterableGenericLinkedList<T> implements Iterable<T> {
   private ListItem start = null;                                       // First ListItem in the list
   private ListItem end = null;                                         // Last ListItem in the list
   private ListItem current = null;                                     // The current item for iterating
+  private static final long serialVersionUID = 1001L;
 
-  private class ListItem {
+  private class ListItem implements Serializable {
 
     // Constructor
     public ListItem(T item) {
@@ -74,37 +69,6 @@ public class IterableGenericLinkedList<T> implements Iterable<T> {
 
     ListItem next;                                                     // Refers to next item in the list
     T item;                                                            // The item for this ListItem
-  }
-
-  private class ListIterator implements Iterator<T> {
-    // Constructor
-    public ListIterator() {
-      nextElement = getFirst();
-    }
-
-    // Method to test whether more elements are available
-    public boolean hasNext() {
-      return nextElement != null;
-    }
-
-    // Method to return the next available object from the linked list
-    public T next() {
-      T element = nextElement;
-      if(element == null) {
-        throw new java.util.NoSuchElementException();
-      }
-      nextElement = getNext();
-        return element;
-    }
-
-    // Method to remove the last element retrieved from the linked list
-    // You don�t want to support this operation so just throw the exception
-    // It you did support this operation, you would need to include a check
-    // that next() has been called, and if not, throw IllegalStateException
-    public void remove() {
-      throw new UnsupportedOperationException("Remove not supported for LinkedList<>");
-    }
-
-    private T nextElement;
+    private static final long serialVersionUID = 1001L;
   }
 }

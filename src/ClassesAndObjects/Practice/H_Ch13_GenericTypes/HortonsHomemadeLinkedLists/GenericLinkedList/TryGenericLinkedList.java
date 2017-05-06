@@ -1,4 +1,4 @@
-package ClassesAndObjects.LinkedLists.GenericLinkedList;
+package ClassesAndObjects.Practice.H_Ch13_GenericTypes.HortonsHomemadeLinkedLists.GenericLinkedList;
 
 public class TryGenericLinkedList {
   public static void main(String[] args) {

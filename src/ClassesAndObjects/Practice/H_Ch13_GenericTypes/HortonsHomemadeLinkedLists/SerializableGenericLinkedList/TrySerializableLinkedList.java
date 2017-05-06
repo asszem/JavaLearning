@@ -1,4 +1,4 @@
-package ClassesAndObjects.LinkedLists.SerializableGenericLinkedList;
+package ClassesAndObjects.Practice.H_Ch13_GenericTypes.HortonsHomemadeLinkedLists.SerializableGenericLinkedList;
 
 import static java.lang.Math.random;
 import java.nio.file.*;

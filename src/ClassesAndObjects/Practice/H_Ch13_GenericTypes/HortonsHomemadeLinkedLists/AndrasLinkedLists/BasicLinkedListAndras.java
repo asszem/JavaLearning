@@ -15,7 +15,7 @@ Implementation plan
 2. The BasicLinkedListAndras class will have the methods to add, remove and query list items
 
  */
-package ClassesAndObjects.LinkedLists.AndrasLinkedLists;
+package ClassesAndObjects.Practice.H_Ch13_GenericTypes.HortonsHomemadeLinkedLists.AndrasLinkedLists;
 
 //import FilesAndDirectories.H12_Serialization.GadgetOwner;
 import java.io.Serializable;
