@@ -76,6 +76,9 @@ Generic Class Definition
 			class Beta extends Alfa				in bound			in bound
 			class Gamma extends Alfa			in bound			out bound
 			class Delta							out bound			out bound
+		Other resources
+			Excellent visualisation:
+				http://stackoverflow.com/questions/4343202/difference-between-super-t-and-extends-t-in-java
 
 Generic Class Implementation
 	Generic Constructors

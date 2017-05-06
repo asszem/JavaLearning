@@ -1,2 +1,4 @@
+Why is Vector() obsolete?
+	http://stackoverflow.com/questions/1386275/why-is-java-vector-class-considered-obsolete-or-deprecated
 Source
 	Horton Chapter 14, p517
