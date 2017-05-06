@@ -5,7 +5,7 @@ package StringsAndArrays;
  * 
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class MultipleStringInputMethodParameters3Dots {
+public class MultipleMethodParameters3Dots {
 
 public static void printHeader(String... strings) {
 		System.out.println("*************************");

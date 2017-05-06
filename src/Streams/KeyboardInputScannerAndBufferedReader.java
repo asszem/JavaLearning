@@ -31,13 +31,13 @@ public class KeyboardInputScannerAndBufferedReader {
 		return scanner.nextLine();
 	}
 
-	//ÁRVÍZTŰRŐ compliant
+	//ÁRVÍZTŰRŐ compliant with trim()
 	public static String getStringUsingBufferedReader() {
 		String charSet = "ISO8859_1";
 		String returnString = null;
 		try {
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in, charSet));
-			returnString = bufferedReader.readLine();
+			BufferedReader keyboardInput = new BufferedReader(new InputStreamReader(System.in, charSet));
+			returnString = keyboardInput.readLine().trim();
 		} catch (UnsupportedEncodingException ex) {
 			ex.printStackTrace();
 		} catch (IOException ex) {
@@ -117,13 +117,16 @@ public class KeyboardInputScannerAndBufferedReader {
 	}
 
 	public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException {
+		String trimTest = getStringUsingBufferedReader();
+		System.out.println(trimTest);
+
 //		get_INT_OnlyUsingScanner();
 //		System.out.println(getStringUsingBufferedReader());
 //		getStringUsingScannerWithInputOutputStreamParameter(System.in, System.out);
-		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("Árvíztűrő tükörfúrógép".getBytes(charset));
-		String outputFile = "J:\\outputstreamwriter.txt";
-		getStringUsingScannerWithInputOutputStreamParameter(byteArrayInputStream, "console");
-		 byteArrayInputStream = new ByteArrayInputStream("Árvíztűrő tükörfúrógép 2".getBytes(charset));
-		getStringUsingScannerWithInputOutputStreamParameter(byteArrayInputStream, outputFile);
+//		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("Árvíztűrő tükörfúrógép".getBytes(charset));
+//		String outputFile = "J:\\outputstreamwriter.txt";
+//		getStringUsingScannerWithInputOutputStreamParameter(byteArrayInputStream, "console");
+//		 byteArrayInputStream = new ByteArrayInputStream("Árvíztűrő tükörfúrógép 2".getBytes(charset));
+//		getStringUsingScannerWithInputOutputStreamParameter(byteArrayInputStream, outputFile);
 	}
 }
