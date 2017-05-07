@@ -1,3 +1,190 @@
+The Collections Framework
+	Description
+		A collection class is simply a class that organizes a set of objects of a given type in a particular way
+		The Java collections framework is a set of generic types that you use to create collection classes that support various ways for you to store and manage objects of any kind in memory.k
+		A class that defines collections of objects is often referred to as a CONTAINER CLASS
+		IMPORTANT! In Java, collections store references only — the objects themselves are external to the collection.
+	Key items
+		The Iterator<T> interface type declares methods for iterating through elements of a collection, one at a time. 
+		The Vector<T> / ArrayList<T> type supports an array-like structure for storing objects. The number of objects that you can store in a Vector<T> object increases automatically as necessary.
+		The Stack<T> type supports the storage of objects in a pushdown stack.
+		The LinkedList<T> type supports the storage of objects in a doubly-linked list, which is a list that you can iterate through forward or backward.
+		The EnumSet<E> type stores constants of a given enum type, E, in a set. 
+		The HashMap<K,V> type supports the storage of objects of type V in a hash table, sometimes called a map. 
+			An object is stored using an associated key object of type K. To retrieve an object you just supply its associated key.
+	Collection Types
+		Sets
+			The objects are not ordered in any particular way at all, and objects are simply added to the set without any control over where they go.
+			You can
+				Iterate over members in set
+				Check if a given object is a member of a set
+				Remove object from a set (only if the reference is known)
+				Ordered (set must implement compareTo method of Comparable<T> interface)
+			You cannot 	
+				Have duplicate objects in a set — each object in a set must be unique.
+			Set collection types
+				HashSet<T>
+					Implements a set using HashMap<T> under the covers. 
+					Although a set is by definition unordered, there has to be some way to find an object reasonably efficiently. 
+					Using a HashMap<T> object to implement the set enables store and retrieve operations to be done in a constant time. 
+					However, the order in which elements of the set are retrieved might vary over time.
+				LinkedHashSet<T>
+					Implements a set using a hash table with all the entries in a doubly-linked list. 
+					This class can be used to make a copy of any set such that iteration ordering is preserved — something that does not apply to a HashSet<>.
+				TreeSet<T>
+					Implements a set that orders the objects in ascending sequence. 
+					This means that an iterator obtained from a TreeSet<T> object provides the objects in ascending sequence. 
+					You can also search the set for the closest match to a given item.
+				EnumSet<E extends Enum<E>>
+					Implements a specialized set that stores enum values from a single enum type, E.
+		Sequences(Lists)
+			The objects are stored in a linear fashion, not necessarily in any particular order, but organized in an arbitrary fixed sequence with a beginning and an end. 
+			Typical sequneces: arrays, LinkedList, stacks(LIFO), queue(FIFO), Vector, Victor, ArrayList
+			You can
+				Add object to the beginning/end of a list
+				Insert object at a given point to the list
+				Iterate backward and forward
+				Have duplicate objects in a list - to store several copies of the same object at different places in the sequence
+			List Collection Types
+				Vector<T> - Synchronized
+					Implements a list as an array that automatically increases in size to accommodate as many elements as you need. 
+					Objects are stored and retrieved using an integer index. 
+					You can also use an iterator to retrieve objects from a Vector<>. 
+					The Vector<> type is synchronized — that is, it is well behaved when concurrently accessed by two or more threads.
+						Why is Vector() obsolete or deprecated?
+							Vector synchronizes on each individual operation. That's almost never what you want to do.  
+							Generally you want to synchronize a whole sequence of operations. 
+							Synchronizing individual operations is 
+								less safe
+									if you iterate over a Vector, you still need to take out a lock to avoid anyone else changing the collection at the same time
+									which would cause a ConcurrentModificationException in the iterating thread
+								 slower
+									why take out a lock repeatedly when once will be enough
+							Source
+								http://stackoverflow.com/questions/1386275/why-is-java-vector-class-considered-obsolete-or-deprecate
+				ArrayList<T> - Unsynchronized
+					Implements an array that can vary in size and can also be accessed as a linked list.
+					This provides a similar function to the Vector<T> generic type but is unsynchronized, so it is not safe for use by multiple threads.
+				Stack<T>
+					This class is derived from Vector<T> and adds methods to implement a stack — a last-in, first-out storage mechanism.
+				LinkedList<T>>
+					Implements a linked list. The linked list defined by this class can also be used as a stack or a queue.
+			Queue Collection Types
+				ArrayDeque<T>
+					Implements a resizable array as a double-ended queue.
+				PriorityQueue<T>
+					Implements a priority queue in which objects are ordered in ascending sequence from the head of the queue. 
+					The order is determined either 
+						by a Comparator<T> object supplied to the constructor for the collection class, 
+						by the compareTo() method declared in the Comparable<T> interface that the object type implements.
+		Maps
+			Each entry must be a Key:Value pair
+			A key can be any kind of object that you want to use to reference the stored objects. 
+			Because a key has to uniquely identify an object, all the keys in a map must be different.
+			Hashing
+				The locatione where a key/object pair is stored in a map is determined from the key by a process known as hashing
+				Hashing processes the key object to produce an integer value called a hashcode. 
+				The hashcode for a key is typically used to calculate an offset from the start of the memory that has been allocated within the map for storing objects
+				and the offset determines the location where the key/object pair is stored.
+			Map Collection Types
+			Hashtable<K,V> - syncronized, nulls not allowed
+				Implements a map with keys of type K and values of type V where ALL KEYS MUST BE NONNULL. 
+				The key class must implement the hashcode() and equals() methods to work effectively. 
+				This type, like Vector<T>, is synchronized, so it's safe for concurrent use by two or more threads.
+			HashMap<K,V> - unsyncronized, nulls allowed
+				Implements a map where objects of type V are stored using keys of type K. 
+				This collection allows null objects to be stored and allows a key to be null (only one of course, because keys must be unique). 
+				The map is not synchronized.
+			LinkedHashMap<K,V>
+				Implements a map storing values of type V using keys of type K with all of its entries in a doubly-linked list. 
+				This class can be used to create a copy of a map of any type such that the order of the entries in the copy is the same as the original.
+			WeakHashMap<K,V>
+				Implements a map storing values of type V using keys of type K such that if a reference to a key no longer exists outside the map, the key/object pair is discarded. 
+				This contrasts with HashMap<> where the presence of the key in the map maintains the life of the key/object pair
+				even though the program using the map no longer has a reference to the key and therefore cannot retrieve the object.
+			IdentityHashMap<K,V>
+				Implements a map storing values of type V using keys of type K using a hash table where comparisons in searching the map for a key or a value compares references, not objects.
+				This implies that two keys are equal only if they are the same key. The same applies to values. 
+				This is a specialized collection class for situations where reference equality is required for both keys and objects.
+			TreeMap<K,V>: 
+				Implements a map storing values of type V using keys of type K such that the objects are arranged in ascending key order.
+	Iterators
+		An iterator is a standard mechanism for accessing elements in a collection.
+		Any collection object that represents a SET or a SEQUENCE can create an object of type java.util.Iterator<> that behaves as an iterator
+		Most collection classes provide an iterator() method that returns an iterator for the current contents of the collection
+		An iterator is an object that you can use ONCE to retrieve all the objects in a collection one by one
+		An Iterator<> object encapsulates references to all the objects in the original collection in some sequence.
+		An iterator is for one pass through the objects. To access the objects from a collection again, you just obtain another iterator object. 
+		Iterable<T> vs Iterator<T>
+			Iterable<T> defines a method that returns a reference of type Iterator<T> A class that implements Iterable<T> can make an iterator available.
+			Iterator<T> defines the methods that enable the iterator mechanism.
+				hasNext()
+				next()
+				remove()
+	ListIterator 
+		 Used to traverse a collection of objects backward or forward. Extends to Iterator<T> so all Iterator<T> methods are available
+		 Special methods in ListIterator 
+			int nextIndex()
+				Returns the index of the object that is returned by the next call to next() as type int
+				or returns the number of elements in the list if the ListIterator<> object is at the end of the list.
+			T previous()
+				Returns the previous object in sequence in the list. You use this method to run backward through the list.
+			boolean hasPrevious()
+				Returns true if the next call to previous()returns an object.
+			int previousIndex()()
+				Returns the index of the object that is returned by the next call to previous(), or returns -1 if the ListIterator<> object is at the beginning of the list.
+	Generic Collection Interfaces
+											Iterable<T> 							Map<K,V>
+												|										|
+											Collection<T>							SortedMap<K,V>
+								/				|			\							|
+							Set<T>			List<T>		Queue<T>					NavigableMap<K,V>
+							SortedSet<T>				Dequeu<T>
+							NavigableSet<T>
+		Notes
+			The map interfaces do not implement the Iterable<T> interface, so you cannot use the collection-based for loop to iterate over the objects in a map.
+			Any collection class object that implements the Collection<T> interface can be referenced using a variable of type Collection<T>. 
+			This means that any of the list or set collections can be referenced in this way
+		INTERFACE TYPE 				IMPLEMENTED BY
+		Set<T> 						HashSet<T>, LinkedHashSet<T>, EnumSet<T>
+		SortedSet<T> 				TreeSet<T>
+		List<T> 					Vector<T>, Stack<T>, ArrayList<T>, LinkedList<T>
+		Queue<T> 					PriorityQueue<T>, LinkedList<T>
+		Deque<T> 					LinkedList<T>, ArrayDeque<T>
+		Map<K,V> 					Hashtable<K,V>, HashMap<K,V>, LinkedHashMap<K,V>, WeakHashMap<K,V>, IdentityHashMap<K,V>, EnumMap<K extends Enum<K>,V>
+		SortedMap<K,V> 				TreeMap<K,V>
+		NavigableMap<K,V> 			TreeMap<K,V>
+	EnumSet<E> Collection
+		There are no constructors for EnumSet. 
+		You create an EnumSet<E> object by using one of the static factory methods that the class defines.
+		Factory Method
+			A factory method is a static method that is not a constructor, but nonetheless creates objects. 
+			A factory method can provide advantages over a constructor in some situations. 
+			For example, it makes it possible to limit the number of objects that may be created. 
+			It allows caching of objects so objects may be reused. It also allows a reference to be returned that is an interface type that the object implements. 
+		.of() method
+			The static of() method in the EnumSet<E> generic class is the factory method. It has 6 overloaded versions
+			Five accept one, two, three, four, or five arguments of type E to be stored in the collection. 
+			The sixth method uses a varargs parameter list to permit an arbitrary number of arguments of type E. 
+			The reason for implementing the of() method as a set of overloads like this is to maximize efficiency when you put a small number of enumeration constants in a set.
+			Example:
+				EnumSet<StandardOpenOption> set = EnumSet.of(CREATE,WRITE);
+		.complementOf() method
+			After you have the EnumSet<StandardOpenOption> object, set, you can create another EnumSet<> object that represents the set of constants that are not in set
+			EnumSet<StandardOpenOption> setComplement = EnumSet.complementOf(set);
+		.noneOf()
+			The static noneOf() method creates an empty set that can hold constants of the type you specify as the argument. 
+			The expression StandardOpenOption.class specifies the class type for the StandardOpenOption enumeration. 
+			You can test for an empty set by calling the isEmpty() method for the object.
+			EnumSet<StandardOpenOption> options = EnumSet.noneOf(StandardOpenOption.class);
+			options.isEmpty;	//True
+		.add()
+			options.add(READ);
+		.copyOf
+			EnumSet<StandardOpenOption> optionsCopy = EnumSet.copyOf(options);
+		.allOf
+			EnumSet<StandardOpenOption> allOptions = EnumSet.allOf(StandardOpenOption.class);
+
 HashMaps
 	Hashing process
 		Description
@@ -143,10 +330,6 @@ HashMaps
 			Returns an object containing all the values stored in the map. Can iterate with collection based for-loop 
 				for(Integer i : collection) { System.out.println(i); }
 
-
-Why is Vector() obsolete?
-	http://stackoverflow.com/questions/1386275/why-is-java-vector-class-considered-obsolete-or-deprecated
-
 Why the default hashCode() method needs to be overwritten to use the fields of a class to generate hashcodes when storing objects to files?
 	Problem:
 		WARNING Beware of the default hashCode() method in the Object class when storing maps in a file. 
@@ -162,6 +345,8 @@ Why the default hashCode() method needs to be overwritten to use the fields of a
 
 Sources for Collections
 	Horton Chapter 14, p517
+	http://www.dineshonjava.com/2013/05/java-collection-framework.html
+	http://www.java2s.com/Tutorial/Java/0140__Collections/Createanemptycollectionobject.html
 
 
 
