@@ -155,8 +155,8 @@ The Collections Framework
 		SortedMap<K,V> 				TreeMap<K,V>
 		NavigableMap<K,V> 			TreeMap<K,V>
 	EnumSet<E> Collection
-		There are no constructors for EnumSet. 
-		You create an EnumSet<E> object by using one of the static factory methods that the class defines.
+		The EnumSet<> collection class enables you to aggregate one or more constants from a given enumeration type into a set so they can be passed to a method as a single argument.
+		There are no constructors for EnumSet.  You create an EnumSet<E> object by using one of the static factory methods that the class defines.
 		Factory Method
 			A factory method is a static method that is not a constructor, but nonetheless creates objects. 
 			A factory method can provide advantages over a constructor in some situations. 
