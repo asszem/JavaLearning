@@ -4,12 +4,18 @@ Exercise 3 requirements:
 Extend the program from this chapter that used a map to store names and telephone numbers such that
 you can enter a number to retrieve the name.
 
- */
-package HortonExercises.Ch14.Ex3.Ex3_Andras;
+Exercise 4 requirements
 
+Implement a phone book so that just a surname can be used to search and have all the entries
+corresponding to the name display
+
+ */
+package HortonExercises.Ch14.Ex3.Ex34_Andras;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Ex3_PhoneBook_Andras {
+public class Ex34_PhoneBook_Andras {
 
 	public static void main(String[] args) {
 		PhoneBook book = new PhoneBook();                                  // The phone book
@@ -20,6 +26,7 @@ public class Ex3_PhoneBook_Andras {
 					+ "Enter 2 to find the number for a name\n"
 					+ "Enter 3 to list all the entries\n"
 					+ "Enter 4 to find a name for a number\n"
+					+ "Enter 5 to find the number for a SURNAME\n"
 					+ "Enter 9 to quit.");
 			int what = 0;                                                    // Stores input selection
 			try {
@@ -35,6 +42,7 @@ public class Ex3_PhoneBook_Andras {
 					book.addEntry(BookEntry.readEntry());
 					break;
 				case 2:
+					//<editor-fold desc="Find entry by Person">
 					someone = Person.readPerson();
 					BookEntry entry = book.getEntry(someone);
 					if (entry == null) {
@@ -43,10 +51,12 @@ public class Ex3_PhoneBook_Andras {
 						System.out.println("The number for " + someone + " is " + entry.getNumber());
 					}
 					break;
+					//</editor-fold>
 				case 3:
 					book.listEntries();
 					break;
 				case 4:
+					//<editor-fold desc="Find entry by PhoneNumber">
 					//Read the number
 					PhoneNumber somenumber = PhoneNumber.readNumber();
 
@@ -70,6 +80,21 @@ public class Ex3_PhoneBook_Andras {
 						System.out.println("The name for " + somenumber + " is " + phoneNumberEntry.getPerson());
 					}
 					break;
+				//</editor-fold>
+				case 5:
+					//<editor-fold desc="Find entry by Surname only">
+					String surnameToFind = Person.readPersonSurname();
+					ArrayList<BookEntry> foundEntries = book.getEntry(surnameToFind);
+
+					if (foundEntries.size() == 0) {
+						System.out.println("No entry for " + surnameToFind + " was found.");
+					} else {
+						for (BookEntry currEntry : foundEntries) {
+							System.out.println("The book entry for " + surnameToFind + " is:\n" + currEntry);
+						}
+					}
+					break;
+				//</editor-fold>
 				case 9:
 					book.save();
 					System.out.println("Ending program.");

@@ -1,4 +1,4 @@
-package HortonExercises.Ch14.Ex3.Ex3_Andras;
+package HortonExercises.Ch14.Ex3.Ex34_Andras;
 
 import java.nio.file.*;
 import java.io.*;
@@ -30,7 +30,7 @@ class PhoneBook implements Serializable {
 		//Create a Collection 
 		Collection<BookEntry> sourcePhoneBookValues = this.phoneBook.values();  //Based on the object instance's phoneBook field
 		//Iterate through the collection and copy each entry to the cloneBook map
-		for (BookEntry currentEntry:sourcePhoneBookValues){
+		for (BookEntry currentEntry : sourcePhoneBookValues) {
 			clonedBook.put(currentEntry.getNumber(), currentEntry);
 		}
 		return clonedBook;
@@ -72,10 +72,12 @@ class PhoneBook implements Serializable {
 		phoneBook.put(entry.getPerson(), entry);
 	}
 
+	//Retunrs an entry based on Person key
 	public BookEntry getEntry(Person key) {
 		return phoneBook.get(key);
 	}
 
+	//Returns the matching BookEntry for PhoneNumber argument using Person as key - iterates through the whole phoneBook
 	public BookEntry getEntry(PhoneNumber phoneNumber) {
 		//Create a Set for Map.Entry<K,V> type entries
 		Set<Map.Entry<Person, BookEntry>> phoneBookEntries = phoneBook.entrySet();
@@ -91,12 +93,26 @@ class PhoneBook implements Serializable {
 		return null;
 	}
 
-	//Creates a cloned book with PhoneNumber keys and returns the searched key
-	public BookEntry getEntryByPhoneKey(PhoneNumber key){
-		HashMap<PhoneNumber, BookEntry> clonedBook=this.cloneBook();
+	//Returns an ArrayList of BookEntries for all entries with matching Surname argument - iteartes through the whole phonebook
+	public ArrayList<BookEntry> getEntry(String surname) {
+		ArrayList<BookEntry> entriesFound=new ArrayList<>();
+		Set<Map.Entry<Person, BookEntry>> entrySet = this.phoneBook.entrySet();
+		for (Map.Entry<Person, BookEntry> currentEntry : entrySet) {
+			if (currentEntry.getValue().getPerson().getSurname().equals(surname)){
+				//Found a matching surname!
+				entriesFound.add(currentEntry.getValue());  //Add the BookEntry object to the list of found entries
+			}
+		}
+		return entriesFound;
+	}
+
+	//Retuns the matching BookEntry for PhoneNumber argument using PhoneNumber as key - Creates a cloned book with PhoneNumber keys 
+	public BookEntry getEntryByPhoneKey(PhoneNumber key) {
+		HashMap<PhoneNumber, BookEntry> clonedBook = this.cloneBook();
 		BookEntry foundEntry = clonedBook.get(key);
 		return this.cloneBook().get(key);
 	}
+
 	//Returns a PhoneNumber object from a BookEntry based on the key
 	public PhoneNumber getNumber(Person key) {
 		BookEntry entry = getEntry(key);
@@ -106,5 +122,4 @@ class PhoneBook implements Serializable {
 			return null;
 		}
 	}
-
 }

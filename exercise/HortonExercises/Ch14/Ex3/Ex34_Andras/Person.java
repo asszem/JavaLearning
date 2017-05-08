@@ -1,4 +1,4 @@
-package HortonExercises.Ch14.Ex3.Ex3_Andras;
+package HortonExercises.Ch14.Ex3.Ex34_Andras;
 
 import java.io.*;
 
@@ -32,6 +32,20 @@ public class Person implements Comparable<Person>, Serializable {
 		return new Person(firstName, surname);
 	}
 
+	// Read a person SURNAME only from the keyboard
+	public static String readPersonSurname() {
+		String surname = null;
+		try {
+			System.out.print("Enter surname: ");
+			surname = keyboard.readLine().trim();
+		} catch (IOException e) {
+			System.err.println("Error reading a name.");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		return surname;
+	}
+
 	@Override
 	public boolean equals(Object comparedToPerson) {							//Uses the compareTo method
 		return this.compareTo((Person) comparedToPerson) == 0;					//Evaulates TRUE if compareTo returns 0
@@ -51,5 +65,13 @@ public class Person implements Comparable<Person>, Serializable {
 	@Override
 	public String toString() {
 		return firstName + " " + surname;
+	}
+
+	public String getSurname(){
+		return surname;
+	}
+
+	public String getFirstName(){
+		return firstName;
 	}
 }
