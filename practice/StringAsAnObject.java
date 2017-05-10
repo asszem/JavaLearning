@@ -7,7 +7,6 @@ When new value is assigned to string, in the background garbage collection clear
 
 
  */
-package PracticeAndTry;
 
 public class StringAsAnObject {
 

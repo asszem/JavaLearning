@@ -5,7 +5,7 @@
  * @author Andras Olah (olahandras78@gmail.com)
  */
 //this is redundant, only for testing purposes that a class can implement multiple interfaces
-public class RunTest implements Practice.InterfaceTest {
+public class RunTest implements practiceAndTry.InterfaceTest {
 //Since this class impelemnts InterfaceTest, which extends to InterfaceMethods
 //All methods needs to be declared here
 

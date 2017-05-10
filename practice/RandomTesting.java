@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package PracticeAndTry;
 
 import java.lang.Math;
 import static java.lang.Math.ceil;

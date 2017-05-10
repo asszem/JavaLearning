@@ -1,7 +1,8 @@
 package Exceptions.H_Ch7_Exceptions;
 
-import Exceptions.SajatException;
 import java.io.IOException;
+
+import exceptionsPractice.SajatException;
 
 public class TryBlockTest2 {
   public static void main(String[] args) {

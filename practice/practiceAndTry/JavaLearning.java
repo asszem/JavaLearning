@@ -3,22 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-import java.util.Scanner;
+package practiceAndTry;
 
 /**
  *
  * @author olaha
  */
-public class QuickTest {
-static int statikusValtozo;
+public class JavaLearning {
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       
-        Scanner szkenner = new Scanner(System.in);
-        int bevitel = szkenner.nextInt();
+        
     }
     
 }
