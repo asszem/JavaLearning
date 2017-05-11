@@ -1,6 +1,8 @@
-package ClassesAndObjects.Practice.H_Ch15_UsefulClasses;
+package ClassesAndObjects;
 
 import java.util.Comparator;
+
+import ClassesAndObjects.Practice.H_Ch15_UsefulClasses.Person;
 
 public class UtilityClassForArrays {
 
@@ -76,5 +78,4 @@ class ReverseComparatorPerson implements Comparator<Person> {
 	public int compare(Person o1, Person o2) {
 		return o1.name.compareTo(o2.name) * -1;
 	}
-
 }

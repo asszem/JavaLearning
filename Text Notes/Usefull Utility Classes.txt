@@ -29,4 +29,59 @@ java.util.Arrays
 				middle: 7, smaller than the search, take the rigth half between 7 and 20
 				middle: 8 - found it!
 			This is why the array must be sorted ascending
-								
+
+Observable & Observer
+	Concept - separating Document/View
+		When the Document object changes, all the Views need to be notified that a change has occurred, because they may well need to update what they display. 
+		The document is observable, and the views are observers.
+		This is exactly what the Observable class is designed to achieve when used in combination with the Observer interface. 
+		A document can be considered to be an Observable object, and a view can be thought of as an Observer object. This enables a view to respond to changes in the document.
+		The document/view architecture portrays a many-to-many relationship. A document may have many observers, and a view may observe many documents.
+	Document Vs. View
+		A document has permanence because it represents the data for an application. 
+		A view is a transient presentation of some or all of the data in the document, so a document object should naturally create and own its view objects.
+		A view is responsible for managing the interface to the application's user
+		but the update of the underlying data in the document object would be carried out by methods in the document object, which would then notify other view objects that a change has occurred.
+	Define the Observable class
+		Class definition
+			public class Document extends Observable {
+				// Details of the class definitions...
+			}
+	Define the Observer classes
+		Class Definition
+			public class View implements Observer {
+				// Method for the interface
+				public void update(Observable theObservableObject, Object arg) {
+					// This method is called when the observed object changes
+				}
+				// Rest of the class definition...
+			}
+		The update() method
+			1st argument:
+				A reference to the Observable object that changed and caused the method to be called.  
+				This enables the View object to access public methods in the associated Observable object that would be used to access the data to be displayed.
+			2nd argument: TBD!!!
+	Inside the OBSERVABLE class methods
+		The Observable class maintains an internal record of all the Observer objects related to the object to be observed.
+		int countObservers()
+			Returns the number of Observer objects for the current object.
+		void addObserver(Observer o)
+			Adds the object you pass as the argument to the internal record of observers. 
+			Only Observer objects in the internal record are notified when a change in the Observable object occurs.
+		void deleteObserver(Observer o)
+			Deletes the object you pass as the argument from the internal record of observers.
+		void deleteObservers()
+			Deletes all observers from the internal record of observers.
+		void setChanged()
+			Sets the current object as changed. You must call this method before calling the notifyObservers() method. Note that this method is protected.
+		void clearChanged()
+			 Resets the changed status of the current object to unchanged. Note that this method is also protected. This method is called automatically after notifyObservers() is called
+		boolean hasChanged()
+			Returns true if the object has been set as changed and returns false otherwise.
+		void notifyObservers(Object arg)
+			Calls the update() method for all of the Observer objects in the internal record if the current object has been set as changed. 
+			The current object is set as changed by calling the setChanged() method. 
+			The current object and the argument passed to the notifyObservers() method are passed to the update() method for each Observer object. 
+		void notifyObservers()
+			Calling this method is equivalent to calling the previous method with a null argument.
+				
