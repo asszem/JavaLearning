@@ -1,0 +1,32 @@
+java.util.Arrays
+	.sort()
+	.fill()
+		fills ALL elements in the range with the same values
+	.copyOf() / .copyOfRange()
+		result array can be smaller or greater than source array. 
+	.equals()
+		can use a Comparator object, or the argument object's compareTo() method
+	.binarySearch()
+		Uses Binary Search - The binary search algorithm works by repeatedly subdividing the sequence of elements to find the target element value.
+		This works only if the elements of the array are in ascending sequence, so if they are not, you should call the sort() method before calling binarySearch().
+		Return value
+			Found
+				Return is the result of the index position of the element that is equal to the target
+			Not found
+				Negative integer returned.	This is produced by 
+					a) taking the value of the index position of the first element that is greater than the value 
+					b) reversing its sign
+					c) subtracting 1
+					This mechanism guarantees that if the value sought is not in the array then the return value is always negative.
+				Example
+					int[] numbers = { 2, 4, 6, 8, 10 };
+					int positionNotInArray = java.util.Arrays.binarySearch(numbers, 7);  			//results -4
+					The value of position is -4 because the element (number '8') at index position 3 is the first element that is greater than 7. 
+					The return value is calculated as -3-1, which is -4. 
+		Example
+			find 8 in 5,6,7,8,20,25,32,43,54
+				middle: 20, greater than the search, take the left half between 20 and 5
+				middle: 7, smaller than the search, take the rigth half between 7 and 20
+				middle: 8 - found it!
+			This is why the array must be sorted ascending
+								
