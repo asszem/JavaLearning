@@ -30,7 +30,7 @@ java.util.Arrays
 				middle: 8 - found it!
 			This is why the array must be sorted ascending
 
-Observable & Observer
+java.util.Observable & java.util.Observer
 	Concept - separating Document/View
 		When the Document object changes, all the Views need to be notified that a change has occurred, because they may well need to update what they display. 
 		The document is observable, and the views are observers.
@@ -84,4 +84,27 @@ Observable & Observer
 			The current object and the argument passed to the notifyObservers() method are passed to the update() method for each Observer object. 
 		void notifyObservers()
 			Calling this method is equivalent to calling the previous method with a null argument.
+
+java.util.Random
+	Description
+		Random objects that you create using the same seed always produce the same sequence, which can be very important when you are testing a program. 
+		Testing a program where the output is not repeatable can be a challenge! 
+		A major feature of random number generators you create using a given seed in Java is that not only do they always produce the same sequence of pseudo-random numbers,
+		but they also do so on totally different computers.
+	Examples
+		Random zeroAndNinety = new Random();
+		zeroAndNinety.setSeed(12345L);		//Set the seed
+		zeroAndNinety.nextInt(91) 			//Limit is exclusive
+
+Dates and Time
+A Date class object represents a given date and time
+The Date class implements the Comparable<Date> interface so you have the compareTo() method
+available.
+The
+presence of this method in the class means that you can use the sort() method in the Arrays class to sort
+an array of Date objects, or the sort() method in the Collections class to sort a collection of dates.
+Because the hashCode() method is also implemented for the class, you have all you need to use Date
+objects as keys in a hash map
+
 				
+

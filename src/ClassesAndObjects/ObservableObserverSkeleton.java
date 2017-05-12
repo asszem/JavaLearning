@@ -8,9 +8,10 @@ public class ObservableObserverSkeleton extends Observable {
 		setChanged();
 		notifyObservers();
 	}
+
 	public static void main(String[] args) {
 		ObservableObserverSkeleton instance = new ObservableObserverSkeleton();
-		ObserverClass observerInstance=new ObserverClass();
+		ObserverClass observerInstance = new ObserverClass();
 		instance.addObserver(observerInstance);
 		instance.notifyObserverClass();
 	}

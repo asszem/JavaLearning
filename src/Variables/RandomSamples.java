@@ -62,6 +62,22 @@ public class RandomSamples {
 	}
 
 	public static void main(String[] args) {
+		//Instantiate two random generator objects
+		java.util.Random zeroAndNinety=new Random();
+		java.util.Random zeroAndNinety2=new Random();
+		//Set the same seed for both
+		zeroAndNinety.setSeed(12345L);
+		zeroAndNinety2.setSeed(12345L);
+		//Get a random number between 0-90
+		for (int i=0;i<20;i++){
+		int number=zeroAndNinety.nextInt(91);  //0-90
+		int number2=zeroAndNinety2.nextInt(91);  //0-90
+		System.out.println(number+" "+number2);
+		}
+		
+		
+		
+		
 		System.out.println("Random class obj \"veletlenszam\" nextInt(5) metódus eredménye: " + veletlenszam.nextInt(5)); //0-4 közötti random számot ad
 		String[] nevek = {"András", "Anikó", "Barni", "Benő", "Perec"};
 		System.out.println("Véletlen név a tömbből: " + nevek[veletlenszam.nextInt(nevek.length)]);
