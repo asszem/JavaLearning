@@ -96,15 +96,57 @@ java.util.Random
 		zeroAndNinety.setSeed(12345L);		//Set the seed
 		zeroAndNinety.nextInt(91) 			//Limit is exclusive
 
-Dates and Time
-A Date class object represents a given date and time
-The Date class implements the Comparable<Date> interface so you have the compareTo() method
-available.
-The
-presence of this method in the class means that you can use the sort() method in the Arrays class to sort
-an array of Date objects, or the sort() method in the Collections class to sort a collection of dates.
-Because the hashCode() method is also implemented for the class, you have all you need to use Date
-objects as keys in a hash map
-
-				
-
+java.util.Date & java.text.DateFormat & java.util.Locale & java.util.TimeZone.
+	Date class - java.util.Date
+		A Date class object represents a given date and time
+		The Date class implements the Comparable<Date> interface so you have the compareTo() method available.
+		The presence of this method in the class means that 
+			you can use the sort() method in the Arrays class to sort an array of Date objects
+			you can use the sort() method in the Collections class to sort a collection of dates.
+		Because the hashCode() method is also implemented for the class, you have all you need to use Date objects as keys in a hash map
+	DateFormat - java.text.DateFormat
+		Instantiate a DateFormat object
+			DateFormat formatter = DateFormat.getDateTimeInstance(dateStyle, TimeStyle, Locale)
+		Methods on formatter object	
+			formatter.format(Date object)
+			formatter.parse(String)
+	GregorianCalendar
+		A GregorianCalendar object encapsulates time zone information, as well as date and time data. 
+		The GregorianCalendar class is derived from the abstract Calendar class from which it inherits a large number of methods and static constants for use with these methods.
+		Instantiation
+			GregorianCalendar calendar = new GregorianCalendar();													//set for current instant in time
+			GregorianCalendar(int year, int month, int day, int hour, int minute, int second)						//day:1-31, month:0-11!!
+			GregorianCalendar calendar = new GregorianCalendar(1967, Calendar.MARCH, 10);							//Using enums in Calendar class
+			GregorianCalendar calendar = new GregorianCalendar(TimeZone.getTimeZone(“America/Chicago”));  			//Using timezoneID
+			GregorianCalendar calendar = new GregorianCalendar(TimeZone.getTimeZone(“America/Chicago”), Locale.US); //timezoneID and locale
+			GregorianCalendar calendar = new GregorianCalendar(Locale.UK);											//Automatically sets time zone to Locale
+		Time Zones
+			Default time zone
+				The time zone and locale is the default for the computer on which this statement executes. 
+				You can get the default TimeZone object by calling the static getDefault() method.
+			Specify time zone
+				To specify a time zone, use the GregorianCalendar constructor that accepts an argument of type java.util.TimeZone. 
+				To create a particular time zone you need to know its ID. 	
+			Get TimeZone ID
+				String[] ids = TimeZone.getAvailableIDs(); for(String id : ids) { System.out.println(id); }
+		Get a Date object
+			calendar.getTime();				//This can be the imput of a DateFormat formatter object)
+		Set the date in a calendar
+			calendar.set(dateObject);		// Sets the date according to the Date object
+			calendar.set(1995, 10, 29); 	// Date set to 29th November 1995
+		Modify date in calendar
+			.add() 
+				calendar.add(DAY_OF_MONTH, -1);     //Updates every field in Calendar object if change
+			.roll()
+				calendar.roll(DAY_OF_MONTH, false); //Rolls back to the first day of the SAME mont
+	Compare Calendars
+		before()
+			Returns true if the current object corresponds to a time before that of the Calendar object passed as an argument. 
+			Note that this implies a true return can occur if the date is the same but the time is different.
+		after() 
+			Returns true if the current object corresponds to a time after that of the Calendar object passed as an argument.
+		equals() 
+			Returns true if the current object corresponds to a time that is identical to that of the Calendar object passed as an argument.
+		compareTo(Calendar c) 
+			Returns a value of type int that is negative, zero, or positive depending on whether 
+			the time value for the current object is less than, equal to, or greater than the time value for the argument.
