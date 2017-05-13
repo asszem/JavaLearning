@@ -31,7 +31,7 @@ import static java.lang.Math.random;
 import java.util.Arrays;              //A teljes Arrays osztály importálása
 import static java.util.Arrays.fill;  //az Arrays osztályból a fill() metódus statikusan importálva
 
-public class ArraySamples {
+public class Array_Samples {
 
 	public static void main(String[] args) {
 

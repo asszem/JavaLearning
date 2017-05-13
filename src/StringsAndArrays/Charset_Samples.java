@@ -10,7 +10,7 @@ import java.nio.charset.CharsetEncoder;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class Charsets {
+public class Charset_Samples {
 
 	/*
 	Supported Encodng - Charset codes:

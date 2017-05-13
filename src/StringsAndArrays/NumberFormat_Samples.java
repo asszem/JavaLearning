@@ -3,7 +3,7 @@ package StringsAndArrays;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class NumberFormatSamples {
+public class NumberFormat_Samples {
 //Setting the locale
   static Locale localeVariable = new Locale("de", "DK");
           
@@ -12,9 +12,9 @@ public class NumberFormatSamples {
     System.out.println("Locale "+localeVariable);
     
     NumberFormat numF;
-    numF = NumberFormat.getNumberInstance(); //A NumberFormat osztályt használva a getNumberInstance methoddal.
+    numF = NumberFormat.getNumberInstance(); 
     System.out.println("Number: \t\t" + numF.format(doubleValue));
-    numF = NumberFormat.getNumberInstance(localeVariable); //A NumberFormat osztályt használva a getNumberInstance methoddal.
+    numF = NumberFormat.getNumberInstance(localeVariable); 
     System.out.println("Locale Number: \t\t" + numF.format(doubleValue));
     
     NumberFormat curF;
@@ -23,10 +23,11 @@ public class NumberFormatSamples {
     curF = NumberFormat.getCurrencyInstance(localeVariable);
     System.out.println("Locale Currency: \t"+curF.format(doubleValue));
     
-    NumberFormat datF;
-    datF = NumberFormat.getIntegerInstance();
-    System.out.println("Integer: \t\t"+datF.format(doubleValue));
-    datF = NumberFormat.getIntegerInstance(localeVariable);
-    System.out.println("Locale Integer: \t"+datF.format(doubleValue));
+    NumberFormat integerF;
+    integerF = NumberFormat.getIntegerInstance();
+    System.out.println("Integer: \t\t"+integerF.format(doubleValue));
+    integerF = NumberFormat.getIntegerInstance(localeVariable);
+    System.out.println("Locale Integer: \t"+integerF.format(doubleValue));
+    System.out.println("Locale Integer: \t"+integerF.format(doubleValue-567.89));
   }
 }

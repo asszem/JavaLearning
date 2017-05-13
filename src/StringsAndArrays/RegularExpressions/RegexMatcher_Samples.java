@@ -2,7 +2,7 @@ package StringsAndArrays.RegularExpressions;
 
 import java.util.regex.*;
 
-public class Regex_Samples {
+public class RegexMatcher_Samples {
 
 	public static boolean getPatternPosition(Matcher matcherObject) {
 		if (matcherObject.find()) {
@@ -77,6 +77,13 @@ public class Regex_Samples {
 		Regex_Skeleton.displayHighlightedResults(matcherObjectWithFlags, sourceString);
 		Regex_Skeleton.displayHighlightedResults(matcherObjectNotFound, sourceStringDifferent);
 		
+		//Match the entire pattern
+		System.out.println("Matching entire patterns");
+		Regex_Skeleton.displayHighlightedResults(matcherObject, sourceString);
+		System.out.println("Entire pattern matches: " + matcherObject.matches());
+		Matcher matchEntirePattern = Pattern.compile(sourceString).matcher(sourceString);
+		Regex_Skeleton.displayHighlightedResults(matchEntirePattern, sourceString);
+		System.out.println("Entire pattern matches: " + matchEntirePattern.matches());
 	}
 
 }

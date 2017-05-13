@@ -48,6 +48,29 @@ public class Regex_Skeleton {
 		System.out.println(marker);
 	}
 
+public static void displayMatchedGroups(String inputPattern, String source){
+	
+		// The matches in the output will be marked (fixed-width font required)
+		char[] marker = new char[source.length()];
+		Arrays.fill(marker, ' ');
+
+		// Obtain the required matcher
+		Pattern pattern = Pattern.compile(inputPattern);
+		Matcher m = pattern.matcher(source);
+
+		// Show the object string with matches marked under it
+		System.out.println(inputPattern);
+		System.out.println(source);
+
+		// Find every groups and display
+		int groupCounter=1;
+		while (m.find()) {
+			System.out.printf("Group #%02d [%s]%n",(groupCounter++),m.group());
+		}
+
+}
+	
+	
 	public static Pattern createPattern(String inputPattern) {
 		Pattern pattern = Pattern.compile(inputPattern);
 		Pattern patternWithFlags = Pattern.compile(inputPattern, Pattern.CASE_INSENSITIVE);

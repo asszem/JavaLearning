@@ -4,14 +4,13 @@ package StringsAndArrays;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class NumberToString {
-
+public class NumberToString_Incomplete {
+//TODO class incomplete. 
 	static String[] numbers = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
 	static String[] tens = {"teen", "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "ninety"};
 
 	static String numberToString(int i) {
 		String s = Integer.toString(i);
-//		System.out.printf("%d hossza: %d", i, s.length());
 		String number, tens, hundreds, thousands;
 		if (i < 14) {
 			return getTens(i);
@@ -22,9 +21,6 @@ public class NumberToString {
 		return "Error";
 	}
 
-	/*
-	1234
-	 */
 	static String getTens(int i) {
 		if (i == 0) {
 			return "zero";

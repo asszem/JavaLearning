@@ -1,4 +1,4 @@
-//To test the effect of various Charsets and Encoding in IO Streams
+//To test the effect of various Charset_Samples and Encoding in IO Streams
 //ISO8859_1
 //UTF-8
 //Windows-1250

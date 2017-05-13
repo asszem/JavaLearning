@@ -4,7 +4,7 @@ package StringsAndArrays;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class BubbleSort {
+public class BubbleSort_Demo {
 
 	public static void bubbleSortInt(int[] array) {
 		int[] nums = array;

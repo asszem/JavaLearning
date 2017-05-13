@@ -42,10 +42,13 @@ Step 2. Creating Matcher - matcher()
 	Updating sourceString in existing Matcher
 		matcherObject
 	You can also change the string that a Matcher object is to search by calling its reset() method with a new string as the argument. 
-Step 3. Searching for the string - find()
-	Calling the find() method for the Matcher object searches the string for the next occurrence of the pattern. 
+Step 3. Searching for the string - find() - matches()
+	find()
+		Calling the find() method for the Matcher object searches the string for the next occurrence of the pattern. 
 		If it finds the pattern, the method stores information about where it was found in the Matcher object and returns true. 
 		If it doesn't find the pattern, it returns false. 
+	matches()
+		The entire pattern must match
 	Locating the found pattern
 		start() - returns the index position of the first caracter in the pattern
 		end() - returns the index position following the last character in the pattern

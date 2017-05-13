@@ -1,4 +1,4 @@
-package StringsAndArrays;
+package DateAndTime;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

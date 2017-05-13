@@ -9,7 +9,7 @@ package StringsAndArrays;
  *
  * @author olaha
  */
-public class StringComparisonSamples {
+public class StringCompareTo_Demo {
 
 	public static void main(String[] args) {
 		//<editor-fold desc="This provides the result for the comparison call in the add() method in BinaryTree class">

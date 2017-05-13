@@ -4,7 +4,7 @@ package StringsAndArrays;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class Day1st2nd3rd {
+public class DayEndingOf1st2nd3rd_Demo {
 
 	static String dayEnding(int i) {
 		String ending;

@@ -45,7 +45,7 @@ package StringsAndArrays;
  *
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class toStringOverride {
+public class toStringOverride_Demo {
 
 	String objVar1 = "String instance változó";
 	int objVar2 = 42;
@@ -77,18 +77,18 @@ public class toStringOverride {
 	}
 
 	public static void main(String[] args) {
-		toStringOverride objektum = new toStringOverride();
+		toStringOverride_Demo objektum = new toStringOverride_Demo();
 		objektum.objID="ID01";
 		System.out.println(objektum);
 
-		toStringOverride objektum2 = new toStringOverride();
+		toStringOverride_Demo objektum2 = new toStringOverride_Demo();
 		objektum2.objID="ID02";
 		objektum2.objVar1 = "Ez a második objektum";
 		objektum2.objVar2 = 21;
 		objektum2.objVar3 = false;
 		System.out.println(objektum2);
 
-		//Ha másik osztályon nincs toString() override:
+		//Without overriding toString()
 		Kutyak bloki = new Kutyak(12, "hím", "bernáthegyi", "Blöki");
 		System.out.println(bloki);
 		int numberTest = 123;

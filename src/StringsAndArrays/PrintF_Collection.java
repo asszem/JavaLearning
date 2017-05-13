@@ -40,7 +40,7 @@ package StringsAndArrays;
  * 
  * @author Andras Olah (olahandras78@gmail.com)
  */
-public class PrintF {
+public class PrintF_Collection {
 	public static void main(String[] args) {
 		String str="teszt";
 		System.out.printf("String %1$S String %1$s",str);
