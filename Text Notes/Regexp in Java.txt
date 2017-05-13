@@ -1,0 +1,62 @@
+Class
+	java.util.regex.Pattern
+	java.util.regex.Matcher
+Description
+	A regular expression is simply a string that describes a PATTERN that you use to search for matches within some other string. 
+	A regular expression is essentially a mini-program for a specialized kind of computer called a STATE-MACHINE. 
+	The State Machine is specifically designed to interpret a regular expression and analyze a given string based on the operations implicit in a regular expression.
+Process overview
+	1. You create a Pattern object by passing a string containing a regular expression to the static compile() method in the Pattern class.
+	2. You then obtain a Matcher object, which can search a given string for the pattern, by calling the matcher() method for the Pattern object with the string that is to be searched as the argument.
+	3. You call the find() method (or some other methods, as you later see) for the Matcher object to search the string.
+	4. If the pattern is found, you query the Matcher object to discover the whereabouts of the pattern in the string and other information relating to the match.
+Step 1. Createing Pattern - compile()
+	Instantiating 
+		String patternString="\\d{2,}";
+		Pattern patternObject = Pattern.compile(patternString);		//.compile() is a static method
+		Pattern patternObjectWithFlags = Pattern.compile(patternString,Pattern.MULTILINE | Pattern.UNICODE_CASE);
+	Method description
+		The static compile() method in the Pattern class returns a reference to a Pattern object that contains the compiled regular expression. 
+		The method throws a PatternSyntaxException (unchecked as it a subclass of RuntimeException) if the argument is invalid.
+		The compilation process stores the regular expression in a Pattern object in a form that is ready to be processed by a Matcher state-machine.
+	Multiple flags
+		All these flags are unique single-bit values within a value of type int so you can combine them by ORing them together or by simple addition.
+		Beware of using addition when you want to add a flag to a variable representing an existing set of flags.
+		If the flag already exists, addition produces the wrong result because adding the two corresponding bits results in a carry to the next bit. 
+		ORing always produces the correct result.
+Step 2. Creating Matcher - matcher()
+	Instatiating
+		String searchString = "This is the string in which we are searching for the pattern";
+		Matcher matcherObject= patternObject.matcher(searchString);					//create a matcher object for the search string
+		Matcher differentMatcher = patternObject.matcher(searchAnotherString);		//use the same pattern on a different matcher
+		matcherObject.reset(differentSearchString);									//use the same pattern on an existing Matcher with different search string
+	Accepted parameter types for .matcher() and .reset()
+		The parameter for the matcher() method is actually of type CharSequence interface.
+		CharSequence interface is implemented by:
+			String, StringBuilder, StringBuffer
+			CharBuffer - it can be used to hold char data read from a file and passed directly to the macher
+	Use same pattern object on multiple Matchers
+		You can reuse a Pattern object to create Matcher objects to search for the pattern in a variety of strings. 
+		To use the same pattern to search another string, you just call the matcher() method for the Pattern object with the new string as the argument. 
+		You then have a new Matcher object that you can use to search the new string.
+	Updating sourceString in existing Matcher
+		matcherObject
+	You can also change the string that a Matcher object is to search by calling its reset() method with a new string as the argument. 
+Step 3. Searching for the string - find()
+	Calling the find() method for the Matcher object searches the string for the next occurrence of the pattern. 
+		If it finds the pattern, the method stores information about where it was found in the Matcher object and returns true. 
+		If it doesn't find the pattern, it returns false. 
+	Locating the found pattern
+		start() - returns the index position of the first caracter in the pattern
+		end() - returns the index position following the last character in the pattern
+		IllegalStateException - thrown when start() or end() called when .find() is not true
+		reset() - If you want to reset the index position to zero, you just call an overloaded version of reset() for the Matcher object that has no arguments
+	Locating multiple patterns
+		Go trough with a loop
+			while(matcherObject.find()) { System.out.println(“ Start: “ + m.start() + “ End: “ + m.end()); }
+Source:
+	Horton, p. 592
+	Regex tool: https://regex101.com/
+	Javadoc
+		Pattern - https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+		Matcher - https://docs.oracle.com/javase/7/docs/api/java/util/regex/Matcher.html
