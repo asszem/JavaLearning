@@ -38,25 +38,26 @@ public class DateFormat_Collection {
 		System.out.println("Available locales number: " + availableLocales.length);
 	}
 
-	public static void displayAvailableTimeZones() {
+	public static void displayAvailableTimeZoneIDs() {
 		String[] timeZones = java.util.TimeZone.getAvailableIDs();
-		for (String timeZone:timeZones){
+		for (String timeZone : timeZones) {
 			System.out.println(timeZone);
 		}
 	}
 
-	public static void displayFormattedDate(Locale locale) {
+	// SHORT, MEDIUM, LONG, FULL
+	public static void displayDateFormatStyles(Locale locale, Date displayDate) {
 		System.out.println("Locale: " + locale.getDisplayCountry());
 		// Iterate through the DateFormatStylesEnum
-		for (DateFormatStylesEnum currentFormat : DateFormatStylesEnum.values()) {
-			// ordinal() is required because .getDateTimeInstance expects an int
-			// arg.
-			DateFormat formatter = DateFormat.getDateTimeInstance(currentFormat.ordinal(), currentFormat.ordinal(),
-					locale);
-			System.out.println(currentFormat + "\t " + formatter.format(new Date()));
+		for (DateFormatStylesEnum currentFormatStyle : DateFormatStylesEnum.values()) {
+			// ordinal() is required because .getDateTimeInstance expects an int arg.
+			DateFormat formatter = DateFormat.getDateTimeInstance(currentFormatStyle.ordinal(),
+					currentFormatStyle.ordinal(), locale);
+			System.out.println(currentFormatStyle + "\t " + formatter.format(displayDate));
 		}
 	}
 
+	//Input string MUST be the same format as defined in DateFormat style. Eg: 2011.11.11. 12:21
 	public static Date parseDateFromString(String input, DateFormatStylesEnum style, Locale locale) {
 		Date resultDate;
 		DateFormat formatter = DateFormat.getDateTimeInstance(style.ordinal(), style.ordinal(), locale);
@@ -78,13 +79,13 @@ public class DateFormat_Collection {
 		// Get a Locale object
 		Locale hunLocale = new Locale("hu", "HU");
 
-		// Display all DateFormat options for a locale
-		displayFormattedDate(hunLocale);
-		displayFormattedDate(Locale.CHINA);
-		displayFormattedDate(Locale.US);
-
 		// Get today's date
 		Date todayDateObject = new Date(); // Object for now – today’s date
+
+		// Display all DateFormat options for a locale
+		displayDateFormatStyles(hunLocale, todayDateObject);
+		displayDateFormatStyles(Locale.CHINA, todayDateObject);
+		displayDateFormatStyles(Locale.US, todayDateObject);
 
 		// Print Date or Time only for given locale
 		DateFormat formatterUS = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US);
@@ -93,8 +94,10 @@ public class DateFormat_Collection {
 		System.out.println("Time HU:\t" + formatterHUN.format(todayDateObject));
 
 		// Parse string according to locale
-		Date parsedDate = parseDateFromString("2000.01.01. 10:10", DateFormatStylesEnum.SHORT, hunLocale);
-		System.out.println(parsedDate);
+		String parseString = "2000.01.01. 10:10";
+		Date parsedDate = parseDateFromString(parseString, DateFormatStylesEnum.SHORT, hunLocale);
+		System.out.println("Pares string: " + parseString);
+		System.out.println("Parsed date: " + parsedDate);
 
 	}
 }
