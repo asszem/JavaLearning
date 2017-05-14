@@ -150,3 +150,19 @@ java.util.Date & java.text.DateFormat & java.util.Locale & java.util.TimeZone.
 		compareTo(Calendar c) 
 			Returns a value of type int that is negative, zero, or positive depending on whether 
 			the time value for the current object is less than, equal to, or greater than the time value for the argument.
+
+java.util.Scanner
+	You can construct a Scanner from any of the following types:
+		InputStream 
+		File 
+		Path 
+		ReadableByteChannel 
+		Readable 
+		String
+	Delimiter
+		By default, a Scanner object reads tokens assuming they are delimited by whitespace. 
+		Whitespace corresponds to any character for which the isWhitespace() method in the Character class returns true. 
+		Using regex as delimiter for a scanner
+		The useDelimiter() method expects an argument of type String that specifies a regular expression for recognizing delimiters.
+	Finding the next token that matches a regex pattern
+		.next(pattern) or .next(string)
