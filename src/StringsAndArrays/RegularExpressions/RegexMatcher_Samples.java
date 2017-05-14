@@ -1,5 +1,7 @@
 package StringsAndArrays.RegularExpressions;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.regex.*;
 
 public class RegexMatcher_Samples {
@@ -68,22 +70,38 @@ public class RegexMatcher_Samples {
 		// Displaying the marked matches (using Horton's method)
 		String regEx = "had";
 		String str = "Smith, where Jones had had 'had', had had 'had had'.";
-		Regex_Skeleton.displayHighlightedResults(regEx, str);
-		Regex_Skeleton.displayHighlightedResults(patternString, sourceString);
+		Regex_Collection.displayHighlightedResults(regEx, str);
+		Regex_Collection.displayHighlightedResults(patternString, sourceString);
 		
 
 		//Displaying the marked matches with different matchers
-		Regex_Skeleton.displayHighlightedResults(matcherObject, sourceString);
-		Regex_Skeleton.displayHighlightedResults(matcherObjectWithFlags, sourceString);
-		Regex_Skeleton.displayHighlightedResults(matcherObjectNotFound, sourceStringDifferent);
+		Regex_Collection.displayHighlightedResults(matcherObject, sourceString);
+		Regex_Collection.displayHighlightedResults(matcherObjectWithFlags, sourceString);
+		Regex_Collection.displayHighlightedResults(matcherObjectNotFound, sourceStringDifferent);
 		
 		//Match the entire pattern
 		System.out.println("Matching entire patterns");
-		Regex_Skeleton.displayHighlightedResults(matcherObject, sourceString);
+		Regex_Collection.displayHighlightedResults(matcherObject, sourceString);
 		System.out.println("Entire pattern matches: " + matcherObject.matches());
 		Matcher matchEntirePattern = Pattern.compile(sourceString).matcher(sourceString);
-		Regex_Skeleton.displayHighlightedResults(matchEntirePattern, sourceString);
+		Regex_Collection.displayHighlightedResults(matchEntirePattern, sourceString);
 		System.out.println("Entire pattern matches: " + matchEntirePattern.matches());
+		
+		//Get matching groups - make sure pattern defines capturing groups
+		String regex = "[+|-]?(\\d+(\\.\\d*)?)|[+|-](\\.\\d+)\\b";
+		String source= "256 is the square of 16 and -2.5 squared is 6.25 and -.243 is less than 0.1234. 0.1.2.3 0,1,2,3";
+		System.out.println(regex);
+		System.out.println(source);
+		System.out.println("Group 0: ");
+		System.out.println("Group 1: ( \\d+(\\.\\d*)? )");
+		System.out.println("Group 2: ( \\.\\d* )");
+		System.out.println("Group 3: ( \\.\\d+ )");
+		Matcher matcherWithGroups = Pattern.compile(regex).matcher(source);
+		System.out.println("\n\nDisplay map\n\n");
+		Regex_Collection.displayMatchedGroupsMap(Regex_Collection.getMatchedGroupsMap(matcherWithGroups));
+		System.out.println("\n\nDisplay Groups\n\n");
+		Regex_Collection.displayMatchedGroups(regex, source);
+
 	}
 
 }

@@ -14,7 +14,7 @@ import java.util.Date;
  *
  * https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
  */
-public class GetTodayDateAndTime {
+public class GetFormattedTodayDateAndTime_Demo {
 
 	private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

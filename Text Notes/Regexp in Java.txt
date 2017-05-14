@@ -1,3 +1,9 @@
+General
+	matcher.group() -> displays the current match, as it equals go Group 0 which is the whole match. Also this is the same as source.substring(m.start(), m.end())
+	.find() might find multiple matches within the source
+	each match can have multiple capture groups, depending on the pattern
+	the matcher object needs to reset so calling .find will start over from the beginning
+
 Class
 	java.util.regex.Pattern
 	java.util.regex.Matcher
@@ -30,6 +36,7 @@ Step 2. Creating Matcher - matcher()
 		Matcher matcherObject= patternObject.matcher(searchString);					//create a matcher object for the search string
 		Matcher differentMatcher = patternObject.matcher(searchAnotherString);		//use the same pattern on a different matcher
 		matcherObject.reset(differentSearchString);									//use the same pattern on an existing Matcher with different search string
+		Matcher newMatcher = Pattern.compile(regEx).matcher(searchString);			//Create matcher and pattern in the same line
 	Accepted parameter types for .matcher() and .reset()
 		The parameter for the matcher() method is actually of type CharSequence interface.
 		CharSequence interface is implemented by:
@@ -54,9 +61,29 @@ Step 3. Searching for the string - find() - matches()
 		end() - returns the index position following the last character in the pattern
 		IllegalStateException - thrown when start() or end() called when .find() is not true
 		reset() - If you want to reset the index position to zero, you just call an overloaded version of reset() for the Matcher object that has no arguments
-	Locating multiple patterns
+	Locating multiple matches
 		Go trough with a loop
 			while(matcherObject.find()) { System.out.println(“ Start: “ + m.start() + “ End: “ + m.end()); }
+Replacing string based on matched pattern
+	1. Create a new Stringbuilder
+	2. Call appendReplacement() as many times as find() result is true
+		The arguments to the appendReplacement() method are a reference to the StringBuffer object that is to contain the new string, and the replacement string for the matched text.
+	3. Call appendTail() to add the last part of the original string after find() results in false
+Capturing groups
+	Each pair of parentheses in a regular expression defines a separate capturing group in addition to the group that the whole expression defines.
+	The capturing group for the whole regular expression is always number 0. 
+	Counting their opening parentheses from the left in the regular expression numbers the other groups. 
+	Example:
+		(A ( B ( C (D) ) ( E ) )
+		1  2   3   4     5
+		1: ABCDE
+		2: BCD
+		3: CD
+		4: D
+		5: E
+	.group(groupNumber)
+	.groupCount() - number of groups
+
 Source:
 	Horton, p. 592
 	Regex tool: https://regex101.com/
