@@ -36,12 +36,20 @@ https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#syntax
 */
 package StringsAndArrays;
 
+import java.util.Formatter;
+
 /**
  * 
  * @author Andras Olah (olahandras78@gmail.com)
  */
 public class PrintF_Collection {
 	public static void main(String[] args) {
+		String stringToFormat="%d, %d, %d, %s";
+		Formatter formatter = new Formatter();
+		System.out.println(formatter.format(stringToFormat, 1,2,3,"Hello"));
+		
+		
+		
 		String str="teszt";
 		System.out.printf("String %1$S String %1$s",str);
 		System.out.println("");

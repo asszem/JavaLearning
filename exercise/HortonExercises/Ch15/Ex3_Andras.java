@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
-public class Ex3_andras {
+public class Ex3_Andras {
 	public static GregorianCalendar getBirthDate(int[] sourceDate) {
 		GregorianCalendar birthdate = new GregorianCalendar(sourceDate[0], sourceDate[1] - 1, sourceDate[2]);
 		return birthdate;
