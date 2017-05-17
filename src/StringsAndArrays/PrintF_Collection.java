@@ -48,7 +48,8 @@ public class PrintF_Collection {
 		Formatter formatter = new Formatter();
 		System.out.println(formatter.format(stringToFormat, 1,2,3,"Hello"));
 		
-		
+		String oneLineFormat = String.format("%d %s%n%d",1,"Hello",2);
+		System.out.println(oneLineFormat);
 		
 		String str="teszt";
 		System.out.printf("String %1$S String %1$s",str);
