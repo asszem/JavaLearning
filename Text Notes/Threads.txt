@@ -1,0 +1,18 @@
+Creating Threads
+	Implement Runnable vs. Extend Thread
+		Because Java allows only a single base class, if you derive your class from Thread, it can't inherit functionality from any other class.
+		The Runnable interface declares only one method, run(), and this is the method that is executed when the thread is started.
+Methods
+	.start()
+	.sleep()
+	.interrupt()
+	.isInterrupted()
+	.interrupted()
+	.join()
+	.yield()
+		When you call the sleep() method for a thread, the thread does not continue for at least the time you have specified as an argument, even if no other threads are waiting. 
+		Calling yield(), on the other hand, causes the current thread to resume immediately if no threads are waiting
+
+Sources
+	Horton Chapter 16. - Threads
+	Schildt Chapter 11. - Multithread programming
