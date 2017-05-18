@@ -2,7 +2,7 @@ package Threads.Practice.Bank.BankOperation_1;
 
 import java.util.Random;
 
-public class BankOperation {
+public class BankOperation { 
   public static void main(String[] args) {
     int initialBalance = 500;                                          // The initial account balance
     int totalCredits = 0;                                              // Total credits on the account
@@ -13,10 +13,10 @@ public class BankOperation {
     Bank theBank = new Bank();                                         // Create a bank
     Clerk clerk1 = new Clerk(theBank);                                 // Create the first clerk
     Clerk clerk2 = new Clerk(theBank);                                 // Create the second clerk
-    Account account = new Account(1, initialBalance);                  // Create an account
+    Account account = new Account(1, initialBalance);                  // Create an account (AccountNumber, initialBalance)
 
     // Create the threads for the clerks as daemon, and start them off
-    Thread clerk1Thread = new Thread(clerk1);
+    Thread clerk1Thread = new Thread(clerk1);		//Clerk class implements Runnable
     Thread clerk2Thread = new Thread(clerk2);
     clerk1Thread.setDaemon(true);                                      // Set first as daemon
     clerk2Thread.setDaemon(true);                                      // Set second as daemon
@@ -43,7 +43,7 @@ public class BankOperation {
           System.out.println(e);
         }
       }
-      clerk1.doTransaction(transaction);                               // Now do the credit
+      clerk1.assignTransactionToClerk(transaction);                               // Now do the credit
 
       amount = 30 + rand.nextInt(31);                                  // Generate amount of $30 to $60
       transaction = new Transaction(account,                           // Account
@@ -59,7 +59,7 @@ public class BankOperation {
           System.out.println(e);
         }
       }
-      clerk2.doTransaction(transaction);                               // Now do the debit
+      clerk2.assignTransactionToClerk(transaction);                               // Now do the debit
     }
 
     // Wait until both clerks are done

@@ -1,5 +1,4 @@
-package Threads.Practice.Bank.BankOperation_1;
-
+package Threads.Practice.Bank.BankOperation_4;
 public class Clerk implements Runnable {
   // Constructor
   public Clerk(Bank theBank) {
@@ -8,7 +7,7 @@ public class Clerk implements Runnable {
   }
 
   // Receive a transaction
-  public void assignTransactionToClerk(Transaction transaction) {
+  public void doTransaction(Transaction transaction) {
     inTray = transaction;
   }
 
@@ -24,7 +23,7 @@ public class Clerk implements Runnable {
         }
       }
 
-      theBank.executeTransaction(inTray);
+      theBank.doTransaction(inTray);
       inTray = null;                                                   // In-tray is empty
     }
   }
