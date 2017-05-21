@@ -1,6 +1,10 @@
 package Threads.Practice.Bank.BankOperation_1;
-
 // Define the bank
+
+// The whole 'executeTransaction' method is synchronized.
+// Problem with this is that this setup allows only one transaction execution at a time
+// However in a bank, many transactions should be allowed to run simultaneously on DIFFERENT accounts
+// The solution will be in BankOps4, synching Credit/Debit code blocks only and not the whole method
 
 public class Bank {
 
@@ -36,6 +40,8 @@ public class Bank {
 			System.out.println("Invalid transaction");
 			System.exit(1);
 		}
+		// The account balance is set after the debit/credit operations performed
+		// and the new 'balance' value is determined
 		transaction.getAccount().setBalance(balance);                      // Restore the account balance
 	}
 }

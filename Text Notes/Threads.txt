@@ -1,5 +1,5 @@
 Summary
-
+.run() vs .main() vs. call()
 
 Creating Threads
 	Implement Runnable vs. Extend Thread
@@ -15,7 +15,12 @@ Creating Threads
 		first.setDaemon(true);
 		Thread second = new Thread(objectReference, "Thread Name String");
 Methods for Thread objects
+	.run()
+		The .run() method is never called to start a thread. 
+		The .run() method is the first method in the thread's call stack. 
+		All the methods that are called directly or indirectly from the run() method for an object are all part of the same thread, but they clearly don't have to be methods for the same Thread object. 
 	.start()
+		The .start() method is called to start a thread, it will create a new call stack, starting with .run() method of the started thread object
 	.sleep()
 	.interrupt()
 	.isInterrupted()
@@ -40,15 +45,42 @@ Synchronization
 			You can manage code at the method level. This involves synchronizing methods.
 		Block level sync
 			You can manage code at the block level. This uses synchronizing blocks.
-	Method Synchroinization
-		Syncing methods will make them mutually exclusive.
+	Method Synchronization
+		Syncing methods will make them mutually exclusive for the SAME object. Even for the concurrent execution of the SAME method.
 		Only when the currently executing synchronized method for an object has ended can another synchronized method start FOR THE SAME OBJECT. 
-		Two synchronized method can run at the same time on DIFFERENT objects
-		Lock on objects
-			Every object has a LOCK. If synchronized, only the method that locked the process can use it, other's need to wait to get the lock.
-			The lock is set by a locking action (starting a synchronized method)
-			The lock is reset by an unlock action
-
+		When a thread executes a synchronized method for an object, it is assured exclusive access to the object insofar as the synchronized methods in that object are concerned.
+		Synchronizing INSTANCE methods
+			Distinction between an object that has instance methods declared as synchronized in the class definition and the threads of execution that might use them.
+			The method that isn't declared as synchronized, can always be executed by a thread, regardless of whether a synchronized method is executing in some other thread.
+			Two synchronized method can run at the same time on DIFFERENT objects
+			Lock on objects
+				Every object has a LOCK. If synchronized, only the method that locked the process can use it, other's need to wait to get the lock.
+				The lock is set by a locking action (starting a synchronized method)
+				The lock is reset by an unlock action
+		Synchronizing STATIC methods
+			If a static method is declared as synchronized, only one of those static methods in the class can be executing at any point in time.
+			This is per-class synchronization, and the class lock is independent of any locks for objects of the class.
+	Code Block Synchronization
+		Description 
+			You can set a lock on any object for a given statement block. 
+			No other statements or statement blocks in the program THAT ARE SYNCHRONIZED ON THE OBJECT can execute while this statement is executing.
+			When the block that is synchronized on the given object is executing, no other code block or method that is synchronized on the same object can execute.
+		Synced Code blocks can be anywhere in the program
+			Code blocks that are synchronized with respect to a particular object don't have to be in the same class. 
+			They can be anywhere in the program where the appropriate object can be specified.
+		Block vs. method synchronization
+			You can specify which particular object is to benefit from the synchronization of the statement or code block
+			Not just the object that contains the code as in the case of a synchronized method. 
+		Declaration	
+			synchronized(theObject) {
+				statement; // Synchronized with respect to theObject
+				...
+				}
+		Analogy - baton in a relay race (váltóbot)
+			The object in a synchronized code block acts rather like a baton in a relay race that serves to synchronize the runners in the team. 
+			Only the runner with the baton is allowed to run. The next runner in the team can run only after he gets hold of the baton. 
+			There can be several different batons as there are several sets of runners (teams). 
+			In the same way, you can specify several different sets of synchronized code blocks in a class, each controlled by a different object. 
 
 Deadlocks
 
