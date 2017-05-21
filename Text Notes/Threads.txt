@@ -84,7 +84,59 @@ Synchronization
 Deadlocks
 	When a locked object waits for another object which is also locked by another thread and that thread in turn waits for the locked object then a deadlock occurs
 
-Callable<V> 
+Callable<V> interface
+	The Callable<> interface specifies just one method, call(), that a Callable<> object must implement. 
+	The call() method is the equivalent of the run() method in the Runnable interface, but in addition returns a value when the method terminates. 
+	The type parameter, V, for the interface is the type of the value to be returned by the class.
+	Callable can NOT be passed to a Thread constructor, Executor Service must be used
+
+Executors
+	An executor is an object that you can use to start and manage threads. It can execute a Runnable or Callable task
+	Creating Executors - java.util.concurrent.Executors class provides static FACTORY methods to create executors
+		Step 1. - create an ExecutorService object to get a threadPool
+			Unlimited threads
+				Either an existing thread in the pool that is currently no longer running is used, or a new thread is created and added to the thread pool. I
+					ExecutorService threadPool = Executors.newCachedThreadPool()				
+			Limited threads
+				If all threads in the pool have been allocated, the new task is placed in a queue to wait until one of the existing threads becomes free. 
+					int nThreads = 5;
+					ExecutorService threadPool = Executors.newFixedThreadPool(nThreads);		
+			???return a reference to an object of type ThreadPoolExecutor???
+		Step 2. - starting tasks using the ExecutorService Object
+			Starting a Runnable task with .submit()
+				The submit() method returns a reference of type java.util.concurrent.Future<V> 
+				This reflects the state of the task at any time, and eventually encapsulates the result of executing a task, the result being of type V. 
+				A Runnable task does not return a result so the value returned by submit will be of type Future<?>
+					Future<?> futureObject = threadPool.submit(new runnableClass());
+			Starting a Callable task with .submit()
+				The future object encapsulates the result of executing the task that. In the example below, it is an object of type String.
+					Future<String> futureObject = threadPool.submit(callableTask);
+	Using FUTURE objects
+		The Future<> reference that the submit() method returns is returned immediately, before the task completes execution. 
+		The Future<> object therefore provides a way to access the executing task and determine its state. 
+		Cancel tasks 
+			if(future.cancel(true)) {
+				System.out.println(“Task has been cancelled.”);
+				} else {
+				System.out.println(“Task could not be cancelled.”);
+				}
+			isCancelled(), isDone() to determine if a task was cancelled or is done (cancellation also makes the Done true)
+		Get return of Callable - .get()
+			The get() method will block if the task is still running and returns the result when the task has completed
+		Shutting down - .shutdown()
+			threadPool.shutdown()
+				Calling shutdown() for an ExecutorService object starts the process of shutting down a thread pool by closing it to new tasks. 
+				Existing tasks continue to run. You typically want to wait for tasks in a thread pool to complete before closing it
+			.awaitTermination(timeValue, TimeUnit)
+				The awaitTermination() waits for tasks in the thread pool to complete for the time you specify by the two arguments. 
+				The method returns false if all the tasks did not complete in that timeframe.
+			.shutdownNow()
+				The method returns a reference to a list containing references to those tasks in the thread pool that were waiting to start execution when shut down occurred.
+				List<Runnable> tasks = threadPool.shutdownNow();	
+			isTerminated()
+				This method returns true if either shutdown() or shutdownNow() has been called and all tasks have ended
+			isShutdown()
+				Returns true if the executor service object is shutdown
 
 TreadRace_Demo
 	Running 3 threads (including main) parallel with same task will produce unpredictable completion order. Because we can't control how the Java scheduler assigns RUNNING status to threads
