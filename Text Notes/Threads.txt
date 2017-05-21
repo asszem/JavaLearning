@@ -81,8 +81,8 @@ Synchronization
 			Only the runner with the baton is allowed to run. The next runner in the team can run only after he gets hold of the baton. 
 			There can be several different batons as there are several sets of runners (teams). 
 			In the same way, you can specify several different sets of synchronized code blocks in a class, each controlled by a different object. 
-
 Deadlocks
+	When a locked object waits for another object which is also locked by another thread and that thread in turn waits for the locked object then a deadlock occurs
 
 Callable<V> 
 
