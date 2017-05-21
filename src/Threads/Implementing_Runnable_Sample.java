@@ -54,10 +54,11 @@ public class Implementing_Runnable_Sample implements Runnable {
 		boolean isInterrupted = Thread.currentThread().isInterrupted();
 		boolean isAlive = Thread.currentThread().isAlive();
 		boolean isDaemon = Thread.currentThread().isDaemon();
+		String threadStatus = Thread.currentThread().getState().toString();
 		String threadName = Thread.currentThread().getName();
 		System.out.printf(
-				"Current thread%n\tName: [%s]%n\tCounter: [%d]%n\tInterrupted: [%b]%n\tAlive[%b]%n\tDaemon: [%b]%n",
-				threadName, threadNameCounter, isInterrupted, isAlive, isDaemon);
+				"Current thread%n\tName: [%s]%n\tState: [%s]%n\tCounter: [%d]%n\tInterrupted: [%b]%n\tAlive[%b]%n\tDaemon: [%b]%n",
+				threadName, threadStatus, threadNameCounter, isInterrupted, isAlive, isDaemon);
 	}
 
 	public static void main(String[] args) {

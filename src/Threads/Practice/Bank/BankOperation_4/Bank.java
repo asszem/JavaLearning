@@ -3,10 +3,10 @@ package Threads.Practice.Bank.BankOperation_4;
 
 public class Bank {
   // Perform a transaction
-  public void doTransaction(Transaction transaction) {
-    switch(transaction.getTransactionType()) {
+  public void executeTransaction(Transaction transaction) {
+    switch(transaction.getTransactionType()) {						
       case CREDIT:
-        synchronized(transaction.getAccount()) {
+        synchronized(transaction.getAccount()) { 			//Start synchronized block on Object ACCOUNT
         System.out.println("Start credit of " +
                 transaction.getAccount() + " amount: " +
                 transaction.getAmount());
@@ -27,7 +27,7 @@ public class Bank {
                   transaction.getAccount() + " amount: " +
                   transaction.getAmount());
           break;
-        }
+        } //End synchronized block
       case DEBIT:
         synchronized(transaction.getAccount()) {
           System.out.println("Start debit of " +

@@ -25,8 +25,8 @@ public class BankOperation4 {
       totalCredits[i] = totalDebits[i] = 0;
     }
     // Create the threads for the clerks as daemon, and start them off
-    Thread clerk1Thread = new Thread(clerk1);
-    Thread clerk2Thread = new Thread(clerk2);
+    Thread clerk1Thread = new Thread(clerk1, "CreditThread");
+    Thread clerk2Thread = new Thread(clerk2, "DebitThread");
     clerk1Thread.setDaemon(true);                                      // Set first as daemon
     clerk2Thread.setDaemon(true);                                      // Set second as daemon
     clerk1Thread.start();                                              // Start the first
@@ -54,7 +54,7 @@ public class BankOperation4 {
           System.out.println(e);
         }
       }
-      clerk1.doTransaction(transaction);                               // Now do the credit
+      clerk1.assignTransaction(transaction);                               // Now do the credit
 
       // choose an account at random for debit operation
       select = rand.nextInt(accounts.length);
@@ -72,13 +72,13 @@ public class BankOperation4 {
           System.out.println(e);
         }
       }
-      clerk2.doTransaction(transaction);                               // Now do the debit
+      clerk2.assignTransaction(transaction);                               // Now do the debit
     }
 
     // Wait until both clerks are done
     while(clerk1.isBusy() || clerk2.isBusy()) {
       try {
-        Thread.sleep(25);
+        Thread.sleep(25);					//Sleeps the main thread, so that threads can run
 
       } catch(InterruptedException e) {
         System.out.println(e);

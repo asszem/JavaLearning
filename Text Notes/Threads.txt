@@ -1,3 +1,6 @@
+Summary
+
+
 Creating Threads
 	Implement Runnable vs. Extend Thread
 		Because Java allows only a single base class, if you derive your class from Thread, it can't inherit functionality from any other class.
@@ -27,8 +30,42 @@ Methods for Thread objects
 	.currentThread()
 		The static currentThread() method in the Thread class returns a reference to the current thread so that provides access when you need it.
 Synchronization
-	
+	The Danger of Multithreads
+		A thread can be interrupted while a source statement is executing. 
+		Where two or more threads share a common resource (a file or a block of memory)
+		it needs to be ensured that one thread doesn't modify a resource while that resource is still being used by another thread.
+	Objective
+		The objective of synchronization is to ensure that when several threads want access to a single resource, only one thread can access it at any given time. 
+		Method level sync
+			You can manage code at the method level. This involves synchronizing methods.
+		Block level sync
+			You can manage code at the block level. This uses synchronizing blocks.
+	Method Synchroinization
+		Syncing methods will make them mutually exclusive.
+		Only when the currently executing synchronized method for an object has ended can another synchronized method start FOR THE SAME OBJECT. 
+		Two synchronized method can run at the same time on DIFFERENT objects
+		Lock on objects
+			Every object has a LOCK. If synchronized, only the method that locked the process can use it, other's need to wait to get the lock.
+			The lock is set by a locking action (starting a synchronized method)
+			The lock is reset by an unlock action
+
+
+Deadlocks
+
+Callable<V> 
+
+TreadRace_Demo
+	Running 3 threads (including main) parallel with same task will produce unpredictable completion order. Because we can't control how the Java scheduler assigns RUNNING status to threads
+
+Thread status
+	Runnable - Running - Blocked
+
+
+Tipps & Best Practices
+	Debugging Threads
+		Set Eclipse to suspend JVM at breakpoints, don't keep other threads running -- but it doesn't work properly some cases 
 
 Sources
 	Horton Chapter 16. - Threads
 	Schildt Chapter 11. - Multithread programming
+	Head First Chapter 15 - Networking and threads

@@ -7,7 +7,7 @@ public class Clerk implements Runnable {
   }
 
   // Receive a transaction
-  public void doTransaction(Transaction transaction) {
+  public void assignTransaction(Transaction transaction) {
     inTray = transaction;
   }
 
@@ -23,7 +23,7 @@ public class Clerk implements Runnable {
         }
       }
 
-      theBank.doTransaction(inTray);
+      theBank.executeTransaction(inTray);
       inTray = null;                                                   // In-tray is empty
     }
   }
