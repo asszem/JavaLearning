@@ -3,7 +3,7 @@ package Threads.Practice.Bank.BankOperation_5_UsingExecutors;
 
 public class Bank {
   // Perform a transaction
-  public void doTransaction(Transaction transaction) {
+  public void bankExecuteTransaction(Transaction transaction) {
     synchronized(transaction.getAccount()) {
       int balance = 0;
       switch(transaction.getTransactionType()) {
