@@ -1,11 +1,20 @@
 Summary
 .run() vs .main() vs. call()
 
-Creating Threads
+TODO before moving forward to another chapter
+	- why return in Executor Bank ops example?
+	- why the thread.interrupted needed to prevent interruptin exception and why does it not work in my class?
+	- understand and try join, write a sample
+	- complete the Summary field
+	- Update this doc. with everything from Head first & Schild
+	- Add further threading sources
+
+Creating Runnable Threads
 	Implement Runnable vs. Extend Thread
 		Because Java allows only a single base class, if you derive your class from Thread, it can't inherit functionality from any other class.
 		The Runnable interface declares only one method, run(), and this is the method that is executed when the thread is started.
-		Either cases, the run() method needs to be implemented
+		Use extending to thread only when you want to specifically override some of Thread's methods
+		Either case, the run() method needs to be implemented
 			@Override
 			public void run(){....
 	Creating threads with Thread
@@ -92,12 +101,13 @@ Callable<V> interface
 
 Executors
 	An executor is an object that you can use to start and manage threads. It can execute a Runnable or Callable task
+	All the threads in the pool continue to exist until threadPool is shut down!!!!
 	Creating Executors - java.util.concurrent.Executors class provides static FACTORY methods to create executors
 		Step 1. - create an ExecutorService object to get a threadPool
-			Unlimited threads
+			.newCachedThreadPool() - Unlimited threads
 				Either an existing thread in the pool that is currently no longer running is used, or a new thread is created and added to the thread pool. I
 					ExecutorService threadPool = Executors.newCachedThreadPool()				
-			Limited threads
+			.newFixedThreadPoool() - Limited threads
 				If all threads in the pool have been allocated, the new task is placed in a queue to wait until one of the existing threads becomes free. 
 					int nThreads = 5;
 					ExecutorService threadPool = Executors.newFixedThreadPool(nThreads);		
@@ -122,7 +132,7 @@ Executors
 				}
 			isCancelled(), isDone() to determine if a task was cancelled or is done (cancellation also makes the Done true)
 		Get return of Callable - .get()
-			The get() method will block if the task is still running and returns the result when the task has completed
+			The get() method WILL BLOCK if the task is still running and returns the result when the task has completed
 		Shutting down - .shutdown()
 			threadPool.shutdown()
 				Calling shutdown() for an ExecutorService object starts the process of shutting down a thread pool by closing it to new tasks. 
