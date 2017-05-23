@@ -1,0 +1,161 @@
+TODO
++ add the HTML formatter sample to src
++ create the skeleton
+
+
+**JAVA LOGGING API**
+Concept 
+	Loggers: loggers are responsible for capturing events and passing them to the appropriate appender (handler).
+	Handlers (Appenders): handlers are responsible for recording log events to a destination. Handlers use layouts to format events before sending them to an output.
+	Formatters (Layouts): formatters are responsible for converting and formatting the data in a log event. Formatters determine how the data looks when it appears in a log entry.
+	Log flow: application -> logger -> handler  -> outside world
+		When a Logger records an event, it forwards it to the appropriate Appender. 
+		The Appender then formats the log entry using a Layout before sending it to the console, to a file, or to another destination. i
+		In addition, Filters let you further specify whether an Appender should be used for a specific log entry.
+Creating a new Logger
+	Create a new Logger object
+		Usually one logger per class, so it can be static
+		If a Logger with that name already exists, then that Logger is returned
+		Example:
+			private static Logger theLogger = Logger.getLogger(MyClass.class.getName());
+	Logger Naming
+		It is recommended ot use the fully qualified name of the class.
+		It should be in some sort of hierarchy when each level is separated with a dot.
+		The fully qualified class name provides this hierarchy
+Logging Events
+		Use the various methods on the Logger object
+		The logging API has a configuration file and by default, it provides a handler that will send logging messages, in the form of a LogRecord to the console (System.err).
+		.log(level, message)
+		.level(message) - convenient methods to create log msgs for the specified level
+		.logp() (log precise) lets you specify the source class and method for each log entry
+		.logrb() (log with resource bundle) lets you specify a resource bundle to extract logs from. 
+		.entering()
+		.exiting() methods let you log method calls for tracing the execution flow of your program.
+		Example:
+			theLogger.finest("Hello logging!");
+	Logging Levels
+		Description
+			Because we want to leave logging code in an application that goes into production, we need logging to cost us very little at runtime when it is not being used. 
+			To help achieve this, the logging system defines a class called Level to specify the importance of a logging record. 
+		Logging Levels:
+			SEVERE	The highest value; intended for extremely important messages (e.g. fatal program errors).
+			WARNING	Intended for warning messages.
+			INFO	Informational runtime messages. By default, only records at the Level.INFO level or higher will be logged to the console
+			CONFIG	Informational messages about configuration settings/setup.
+			FINE	Used for greater detail, when debugging/diagnosing problems.
+			FINER	Even greater detail.
+			FINEST	The lowest value; greatest detail.
+			ALL		Log everything
+			OFF		Turn of logging
+		Setting the Level for a Logger object
+			Set the log level specifying which message levels will be logged by this logger. 
+			Message levels lower than this value will be discarded. The level value Level.OFF can be used to turn off logging.
+			Example:
+				loggerObject.setLevel(Level.FINE)
+		Setting the level for a package 
+			We could set the logging level for a package, or even a set of packages by calling the LogManager.setLevel(String name, Level level) method. 
+			If a Logger's level was explicitely set, it will keep that level. To get the package's level, set it to null
+			Example: 
+				LogManager.getLogManager().setLevel("logging", Level.FINE); //set the logging level of all loggers to Level.FINE with package prefix 'logging'
+Handlers
+	When a record is logged to a Logger, that Logger actually delegates the output of the record to a subclass of the Handler class.
+	Each Handler has its own Level, in additon to the one for the Logger. The handler's level can be set as well
+	A logger can have multiple handlers. When logging, messages forwarded to all handlers
+	Adding a Handler
+		logger.addHandler(new ConsoleHandler());
+		or
+		Handler newHandler = new ConsoleHandler();
+		logger.addHandler(newHandler);
+	Removing a Handler
+		logger.remove(newHandler);
+	Types of Handlers
+		ConsoleHandler
+		FileHandler
+			The FileHandler writes all messages to file. 
+			This can either be a single file, or a set of rotated files. 
+			If rotated files are used, each file is filled to a certain size limit, after which a new file is created. Each file name is composed of a base name and a sequence number.
+			Filename Patterns
+							Code	Meaning
+				/	The file name separator of the system. Typically either \ or / .
+				%t	The temp directory of the system.
+				%h	The user home directory of the system.
+				%g	The generation number that distinguishes the rotated log files from each other.
+				%u	A unique number to avoid naming conflicts.
+				%%	A single percent sign, in case you want to use that in your file name.
+			Creating a FileHandler
+				FileHandler handler = new FileHandler(); //users the Configuration file propreties, save file to user home
+				FileHandler handler2 = new FileHandler("J:/logfilename.txt"); 
+				FileHandler handler3 = new FileHandler("myapp-log.%u.%g.txt", 1024 * 1024, 10, true); //pattern, filesize limit (1024*1024), file count, APPEND)
+				logger.addHandler(handler);
+Filters
+	Filters provide further control what records get logged. They can be attached to both Loggers and Handlers.
+	Example:
+		Logger -> Handler -> output
+			|		|
+		Filter	  Filter
+	The record must pass 
+		a) the Logger's level check, 
+		b) the Logger's Filter, 
+		c) the Handler's level check, 
+		d)  the Handler's Filter before it would actually be sent to the outside world. 
+	This allows things to start out simple (with no filters) and become more sophisticated as needed. 
+	To get at just the right information without altering the behavior of the program too much is the key to learning what needs to be known.
+	Create a filter
+		Filter filter = new MyFilterImpl();  //MyFilterImpl class must be implementing the Filter interface!
+		logger.setFilter(filter);
+Formatters
+	Predefinded formatters
+		SimpleFormatter
+		XMLFormatter
+	Creating custom formatters
+		Examples:
+			Handler ch = new consoleHandler();
+			ch.setFormatter(new XMLformatter());
+			Logger.addHandler(ch);
+			or
+			logger.addHandler(setFormatter(new MyFormatter));	//MyFormatter class must extend to Formatter
+		Simple Sample of a custom Formatter class
+			public class MyFormatter extends Formatter { @Override public String format(LogRecord record) { return  record.getLevel() + ":" + record.getMessage(); } } 
+LogRecord
+LogManager
+	In terms of logging levels, it allows us to set different logging levels for different "areas" of the program. 
+	To understand this, we need to think of our program as being broken down into different areas based on the package prefix of the classes involved
+Configuration
+	Configuration File
+		Standard property file with key:value pairs
+		C:\Program Files\Java\jdk1.8.0_101\jre\lib\logging.properties
+Logging Hierarchy and Record Forwarding
+	Once a particular Logger decides to log a LogRecord, the Logger not only passes it to any Handler(s) attached to it, but it also forwards the record to its parent Logger. 
+	The parent Logger does not perform a Level or Filter check, but instead forwards it to any attached Handler(s) and forwards it to its parent Logger. 
+	Eventually, the record reaches the root Logger. 
+	The root Logger has a ConsoleHandler that produces the output we see. 
+	Note that this forwarding behavior be controlled via the setUseParentHandlers(boolean) method in the Logger class.
+
+
+
+
+**3rd party Logging Frameworks**
+	Log4j, Logback, and tinylog. 
+	Other packages, such as SLF4J and Apache Commons Logging, provide abstraction layers which decouple your code from the underlying logging framework, allowing you to switch between logging frameworks.
+
+Abstraction Layers (SLF4J)
+	Abstraction layers such as SLF4J decouple your application from its logging framework. 
+	An application can choose to bind a specific logging framework (such as java.util.logging, Log4j, or Logback) at run time by including that framework on the application’s classpath. 
+	If a logging framework is not available on the classpath, the abstraction layer effectively disables log calls. 
+	Abstraction layers make it easier to change a project’s existing framework and to integrate projects that use different frameworks.
+
+
+
+Sources
+	Jenkov Tutorial - well structured and mid-level detailed tutorial on many aspects of Logging. Good entry point for logging
+		http://tutorials.jenkov.com/java-logging/logger.html
+	To be evaulated whether these are really good samples
+		https://stackoverflow.com/questions/5950557/good-examples-using-java-util-logging
+	Vogella Tutorial - simple examples without in-depth explanation. Not very useful. Good example of generating a custom HTML formatted output though. 
+		http://www.vogella.com/tutorials/Logging/article.html
+	Tutorialspoint tutorial on log4j
+		http://www.tutorialspoint.com/log4j/
+	Simple tutorial offers few example of basic logging, but doesn't go into details
+		http://www.onjava.com/pub/a/onjava/2002/06/19/log.html
+	Starts good, but then mixes Java logger api with other frameworks. Re-read it later
+		https://www.loggly.com/ultimate-guide/java-logging-basics/
