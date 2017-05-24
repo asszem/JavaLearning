@@ -135,5 +135,8 @@ public class HTMLFormatter_Sample extends Formatter {
 		classLogger.finest("Really not important");
 		System.out.println(classLogger.GLOBAL_LOGGER_NAME);
 		System.out.println(classLogger.getName());
+		classLogger.setLevel(Level.OFF);
+		//should not be added to the logger
+		classLogger.finest("After turning off");
 	}
 }

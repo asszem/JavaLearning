@@ -1,7 +1,4 @@
 TODO
-+ add the HTML formatter sample to src
-+ create the skeleton
-
 
 **JAVA LOGGING API**
 Concept 
