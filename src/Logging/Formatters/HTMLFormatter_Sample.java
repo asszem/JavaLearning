@@ -2,7 +2,7 @@
  * Modified to have separate setup methods for HTML / File formatter
  * Source: http://www.vogella.com/tutorials/Logging/article.html
  * */
-package Logging;
+package Logging.Formatters;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

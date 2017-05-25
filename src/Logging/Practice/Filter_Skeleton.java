@@ -1,4 +1,4 @@
-package Logging;
+package Logging.Practice;
 
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;

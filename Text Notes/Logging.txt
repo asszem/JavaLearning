@@ -1,5 +1,4 @@
 TODO
- 	+ add sample to read custom logging configuration from a properti file, based on this tutorial http://www.journaldev.com/977/logger-in-java-logging-example
 	+ add another formatter sample that prints out thread name and stuff from the tutorial http://www.journaldev.com/977/logger-in-java-logging-example
 	+ create a demo class with a for loop that generates 1000+ log messages
 	+ add logging to BankOps
@@ -139,10 +138,24 @@ LogManager
 	In terms of logging levels, it allows us to set different logging levels for different "areas" of the program. 
 	To understand this, we need to think of our program as being broken down into different areas based on the package prefix of the classes involved
 Configuration
-	The logging API has a configuration file and by default, it provides a handler that will send logging messages, in the form of a LogRecord to the console (System.err).
-	Configuration File
-		Standard property file with key:value pairs
-		C:\Program Files\Java\jdk1.8.0_101\jre\lib\logging.properties
+	The logging API has a configuration file which is a standard property file with key:value pairs.
+	Default Configuration File - logging.properties
+		Location 
+			(java jdk install dir)/jre/lib/logging.properties
+		Sample
+			C:\Program Files\Java\jdk1.8.0_101\jre\lib\logging.properties
+	Set custom configuration file
+		Example:
+			LogManager.getLogManager().readConfiguration(new FileInputStream("mylogging.properties"));
+	Formatting the configuratin file
+		The given LogRecord will be formatted as if by calling:
+			String.format(format, date, source, logger, level, message, thrown);
+								  $1	$2		$3		$4	   $5		$6
+		Example
+			java.util.logging.SimpleFormatter.format=%4$s: %5$s [%1$tc]%n
+			%4$s - level string
+			%5$s - message string
+			%1$tc - Date time c?
 Logging Hierarchy and Record Forwarding
 	Once a particular Logger decides to log a LogRecord, the Logger not only passes it to any Handler(s) attached to it, but it also forwards the record to its parent Logger. 
 	The parent Logger does not perform a Level or Filter check, but instead forwards it to any attached Handler(s) and forwards it to its parent Logger. 

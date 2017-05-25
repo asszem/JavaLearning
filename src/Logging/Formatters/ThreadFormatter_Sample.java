@@ -1,4 +1,4 @@
-package Logging;
+package Logging.Formatters;
 
 import java.util.Date;
 import java.util.logging.Formatter;
@@ -11,7 +11,7 @@ public class ThreadFormatter_Sample extends Formatter {
 		return "\n"+record.getThreadID()+"::"+record.getSourceClassName()+"::"
         +record.getSourceMethodName()+"::"
         +new Date(record.getMillis())+"::"
-        +record.getMessage()+"\n\n";
+        +record.getMessage()+"\n";
 	}
 
 }
