@@ -1,14 +1,19 @@
 TODO
+ 	+ add sample to read custom logging configuration from a properti file, based on this tutorial http://www.journaldev.com/977/logger-in-java-logging-example
+	+ add another formatter sample that prints out thread name and stuff from the tutorial http://www.journaldev.com/977/logger-in-java-logging-example
+	+ create a demo class with a for loop that generates 1000+ log messages
+	+ add logging to BankOps
 
 **JAVA LOGGING API**
 Concept 
 	Loggers: loggers are responsible for capturing events and passing them to the appropriate appender (handler).
 	Handlers (Appenders): handlers are responsible for recording log events to a destination. Handlers use layouts to format events before sending them to an output.
 	Formatters (Layouts): formatters are responsible for converting and formatting the data in a log event. Formatters determine how the data looks when it appears in a log entry.
-	Log flow: application -> logger -> handler  -> outside world
-		When a Logger records an event, it forwards it to the appropriate Appender. 
-		The Appender then formats the log entry using a Layout before sending it to the console, to a file, or to another destination. i
+	Log flow: application(log event command) -> (filter check) logger(level check) -> handler(level check)  -> (Formatter) -> outside world (log msg)
+		When a Logger records an event, it forwards it to the appropriate Appender(Handler)
+		The Appender then formats the log entry using a Layout before sending it to the console, to a file, or to another destination. 
 		In addition, Filters let you further specify whether an Appender should be used for a specific log entry.
+	A Logger can have multiple Handlers (with each handler have different set of level, for example print Finest to file but only severe to Console);
 Creating a new Logger
 	Create a new Logger object
 		Usually one logger per class, so it can be static
@@ -18,16 +23,15 @@ Creating a new Logger
 	Logger Naming
 		It is recommended ot use the fully qualified name of the class.
 		It should be in some sort of hierarchy when each level is separated with a dot.
-		The fully qualified class name provides this hierarchy
+		The fully qualified class name provides this hierarchy. But it does NOT create the parent loggers!
 Logging Events
-		Use the various methods on the Logger object
-		The logging API has a configuration file and by default, it provides a handler that will send logging messages, in the form of a LogRecord to the console (System.err).
-		.log(level, message)
-		.level(message) - convenient methods to create log msgs for the specified level
-		.logp() (log precise) lets you specify the source class and method for each log entry
-		.logrb() (log with resource bundle) lets you specify a resource bundle to extract logs from. 
-		.entering()
-		.exiting() methods let you log method calls for tracing the execution flow of your program.
+		Use the various methods on the Logger object to log an event. 
+			.log(level, message)
+			.level(message) - convenient methods to create log msgs for the specified level
+			.logp() (log precise) lets you specify the source class and method for each log entry
+			.logrb() (log with resource bundle) lets you specify a resource bundle to extract logs from. 
+			.entering()
+			.exiting() methods let you log method calls for tracing the execution flow of your program.
 		Example:
 			theLogger.finest("Hello logging!");
 	Logging Levels
@@ -57,7 +61,7 @@ Logging Events
 Handlers
 	When a record is logged to a Logger, that Logger actually delegates the output of the record to a subclass of the Handler class.
 	Each Handler has its own Level, in additon to the one for the Logger. The handler's level can be set as well
-	A logger can have multiple handlers. When logging, messages forwarded to all handlers
+	A logger can have multiple handlers. When logging, messages forwarded to all handlers if a Logger has multiple handlers.
 	Adding a Handler
 		logger.addHandler(new ConsoleHandler());
 		or
@@ -67,6 +71,7 @@ Handlers
 		logger.remove(newHandler);
 	Types of Handlers
 		ConsoleHandler
+			Prints the log message to the console
 		FileHandler
 			The FileHandler writes all messages to file. 
 			This can either be a single file, or a set of rotated files. 
@@ -84,10 +89,14 @@ Handlers
 				FileHandler handler2 = new FileHandler("J:/logfilename.txt"); 
 				FileHandler handler3 = new FileHandler("myapp-log.%u.%g.txt", 1024 * 1024, 10, true); //pattern, filesize limit (1024*1024), file count, APPEND)
 				logger.addHandler(handler);
+		StreamHandler
+		SocketHandler
+		MemoryHandler
 Filters
 	Filters provide further control what records get logged. They can be attached to both Loggers and Handlers.
+	The Filter can either accept or reject the message. If the message is accepted, the message is forwarded to the Handler's set on the Logger
 	Example:
-		Logger -> Handler -> output
+		Logger -> Handler(s) -> output
 			|		|
 		Filter	  Filter
 	The record must pass 
@@ -114,10 +123,23 @@ Formatters
 		Simple Sample of a custom Formatter class
 			public class MyFormatter extends Formatter { @Override public String format(LogRecord record) { return  record.getLevel() + ":" + record.getMessage(); } } 
 LogRecord
+	getLevel()
+	getLoggerName()
+	getMessage()
+	getMillis()
+	getParameters()
+	getResourceBundle()
+	getResourceBundleName()
+	getSequenceNumber()
+	getSourceClassName()
+	getSourceMethodName()
+	getThreadID()
+	getThrown()
 LogManager
 	In terms of logging levels, it allows us to set different logging levels for different "areas" of the program. 
 	To understand this, we need to think of our program as being broken down into different areas based on the package prefix of the classes involved
 Configuration
+	The logging API has a configuration file and by default, it provides a handler that will send logging messages, in the form of a LogRecord to the console (System.err).
 	Configuration File
 		Standard property file with key:value pairs
 		C:\Program Files\Java\jdk1.8.0_101\jre\lib\logging.properties
@@ -129,6 +151,13 @@ Logging Hierarchy and Record Forwarding
 	Note that this forwarding behavior be controlled via the setUseParentHandlers(boolean) method in the Logger class.
 
 
+root 				->	filter - Logger - Handler 
+									|
+com					->	filter - Logger - Handler 
+									|
+com.domain 			->	filter - Logger - Handler 
+									^
+com.domain.project 	->	filter - Logger	- Handler
 
 
 **3rd party Logging Frameworks**
@@ -156,3 +185,7 @@ Sources
 		http://www.onjava.com/pub/a/onjava/2002/06/19/log.html
 	Starts good, but then mixes Java logger api with other frameworks. Re-read it later
 		https://www.loggly.com/ultimate-guide/java-logging-basics/
+	Dinesh on Java - good summary with the same examples and includes reference to log4j with Maven dependencies
+		http://www.dineshonjava.com/2016/09/java-logging-framework-with-examples.html
+	Good example on how to read a custom logging-configuration file
+	http://www.journaldev.com/977/logger-in-java-logging-example

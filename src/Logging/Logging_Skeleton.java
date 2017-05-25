@@ -6,9 +6,11 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.XMLFormatter;
+import java.util.logging.Filter;
 
 public class Logging_Skeleton {
 
@@ -16,20 +18,30 @@ public class Logging_Skeleton {
 	private static Logger classLogger;
 	private static Formatter customFormatter;
 	private static Handler customHandler;
+	private static Filter customFilter;
 
-	// Instantiate the Logger, Handler and Formatter
+	// Instantiate a Logger with Handler, Formatter and Filter
 	public static void setupLogger(String filePattern) {
+		// Instantiate a Logger
 		classLogger = Logger.getLogger(Logging_Skeleton.class.getName()); // Update to actual class name
-		customFormatter = new SimpleFormatter();
-		// customFormatter = new XMLFormatter()
+
+		// Instantiate a Handler
 		try {
 			customHandler = new FileHandler(filePattern);
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
 		// customHandler = new ConsoleHandler();
-		customHandler.setFormatter(customFormatter);
 		classLogger.addHandler(customHandler);
+
+		// Instantiate and set Formatter for the Handler (not the Logger)!
+		customFormatter = new SimpleFormatter();
+		// customFormatter = new XMLFormatter()
+		customHandler.setFormatter(customFormatter);
+
+		// Instantiate and set filter
+		customFilter = new CustomFilterSkeleton();
+		classLogger.setFilter(customFilter);
 	}
 
 	// suppress the logging output to the console
@@ -49,7 +61,7 @@ public class Logging_Skeleton {
 	}
 
 	// Create a FileHandler
-	public static Handler createFileHandler(String pattern, boolean appendable){
+	public static Handler createFileHandler(String pattern, boolean appendable) {
 		try {
 			return new FileHandler(pattern, appendable);
 		} catch (SecurityException e) {
@@ -73,14 +85,36 @@ public class Logging_Skeleton {
 	}
 
 	public static void main(String[] args) {
-		setupLogger("J:/Logging_skeleton.txt");
+		setupLogger("J:/Logs/Logging_skeleton.txt");
 		classLogger.setLevel(Level.INFO);
 		classLogger.info("This is an INFO");
 		suppressConsole();
 		classLogger.severe("This is an INFO");
+		classLogger.severe("This is an INFO filtered");  // should not be displayed
 		classLogger.setLevel(Level.OFF);
 		classLogger.severe("This is an INFO");
 
+	}
+
+}
+
+class CustomFormatterSkeleton extends Formatter {
+
+	@Override
+	public String format(LogRecord record) {
+		return record.getLevel() + ":" + record.getMessage() + "\n";
+	}
+}
+
+class CustomFilterSkeleton implements Filter {
+
+	@Override
+	public boolean isLoggable(LogRecord record) {
+		if (record.getMessage().contains("filtered")) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 }
