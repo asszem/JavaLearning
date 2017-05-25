@@ -8,7 +8,7 @@ import java.util.Date;
  *
  * @author András
  */
-public class SimpleDateFormatParse_Demo {
+public class SimpleDateFormatParseFromString_Demo {
 
 	Date myDate;
 	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -27,8 +27,29 @@ public class SimpleDateFormatParse_Demo {
 	}
 
 	public static void main(String[] args) {
-		SimpleDateFormatParse_Demo dmObject = new SimpleDateFormatParse_Demo();
+		SimpleDateFormatParseFromString_Demo dmObject = new SimpleDateFormatParseFromString_Demo();
 		dmObject.parseDate("12/30/1999");
+
+		SimpleDateFormat sdf2 = new SimpleDateFormat("YYYY-MM-dd, hh:mm");
+		System.out.println(sdf2.format(new Date()));
+		/*
+		 * PATTERNS http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
 	}
 
 }

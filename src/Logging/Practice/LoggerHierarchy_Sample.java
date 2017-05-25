@@ -19,7 +19,7 @@ public class LoggerHierarchy_Sample {
 	}
 
 	public static void main(String[] args) {
-		Logger rootLogger = Logger.getLogger("");  // Creates a root logger
+		Logger rootLogger = Logger.getLogger("");  // Creates a root bankLogger
 		Logger logger1 = Logger.getLogger("1");
 		Logger logger1_2 = Logger.getLogger("1.2");
 		Logger logger1_2_1 = Logger.getLogger("1.2.1");
@@ -33,7 +33,7 @@ public class LoggerHierarchy_Sample {
 		Handler logger1Handler=new ConsoleHandler();
 		logger1.addHandler(logger1Handler);
 		Handler[] rootHandlers = rootLogger.getHandlers();
-		System.out.println("Root logger Handlers: "+rootHandlers.length);
+		System.out.println("Root bankLogger Handlers: "+rootHandlers.length);
 		printHandlers(rootHandlers);
 		Handler[] handlers1 = logger1.getHandlers();
 		System.out.println("logger1 Handlers:"+handlers1.length);

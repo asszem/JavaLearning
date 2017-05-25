@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 public class CustomLoggerProperties_Sample {
 
 	public static void main(String[] args) {
-		// Open a custom logger setup
+		// Open a custom bankLogger setup
 		try {
 			LogManager.getLogManager()
 					.readConfiguration(new FileInputStream("J:/Logs/AndrasCustomLoggingSetup.properties"));

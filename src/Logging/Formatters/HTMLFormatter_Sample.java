@@ -20,7 +20,7 @@ import practiceAndTry.classLearning;
 
 public class HTMLFormatter_Sample extends Formatter {
 
-	// Setup static logger for the class
+	// Setup static bankLogger for the class
 	private static Logger classLogger;
 	private static Formatter htmlFormatter;
 	private static Formatter simpleTxtFormatter;
@@ -86,7 +86,7 @@ public class HTMLFormatter_Sample extends Formatter {
 		return "</table>\n</body>\n</html>";
 	}
 
-	// Setup the HTML logger for the class, suppress all ConsoleHandlers
+	// Setup the HTML bankLogger for the class, suppress all ConsoleHandlers
 	public static void setupHTMLLogger(String logFilePattern) {
 		classLogger = Logger.getLogger(HTMLFormatter_Sample.class.getName());
 		htmlFormatter = new HTMLFormatter_Sample();
@@ -100,14 +100,14 @@ public class HTMLFormatter_Sample extends Formatter {
 		supressConsoleHandler();
 	}
 
-	// Setup the SIMPLE file text logger for the class, suppress all ConsoleHandlers
+	// Setup the SIMPLE file text bankLogger for the class, suppress all ConsoleHandlers
 	public static void setupFileTxtLogger(String logFilePattern) {
-		classLogger = Logger.getLogger(HTMLFormatter_Sample.class.getName());					// Get a logger
+		classLogger = Logger.getLogger(HTMLFormatter_Sample.class.getName());					// Get a bankLogger
 		simpleTxtFormatter = new SimpleFormatter(); // Defined in java.util.logging //Get a formatter
 		try {
 			simpleTxtHandler = new FileHandler(logFilePattern);									// Get a handler
 			simpleTxtHandler.setFormatter(simpleTxtFormatter);									// Assign formatter to handler
-			classLogger.addHandler(simpleTxtHandler);											// Assign handler to logger
+			classLogger.addHandler(simpleTxtHandler);											// Assign handler to bankLogger
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
@@ -137,7 +137,7 @@ public class HTMLFormatter_Sample extends Formatter {
 		System.out.println(classLogger.getName());
 		System.out.println(classLogger.getParent().getName());
 		classLogger.setLevel(Level.OFF);
-		//should not be added to the logger
+		//should not be added to the bankLogger
 		classLogger.finest("After turning off");
 	}
 }

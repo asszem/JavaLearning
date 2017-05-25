@@ -83,7 +83,7 @@ public class Logging_Collection {
 		// %u A unique number to avoid naming conflicts.
 		// %% A single percent sign, in case you want to use that in your file name.
 		// FileHandler handler3 = new FileHandler("myapp-log.%u.%g.txt", 1024 * 1024, 10, true); //pattern, filesize limit (1024*1024), file count, APPEND)
-		// logger.addHandler(handler);
+		// bankLogger.addHandler(handler);
 	}
 
 	// Read a custom configuration properties file with LogManager

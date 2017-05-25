@@ -6,10 +6,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class UsingExecutors {
 
+	private static final Logger executorLogger = Logger.getLogger(UsingExecutors.class.getName());
+
 	public static void main(String[] args) {
+		BankLogger.setupLogging("J:/Logs/BankOpsLogs/BankOpsLogSetup.properties", "J:/Logs/BankOpsLogs/Logfiles/Logfile_");
+		executorLogger.info("Program started...");
 		int[] initialBalance = { 500, 800 };                               // The initial account balances
 		int[] totalCredits = new int[initialBalance.length];             // Two different cr totals
 		int[] totalDebits = new int[initialBalance.length];              // Two different db totals
@@ -35,9 +40,10 @@ public class UsingExecutors {
 		// Create and start the transaction source threads
 		Future<int[]> credits = threadPool
 				.submit(new TransactionSource(TransactionType.CREDIT, transactionCount, accounts, clerks));
+		executorLogger.info("Credit transactions created");
 		Future<int[]> debits = threadPool
 				.submit(new TransactionSource(TransactionType.DEBIT, transactionCount, accounts, clerks));
-
+		executorLogger.info("debit transactions created");
 		// Create and start the clerk threads
 		for (Clerk clerk : clerks) {
 			threadPool.submit(clerk);

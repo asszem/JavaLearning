@@ -16,7 +16,7 @@ public class Logging_Sample {
 
 	private static Logger theLogger = Logger.getLogger(Logging_Sample.class.getName());
 
-	private static Logger theAnotherLogger = Logger.getLogger("This is the logger's name");
+	private static Logger theAnotherLogger = Logger.getLogger("This is the bankLogger's name");
 
 	public static void main(String[] args) {
 		
@@ -29,7 +29,7 @@ public class Logging_Sample {
 			e.printStackTrace();
 		}
 
-		// The root logger's handlers default to INFO. We have to
+		// The root bankLogger's handlers default to INFO. We have to
 		// crank them up. We could crank up only some of them
 		// if we wanted, but we will turn them all up.
 		Handler[] handlers = Logger.getLogger("").getHandlers(); //"" is the top of hierarchy
@@ -39,7 +39,7 @@ public class Logging_Sample {
 				handlers[index].setFormatter(new MyFormatter());
 			}
 		}
-		// We also have to set our logger to log finer-grained messages
+		// We also have to set our bankLogger to log finer-grained messages
 		theLogger.setLevel(Level.FINER);
 		Logging_Sample hello = new Logging_Sample("Hello world!");
 
@@ -63,7 +63,7 @@ public class Logging_Sample {
 		// use the 'least important' type of message, one at the 'finest' level.
 		theLogger.finest("Hello finest logging!"); // finest log level won't go to console
 		theLogger.info("Log level: info");
-		theAnotherLogger.info("Log from Another logger at INFO level");
+		theAnotherLogger.info("Log from Another bankLogger at INFO level");
 		System.err.println(theMessage);
 	}
 }
