@@ -41,7 +41,7 @@ public class ListPointAndras {
 		return "[" + actualPoint + "], Hashcode: "+objId;
 	}
 
-//for testing purposes only, the real main() will be called from  XXX
+//for testing purposes only, the real main() will be called from  
 	public static void main(String[] args) {
 		Point testPoint = new Point(10, 20);
 		ListPointAndras a = new ListPointAndras(testPoint);

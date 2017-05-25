@@ -14,7 +14,7 @@ public class Ex3_Andras {
 	public static int[] getBirthdateFromKeyboard() {
 		int[] date = new int[3];
 		System.out.println("Enter birth year:");
-		date[0] = getIntKeyboardInput(); // TODO inut date validation
+		date[0] = getIntKeyboardInput(); // TODO input date validation
 		System.out.println("Enter birth month:");
 		date[1] = getIntKeyboardInput();
 		System.out.println("Enter birth day:");

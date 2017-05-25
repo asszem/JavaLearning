@@ -31,7 +31,6 @@ public class StringBufferBuilder implements Runnable {
 				appendBuilder(String.valueOf(counter));
 				appendBuffer(String.valueOf(counter));
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			counter++;

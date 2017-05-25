@@ -507,11 +507,7 @@ public class GetPermutations {
 		X X X
 
 		Result Array
-		ABC XXX
-		ABD XXX
-		ABE XXX
-		ABF XXX
-
+		
 	
 	
 

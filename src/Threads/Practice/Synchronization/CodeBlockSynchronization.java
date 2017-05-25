@@ -28,7 +28,6 @@ public class CodeBlockSynchronization implements Runnable{
 		try {
 			Thread.sleep(25);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 //		System.out.println(instance.text);

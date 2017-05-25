@@ -63,7 +63,6 @@ public class Scanner_Samples {
 		try (Scanner anotherFileScanner=getAFileScanner(file, Charset.defaultCharset(), Locale.ENGLISH);
 ){
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

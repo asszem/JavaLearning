@@ -22,7 +22,6 @@ public class ThreadRace_Demo implements Runnable {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -38,7 +37,6 @@ public class ThreadRace_Demo implements Runnable {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -53,7 +51,6 @@ public class ThreadRace_Demo implements Runnable {
 		try {
 			Thread.sleep(100); // sleeping main() giving advantage to the first two threads
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ThreadRace_Demo threadTwo = new ThreadRace_Demo();

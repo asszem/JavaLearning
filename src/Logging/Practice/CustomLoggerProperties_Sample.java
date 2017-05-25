@@ -13,7 +13,6 @@ public class CustomLoggerProperties_Sample {
 			LogManager.getLogManager()
 					.readConfiguration(new FileInputStream("J:/Logs/AndrasCustomLoggingSetup.properties"));
 		} catch (SecurityException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

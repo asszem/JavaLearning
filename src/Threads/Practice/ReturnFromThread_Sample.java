@@ -19,7 +19,6 @@ public class ReturnFromThread_Sample {
 		try {
 			System.out.println(future.get());
 		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Future<?> runnableThread = threadPool.submit(new runnableClass2());

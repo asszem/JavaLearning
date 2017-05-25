@@ -16,7 +16,6 @@ public class Deadlock_sample {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				//Call object2's method
@@ -35,7 +34,6 @@ public class Deadlock_sample {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				//Call object2's methodOne
@@ -54,7 +52,6 @@ public class Deadlock_sample {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

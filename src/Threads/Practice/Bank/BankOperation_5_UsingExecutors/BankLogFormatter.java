@@ -20,7 +20,7 @@ public class BankLogFormatter extends Formatter {
 	}
 	
 	public static String formatDate(Date date){
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, hh:mm:ss");
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, EEEE hh:mm:ss");
 		return sdf.format(date);
 	}
 

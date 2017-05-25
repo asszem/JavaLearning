@@ -32,7 +32,6 @@ public class Implementing_Callable_Sample<V> implements Callable<V>{
 			try {
 				System.out.println(thread.get());
 			} catch (InterruptedException | ExecutionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
