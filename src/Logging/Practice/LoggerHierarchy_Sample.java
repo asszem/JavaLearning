@@ -24,7 +24,7 @@ public class LoggerHierarchy_Sample {
 		Logger logger1_2 = Logger.getLogger("1.2");
 		Logger logger1_2_1 = Logger.getLogger("1.2.1");
 		
-		System.out.println("Loggers hierarchy");
+		System.out.println("LoggerSetup hierarchy");
 		System.out.println("Parent of 1=" + logger1.getParent().getName());
 		System.out.println("Parent of 1.2=" + logger1_2.getParent().getName());
 		System.out.println("Parent of 1.2.1=" + logger1_2_1.getParent().getName());

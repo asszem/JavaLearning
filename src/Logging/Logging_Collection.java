@@ -48,7 +48,7 @@ public class Logging_Collection {
 
 	// suppress the logging output to the console
 	public static void suppressConsole() {
-		Logger rootLogger = Logger.getLogger("");
+		Logger rootLogger = Logger.getLogger("");					//Gets the root or global logger
 		Handler[] handlers = rootLogger.getHandlers();
 		if (handlers.length > 0) {									// If the handler has already been removed
 			if (handlers[0] instanceof ConsoleHandler) {

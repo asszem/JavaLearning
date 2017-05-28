@@ -1,7 +1,4 @@
 TODO
-	+ add another formatter sample that prints out thread name and stuff from the tutorial http://www.journaldev.com/977/logger-in-java-logging-example
-	+ create a demo class with a for loop that generates 1000+ log messages
-	+ add logging to BankOps
 
 **JAVA LOGGING API**
 Concept 
@@ -13,6 +10,7 @@ Concept
 		The Appender then formats the log entry using a Layout before sending it to the console, to a file, or to another destination. 
 		In addition, Filters let you further specify whether an Appender should be used for a specific log entry.
 	A Logger can have multiple Handlers (with each handler have different set of level, for example print Finest to file but only severe to Console);
+	All loggers in every class will use the default properties set in the logging.properties file unless other properties file is read
 Creating a new Logger
 	Create a new Logger object
 		Usually one logger per class, so it can be static
@@ -188,7 +186,13 @@ Abstraction Layers (SLF4J)
 	If a logging framework is not available on the classpath, the abstraction layer effectively disables log calls. 
 	Abstraction layers make it easier to change a project’s existing framework and to integrate projects that use different frameworks.
 
-
+Reading log files with grep
+	General format
+		grep pattern file
+	Get lines before-after results
+		grep pattern file -A3 -B2
+	Example
+		grep ThreadID=14 J:\Logs\BankOpsLogs\ThreadPrioritiesLogfiles\ClerkOperations.log -A3
 
 Sources
 	Jenkov Tutorial - well structured and mid-level detailed tutorial on many aspects of Logging. Good entry point for logging

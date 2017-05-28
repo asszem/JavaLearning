@@ -28,7 +28,7 @@ public class BankLogger {
 		// Default logging level: info
 		// Default handler level: info
 		// Default handler: filehandler
-		// Default format: BankLogFormatter
+		// Default format: ThreadPrioritiesBankLogFormatter
 		readCustomConfiguration(configFilePath);
 		try {
 			BankClassFineHandler = new FileHandler(bankLoggerFileName + "Bank_class_fine.log");

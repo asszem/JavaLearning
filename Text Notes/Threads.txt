@@ -148,6 +148,25 @@ Executors
 			isShutdown()
 				Returns true if the executor service object is shutdown
 
+Thread priority
+	All threads have a priority that determines which thread is executed when several threads are waiting for their turn
+	The possible values for thread priority are defined in static data members of the class Thread. 
+		MAX_PRIORITY=10, NORM_PRIORITY=5, MIN_PRIORITY=1
+	When you create a thread, its priority is the same as that of the thread that created it.
+		.setPriority(level) / getPriority()
+	You need to keep in mind that the actual execution priority of a thread that you set by calling setPriority() depends
+		on the mapping between Java thread priorities 
+		and the native operating system priorities. 
+	The thread scheduling algorithm that your operating system uses also affects how your Java threads execute and what proportion of the processor time they are allocated.
+	Make sure you set the priority in the run() / call() method and not in the constructor which is called from the main() method!
+
+
+
+
+
+
+
+
 TreadRace_Demo
 	Running 3 threads (including main) parallel with same task will produce unpredictable completion order. Because we can't control how the Java scheduler assigns RUNNING status to threads
 
