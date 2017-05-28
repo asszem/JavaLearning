@@ -34,13 +34,14 @@ public class TransactionSource implements Callable<int[][]> {
 			// Generate a random account index for operation
 			accountSelect = rand.nextInt(accounts.size());
 			amount = 50 + rand.nextInt(26);                                  // Generate amount of $50 to $75
-			if (rand.nextBoolean()) {
-//				System.out.println("Creating a Credit type transaction source");
-				this.type = TransactionType.CREDIT;
-			} else {
-//				System.out.println("Creating a Debit type transaction source");
-				this.type = TransactionType.DEBIT;
-			}
+//			if (rand.nextBoolean()) {
+////				System.out.println("Creating a Credit type transaction source");
+//				this.type = TransactionType.CREDIT;
+//			} else {
+////				System.out.println("Creating a Debit type transaction source");
+//				this.type = TransactionType.DEBIT;
+//			}
+			this.type=rand.nextBoolean()?TransactionType.CREDIT:TransactionType.DEBIT;
 			transaction = new Transaction(accounts.get(accountSelect),              // Account
 					type,                              						 // Transaction type
 					amount);                          						 // of amount
