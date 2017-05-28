@@ -13,7 +13,7 @@ public class ThreadFormatter_Sample extends Formatter {
 	}
 
 	public static String formatType2(LogRecord record) {
-		return "ThreadID=" + record.getThreadID() 
+		return "ThreadName=" + Thread.currentThread().getName() 
 				+ " :: Class=" + record.getSourceClassName().substring(record.getSourceClassName().lastIndexOf(".") + 1)
 				+ " :: Method=" + record.getSourceMethodName()
 				+ " :: Date=" + formatDate(new Date(record.getMillis()))
@@ -30,7 +30,7 @@ public class ThreadFormatter_Sample extends Formatter {
 
 	@Override
 	public String format(LogRecord record) {
-		return formatType1(record);
+		return formatType2(record);
 	}
 
 }

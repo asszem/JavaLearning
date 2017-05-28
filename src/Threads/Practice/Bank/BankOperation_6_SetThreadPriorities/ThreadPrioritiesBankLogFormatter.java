@@ -9,7 +9,7 @@ public class ThreadPrioritiesBankLogFormatter extends Formatter {
 
 	@Override
 	public String format(LogRecord record) {
-		return "ThreadID=" + record.getThreadID() 
+		return "ThreadName=" + Thread.currentThread().getName()
 				+ " :: Priority="+Thread.currentThread().getPriority()
 				+ " :: Date=" + formatDate(new Date(record.getMillis()))
 				+ "\n"

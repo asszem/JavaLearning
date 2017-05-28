@@ -46,9 +46,23 @@ public class Logging_Collection {
 		classLogger.setFilter(customFilter);
 	}
 
-	// suppress the logging output to the console
+	// Create a FileHandler that logs FINE details using ThreadFormatter_Sample
+	public static void newFineFileHandler(String filePattern, Logger logger) {
+		Handler fileHandler;
+		try {
+			fileHandler = new FileHandler(filePattern);
+			logger.addHandler(fileHandler);
+			fileHandler.setFormatter(new Logging.Formatters.ThreadFormatter_Sample());
+			fileHandler.setLevel(Level.FINE);
+			logger.setLevel(Level.FINE); //this sets the level only for the logger, but not for the root logger
+		} catch (SecurityException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// remove the consolehandler of rootlogger to suppress the logging output to the console
 	public static void suppressConsole() {
-		Logger rootLogger = Logger.getLogger("");					//Gets the root or global logger
+		Logger rootLogger = Logger.getLogger("");					// Gets the root or global logger
 		Handler[] handlers = rootLogger.getHandlers();
 		if (handlers.length > 0) {									// If the handler has already been removed
 			if (handlers[0] instanceof ConsoleHandler) {
@@ -89,15 +103,14 @@ public class Logging_Collection {
 	// Read a custom configuration properties file with LogManager
 	public static void readCustomConfiguration(String configPath) {
 		try {
-			LogManager.getLogManager()
-					.readConfiguration(new FileInputStream(configPath));
+			LogManager.getLogManager().readConfiguration(new FileInputStream(configPath));
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args) {
-//		readCustomConfiguration("J:/Logs/AndrasCustomLoggingSetup.properties");
+		// readCustomConfiguration("J:/Logs/AndrasCustomLoggingSetup.properties");
 		readCustomConfiguration("J:/Logs/BankOpsLogSetup.properties");
 		setupLogger("J:/Logs/Logging_skeleton.txt");
 		classLogger.setLevel(Level.INFO);

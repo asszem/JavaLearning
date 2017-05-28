@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class TransactionSource implements Callable<int[]> {
 
-	protected static final Logger logger = Logger.getLogger(TransactionSource.class.getName());
+	public static final Logger logger = Logger.getLogger(TransactionSource.class.getName());
 	private TransactionType type;
 	private int maxTrans;
 	private Vector<Account> accounts;
@@ -31,8 +31,6 @@ public class TransactionSource implements Callable<int[]> {
 
 	// The source of transactions
 	public int[] call() {
-		String transactionHandlerFile="J:/Logs/BankOpsLogs/ThreadPrioritiesLogfiles/TransactionSource.log";
-		LoggerSetup.addFileHandler(transactionHandlerFile, Level.FINE, logger);
 		logger.info(String.format("%s type transaction thread started. Priority=%d", type, priority));
 		Thread.currentThread().setPriority(priority);                      // Set the priority for this thread
 		// Create transactions randomly distributed between the accounts

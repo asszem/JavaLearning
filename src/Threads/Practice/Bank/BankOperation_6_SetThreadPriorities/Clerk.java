@@ -1,8 +1,6 @@
 package Threads.Practice.Bank.BankOperation_6_SetThreadPriorities;
 
 import java.util.List;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -16,13 +14,7 @@ public class Clerk implements Runnable {
 			Collections.synchronizedList(new LinkedList<Transaction>());
 	private int maxTransactions = 8;                                     // Maximum transactions in the in-tray
 
-	private static final Logger logger = Logger.getLogger(Clerk.class.getName());
-
-	// Inicialize logger so when the assingTransactionToClerk method is called, the logger setup will be already completed
-	{
-		String clerksHandlerFile = "J:/Logs/BankOpsLogs/ThreadPrioritiesLogfiles/ClerkOperations.log";
-		LoggerSetup.addFileHandler(clerksHandlerFile, Level.FINE, logger);
-	}
+	public static final Logger logger = Logger.getLogger(Clerk.class.getName());
 
 	// Constructor
 	public Clerk(int ID, Bank theBank, int priority) {

@@ -13,14 +13,13 @@ public class SettingThreadPriorities {
 	private static final Logger mainLogger = Logger.getLogger(SettingThreadPriorities.class.getName());
 
 	public static void main(String[] args) {
-		String logConfigFile = "J:/Logs/BankOpsLogs/ThreadPriorities.properties";
-		LoggerSetup.setCustomDefaultLoggingConfiguration(logConfigFile);
+		LoggerSetup.startLogging();
 		mainLogger.info("Main execution started");
 		int[] initialBalance = { 500, 800 };                             // The initial account balances
 		int[] totalCredits = new int[initialBalance.length];             // Two different cr totals
 		int[] totalDebits = new int[initialBalance.length];              // Two different db totals
 		int transactionCount = 5;                                       // Number of debits and of credits
-		int clerkCount = 2;
+		int clerkCount = 4;
 
 		// Create the account, the bank, and the clerks...
 		Bank theBank = new Bank();                                       // Create a bank
@@ -79,11 +78,13 @@ public class SettingThreadPriorities {
 
 		// Now output the results
 		for (int i = 0; i < accounts.size(); ++i) {
-			System.out.println("Account Number:" + accounts.get(i).getAccountNumber() + "\n" + "Original balance    : $"
+			String result="Account Number:" + accounts.get(i).getAccountNumber() + "\n" + "Original balance    : $"
 					+ initialBalance[i] + "\n" + "Total credits       : $" + totalCredits[i] + "\n"
 					+ "Total debits        : $" + totalDebits[i] + "\n" + "Final balance       : $"
 					+ accounts.get(i).getBalance() + "\n" + "Should be           : $"
-					+ (initialBalance[i] + totalCredits[i] - totalDebits[i]) + "\n");
+					+ (initialBalance[i] + totalCredits[i] - totalDebits[i]) + "\n";
+			System.out.println(result);
+			mainLogger.info(result);
 		}
 
 		mainLogger.info("Main execution completed");

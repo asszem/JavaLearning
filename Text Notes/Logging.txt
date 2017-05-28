@@ -53,8 +53,6 @@ Logging Events
 		Setting the level for a package 
 			We could set the logging level for a package, or even a set of packages by calling the LogManager.setLevel(String name, Level level) method. 
 			If a Logger's level was explicitely set, it will keep that level. To get the package's level, set it to null
-			Example: 
-				LogManager.getLogManager().setLevel("logging", Level.FINE); //set the logging level of all loggers to Level.FINE with package prefix 'logging'
 Handlers
 	When a record is logged to a Logger, that Logger actually delegates the output of the record to a subclass of the Handler class.
 	Each Handler has its own Level, in additon to the one for the Logger. The handler's level can be set as well
