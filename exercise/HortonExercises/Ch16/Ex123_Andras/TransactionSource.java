@@ -36,7 +36,6 @@ public class TransactionSource implements Callable<int[][]> {
 		int amount = 0;                                                    // Stores an amount of money
 		int accountSelect = 0;                                             // Selects an account
 		int nextSupervisor = 0;
-		boolean done = false;
 		for (int i = 1; i <= maxTrans; ++i) {
 			// Generate a random account index for operation
 			accountSelect = rand.nextInt(accounts.size());
@@ -61,33 +60,19 @@ public class TransactionSource implements Callable<int[][]> {
 			if (this.type == TransactionType.DEBIT) {
 				accountTotalCreditDebit[accountSelect][DEBIT_INDEX] += amount;  // Keep total tally for debits/account
 			}
-			done = false;
 
 			// Assign the transaction to the next available supervisor
 			// There is no limit how much transaction a supervisor can accept. Clerks have limits
 			supervisors.get(nextSupervisor).assignTransactionToSupervisor(transaction);
+			logger.fine("Transaction assigned to supervisor:"+supervisors.get(nextSupervisor).supervisorID);
 			if (++nextSupervisor >= supervisors.size()) {
 				nextSupervisor = 0;
 			}
 
-			while (true) {
-				// The supervisor will find the next clerk he can assign the transaction to
-				for (Clerk clerk : clerks) {
-					if (done = clerk.assignTransactionToClerk(transaction))
-						break;
-				}
-				if (done) {
-					break;
-				}
-
-				// No clerk was free so wait a while
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					System.out.println(" TransactionSource\n" + e);
-					return accountTotalCreditDebit;
-				}
-			}
+			//The supervisor should assign the transaction to one of it's available clerks
+			
+			
+			
 			if (Thread.interrupted()) {
 				System.out.println("Interrupt flag for " + type + " transaction source set. Terminating.");
 				return accountTotalCreditDebit;

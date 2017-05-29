@@ -34,6 +34,7 @@ public class UsingExecutors {
 	public static void main(String[] args) {
 		LoggerSetup.startLogging();
 		int[] initialBalance = { 500, 800 };                    // The initial account balances
+//		int[] initialBalance = { 500 };                    // The initial account balances
 		int accountCount = initialBalance.length;
 		int[] totalCredits = new int[accountCount];             // For each account get a total of credits
 		int[] totalDebits = new int[accountCount];              // For each account get a total of debits
@@ -56,7 +57,7 @@ public class UsingExecutors {
 		int nextSupervisor = 0; // Each clerk will have the next available supervisor
 		for (int i = 0; i < clerkCount; ++i) {
 			clerks.add(new Clerk(i + 1, theBank, supervisors.get(nextSupervisor)));  // Add supervisor to clerk
-			supervisors.get(nextSupervisor).myClerks.add(clerks.get(i)); 	// Add clerk to the supervisor
+			supervisors.get(nextSupervisor).clerksUnderThisSupervisor.add(clerks.get(i)); 	// Add clerk to the supervisor
 			if (++nextSupervisor >= supervisorCount)  // reset the supervisors to the first one if all assigned
 				nextSupervisor = 0;
 		}
@@ -73,6 +74,7 @@ public class UsingExecutors {
 
 		// 1. Create the arbitrary number of transaction source objects
 		int transactionSourcesCount = (int) (Math.random() * 10) + 1; // min1, max 10 Transaction source objects
+//		int transactionSourcesCount=1;	//Temporarily remove the random factor
 		TransactionSource[] transactionSourcePool = new TransactionSource[transactionSourcesCount];
 		for (int i = 0; i < transactionSourcesCount; i++) {
 			transactionSourcePool[i] = new TransactionSource(transactionCount, accounts, clerks, supervisors);
@@ -88,13 +90,11 @@ public class UsingExecutors {
 		for (int i = 0; i < supervisorCount; i++) {
 			supervisorThreadResults.add(threadPool.submit(supervisors.get(i)));
 		}
-		logger.info("Supervisor threads started");
 
 		// Create and start the clerk threads
 		for (Clerk clerk : clerks) {
 			threadPool.submit(clerk);
 		}
-		logger.info("Clerks threads started");
 		try {
 			// Get the total of credits/debits for each account for each transaction source
 			for (int currentAccountIndex = 0; currentAccountIndex < accountCount; currentAccountIndex++) {
@@ -132,9 +132,9 @@ public class UsingExecutors {
 		displaySupervisors.append("Supervisors\n");
 		for (int i = 0; i < supervisorCount; i++) {
 			displaySupervisors.append("\tClerks of Supervisor #" + i + "\n");
-			for (int k = 0; k < supervisors.get(i).myClerks.size(); k++) {
+			for (int k = 0; k < supervisors.get(i).clerksUnderThisSupervisor.size(); k++) {
 				displaySupervisors
-						.append(String.format("\tClerk #%d ID:%s%n", k, supervisors.get(i).myClerks.get(k).ID));
+						.append(String.format("\tClerk #%d ID:%s%n", k, supervisors.get(i).clerksUnderThisSupervisor.get(k).ID));
 			}
 			displaySupervisors.append("\n");
 		}
