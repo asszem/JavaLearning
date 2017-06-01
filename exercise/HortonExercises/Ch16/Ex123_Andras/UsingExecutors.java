@@ -33,7 +33,7 @@ public class UsingExecutors {
 
 	public static void main(String[] args) {
 		LoggerSetup.startLogging();
-		int[] initialBalance = { 500, 800 };                    // The initial account balances
+		int[] initialBalance = { 500, 800, 1000, 1200 };                    // The initial account balances
 //		int[] initialBalance = { 500 };                    // The initial account balances
 		int accountCount = initialBalance.length;
 		int[] totalCredits = new int[accountCount];             // For each account get a total of credits

@@ -68,7 +68,6 @@ public class Supervisor implements Callable<Integer> {
 		logger.fine("Supervisor thread started");
 		Random rnd = new Random();
 		Integer timeDelay = rnd.nextInt(600) + 100;		// Random number between 100 and 500
-		// TODO If sleep(50) is set it works, if timeDelay is used, it doesnt give proper result. Investigate why
 		try {
 			Thread.sleep(timeDelay);
 		} catch (InterruptedException e) {
