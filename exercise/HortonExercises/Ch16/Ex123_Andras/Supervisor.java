@@ -29,49 +29,65 @@ public class Supervisor implements Callable<Integer> {
 		transactionsToAssign.add(transaction);
 	}
 
+	// If a clerk is refusing a transaction, because her plate is full, try other available clerks
 	public void assignTransactionToClerk(Transaction transaction) {
 
-		boolean done = false;
+		boolean isTransactionAssignedToAClerk = false;
 		while (true) { // Run as long as all transactions have been reported as completed
 			// The supervisor will find the next clerk he can assign the transaction to
 
 			for (Clerk clerk : clerksUnderThisSupervisor) {
-				if (done = clerk.assignTransactionToClerk(transaction)) {
-//					logger.fine(String.format("Transaction %s assigned to Clerk %s by %s and it is DONE.",
-//							transaction.getTransactionId(), clerk.ID, supervisorID));
+				// Return true if transaction is accepted by a clerk, or false, if not
+				if (isTransactionAssignedToAClerk = clerk.assignTransactionToClerk(transaction)) {
+					// logger.fine(String.format("Transaction %s assigned to Clerk %s by %s and it is DONE.",
+					// transaction.getTransactionId(), clerk.ID, supervisorID));
 					break;
-				}// break from for
+				}// break from for loop, we have found a clerk who has accepted the transaction
+				logger.info("Clerk " + clerk.ID + " did not accept transaction. Let's try the next one");
 			}
-			if (done) {
+			// If this point is reached, a clerk must have accepted the transaction
+			if (isTransactionAssignedToAClerk) {
 				break; // Break from while
 			}
 
-			// No clerk was free so wait a while
+			// If this point is reached, no clerk accepted the transaction
+			// No clerk was free so the Supervisor thread will wait a while and try again with all clerks
+			long sleepTime = 10;
+			logger.info("No available clekrs. Let's sleep Supervisor thread for " + sleepTime);
 			try {
-				Thread.sleep(10);
+				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
 				System.out.println(" TransactionSource\n" + e);
+				logger.warning("Interrupted Exception in sleeping Supervisor in assignTransactionToClerk method");
 			}
-		}
-	}
+		}// End while
+	} // End assign transaction to clerk
 
 	@Override
 	public Integer call() {
 		logger.fine("Supervisor thread started");
 		Random rnd = new Random();
 		Integer timeDelay = rnd.nextInt(600) + 100;		// Random number between 100 and 500
+		// TODO If sleep(50) is set it works, if timeDelay is used, it doesnt give proper result. Investigate why
 		try {
-			Thread.sleep(50);
+			Thread.sleep(timeDelay);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		// This Supervisor thread will be running as long as all transactions have been assigned (the for loop finishes)
 		while (true) {
-			logger.fine("Total number of Transactions assigned to supervisor:" + supervisorID + ": "
-					+ transactionsToAssign.size());
+			StringBuilder transactionsList = new StringBuilder("Total number of Transactions assigned to "
+					+ supervisorID + ": " + transactionsToAssign.size() + "\n");
+			for (Transaction transaction : transactionsToAssign) {
+				transactionsList.append(transaction.getTransactionId() + "\n");
+			}
+			logger.fine(transactionsList.toString());
 			for (int i = 0; i < transactionsToAssign.size(); i++) {
-				 logger.fine("Transaction " +transactionsToAssign.get(i).getTransactionId() + " assigned by " + supervisorID);
+				logger.fine("Supervisor +" + supervisorID + " attempts to assign transaction "
+						+ transactionsToAssign.get(i).getTransactionId());
 				assignTransactionToClerk(transactionsToAssign.get(i));	// Transaction assigned to next available clerk
 			}
+			logger.info("Thread for " + supervisorID + " completed, terminating");
 			return timeDelay;
 		}
 	}

@@ -47,6 +47,9 @@ public class LoggerSetup extends Formatter {
 		setupLogger(Transaction.logger, transactionLoggerFile);
 		String supervisorsLoggerFile = "J:/Logs/BankOpsLogs/Ex3Logs/Supervisors.log";
 		setupLogger(Supervisor.logger, supervisorsLoggerFile);
+		String clerkLoggerFile = "J:/Logs/BankOpsLogs/Ex3Logs/Clerks.log";
+		setupLogger(Clerk.logger, clerkLoggerFile);
+
 	}
 
 	@Override

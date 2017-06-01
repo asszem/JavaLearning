@@ -7,7 +7,7 @@ public class Transaction {
 	private Account account;
 	private int amount;
 	private TransactionType type;
-	private static String transactionID;
+	private String transactionID;
 	private static int transactionNumber=0;
 	public static final Logger logger=Logger.getLogger(Transaction.class.getName());
 
@@ -16,7 +16,7 @@ public class Transaction {
 		this.account = account;
 		this.type = type;
 		this.amount = amount;
-		Transaction.transactionID=String.format("TransID%d [Acc%d::%s::$%d]",transactionNumber++,account.getAccountNumber(), type, amount);
+		this.transactionID=String.format("TransID%d [Acc%d::%s::$%d]",transactionNumber++,account.getAccountNumber(), type, amount);
 		logger.info("Transaction created. ID: " + transactionID);
 	}
 	
