@@ -41,7 +41,16 @@ public class UsingExecutors {
 		int transactionCount = 5;                               // Number of transaction to be done / transactions source objects
 		int clerkCount = 8;
 		int supervisorCount = 2;
-
+		StringBuilder loginfo = new StringBuilder();
+		loginfo.append("Program started.\n");
+		loginfo.append("Number of accounts: "+accountCount+"\n");
+		for (int i=0;i<accountCount;i++){
+		loginfo.append(String.format("Account #%d initial balance:%s%n",i, initialBalance[i]));
+		}
+		loginfo.append("Transaction count per Transaction Source objects: " + transactionCount+ "\n");
+		loginfo.append("Clerks count: "+ clerkCount+"\n");
+		loginfo.append("Supervisor count: " + supervisorCount);
+		logger.info(loginfo.toString());
 		// Create the account, the bank, and the clerks...
 		Bank theBank = new Bank();                                       // Create a bank
 		Vector<Clerk> clerks = new Vector<Clerk>();                      // Stores the clerk
@@ -74,12 +83,15 @@ public class UsingExecutors {
 
 		// 1. Create the arbitrary number of transaction source objects
 		int transactionSourcesCount = (int) (Math.random() * 10) + 1; // min1, max 10 Transaction source objects
+		logger.info("Number of Transaction Source objects: " + transactionSourcesCount);
+		logger.fine(String.format("Total number of transactions: %d * %d = %d"
+				, transactionCount,transactionSourcesCount, (transactionCount * transactionSourcesCount)));
 //		int transactionSourcesCount=1;	//Temporarily remove the random factor
 		TransactionSource[] transactionSourcePool = new TransactionSource[transactionSourcesCount];
 		for (int i = 0; i < transactionSourcesCount; i++) {
 			transactionSourcePool[i] = new TransactionSource(transactionCount, accounts, clerks, supervisors);
 		}
-
+		logger.fine("Transaction Source Pool filled, transactions not yet started.");
 		// 2. Start the threads for each transaction source object
 		ArrayList<Future<int[][]>> transactionSourceResults = new ArrayList<>();
 		for (int i = 0; i < transactionSourcesCount; i++) {

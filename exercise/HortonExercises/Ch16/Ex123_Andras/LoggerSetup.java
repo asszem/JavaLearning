@@ -5,7 +5,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
@@ -44,9 +43,10 @@ public class LoggerSetup extends Formatter {
 		setupLogger(UsingExecutors.logger, mainLoggerFile);
 		String transactionSourcesLoggerFile = "J:/Logs/BankOpsLogs/Ex3Logs/TransactionSources.log";
 		setupLogger(TransactionSource.logger, transactionSourcesLoggerFile);
+		String transactionLoggerFile = "J:/Logs/BankOpsLogs/Ex3Logs/Transactions.log";
+		setupLogger(Transaction.logger, transactionLoggerFile);
 		String supervisorsLoggerFile = "J:/Logs/BankOpsLogs/Ex3Logs/Supervisors.log";
 		setupLogger(Supervisor.logger, supervisorsLoggerFile);
-
 	}
 
 	@Override

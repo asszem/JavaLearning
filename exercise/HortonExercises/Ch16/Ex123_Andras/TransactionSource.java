@@ -25,11 +25,12 @@ public class TransactionSource implements Callable<int[][]> {
 		this.clerks = clerks;
 		this.supervisors = supervisors;
 		accountTotalCreditDebit = new int[accounts.size()][2];
+		logger.info("Transaction Source constructor completed.");
 	}
 
 	// The source of transactions
 	public int[][] call() {
-		logger.info("Transaction Source thread started");
+		logger.info("Transaction Source thread started.");
 		// Create transactions randomly distributed between the accounts
 		Random rand = new Random();
 		Transaction transaction = null;                                    // Stores a transaction
@@ -48,11 +49,18 @@ public class TransactionSource implements Callable<int[][]> {
 			// this.type = TransactionType.DEBIT;
 			// }
 			this.type = rand.nextBoolean() ? TransactionType.CREDIT : TransactionType.DEBIT;
-			transaction = new Transaction(accounts.get(accountSelect),              // Account
-					type,                              						 // Transaction type
-					amount);                          						 // of amount
-			logger.fine(String.format("New transaction created. Acc:%d, type:%s, amount:%d",
-					accounts.get(accountSelect).getAccountNumber(), type, amount));
+
+			//Uncommenting this will mess up the results. Find out why
+//			try {
+//				Thread.sleep(25);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+			
+			//Use the synchronized factory method for creating new transactions so that each will have unique ID
+				transaction=Transaction.createTransaction(accounts.get(accountSelect), type, amount);
+				logger.fine("New transaction created. ID: " + transaction.getTransactionId());
+
 			// Keep track of total credit [0] and debit [1] for each account
 			if (this.type == TransactionType.CREDIT) {
 				accountTotalCreditDebit[accountSelect][CREDIT_INDEX] += amount;  // Keep total tally for credits/account
@@ -64,21 +72,20 @@ public class TransactionSource implements Callable<int[][]> {
 			// Assign the transaction to the next available supervisor
 			// There is no limit how much transaction a supervisor can accept. Clerks have limits
 			supervisors.get(nextSupervisor).assignTransactionToSupervisor(transaction);
-			logger.fine("Transaction assigned to supervisor:"+supervisors.get(nextSupervisor).supervisorID);
+			logger.fine("Transaction " + transaction.getTransactionId() + " assigned to supervisor:"
+					+ supervisors.get(nextSupervisor).supervisorID);
 			if (++nextSupervisor >= supervisors.size()) {
 				nextSupervisor = 0;
 			}
 
-			//The supervisor should assign the transaction to one of it's available clerks
-			
-			
-			
+			//The running Supervisor thread will assign the transaction to the Clerks
+
 			if (Thread.interrupted()) {
 				System.out.println("Interrupt flag for " + type + " transaction source set. Terminating.");
 				return accountTotalCreditDebit;
 			}
 		}
-		return accountTotalCreditDebit;
+		return accountTotalCreditDebit; //Returns the total credit/debit of all created transaction objects
 	}
 
 }

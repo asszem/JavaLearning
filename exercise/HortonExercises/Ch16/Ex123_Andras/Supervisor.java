@@ -36,9 +36,11 @@ public class Supervisor implements Callable<Integer> {
 			// The supervisor will find the next clerk he can assign the transaction to
 
 			for (Clerk clerk : clerksUnderThisSupervisor) {
-				if (done = clerk.assignTransactionToClerk(transaction))
-					logger.fine(String.format("Transaction %s assigned to Clerk %s", transaction.getTransactionId(), clerk.ID));
-					break; // break from for
+				if (done = clerk.assignTransactionToClerk(transaction)) {
+//					logger.fine(String.format("Transaction %s assigned to Clerk %s by %s and it is DONE.",
+//							transaction.getTransactionId(), clerk.ID, supervisorID));
+					break;
+				}// break from for
 			}
 			if (done) {
 				break; // Break from while
@@ -64,9 +66,10 @@ public class Supervisor implements Callable<Integer> {
 			e.printStackTrace();
 		}
 		while (true) {
-			logger.fine("Transactions to be assigned by supervisor:" + transactionsToAssign.size());
+			logger.fine("Total number of Transactions assigned to supervisor:" + supervisorID + ": "
+					+ transactionsToAssign.size());
 			for (int i = 0; i < transactionsToAssign.size(); i++) {
-				// logger.fine("Transaction " + transaction.getTransactionId() + " assigned to " + supervisorID);
+				 logger.fine("Transaction " +transactionsToAssign.get(i).getTransactionId() + " assigned by " + supervisorID);
 				assignTransactionToClerk(transactionsToAssign.get(i));	// Transaction assigned to next available clerk
 			}
 			return timeDelay;
