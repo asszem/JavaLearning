@@ -1,8 +1,7 @@
 Summary
 .run() vs .main() vs. call()
 
-TODO before moving forward to another chapter
-	- why return in Executor Bank ops example?
+TODO with threads 
 	- why the thread.interrupted needed to prevent interruptin exception and why does it not work in my class?
 	- understand and try join, write a sample
 	- complete the Summary field
@@ -159,13 +158,6 @@ Thread priority
 		and the native operating system priorities. 
 	The thread scheduling algorithm that your operating system uses also affects how your Java threads execute and what proportion of the processor time they are allocated.
 	Make sure you set the priority in the run() / call() method and not in the constructor which is called from the main() method!
-
-
-
-
-
-
-
 
 TreadRace_Demo
 	Running 3 threads (including main) parallel with same task will produce unpredictable completion order. Because we can't control how the Java scheduler assigns RUNNING status to threads
