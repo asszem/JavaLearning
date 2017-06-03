@@ -1,10 +1,134 @@
 Summary
 
 Keywords
-	JavaAWT - Abstract Windowing Toolkit - until java 1.1
-	JavaSwing 
-	JFC - Java Foundation Classes
-	Event Dispatching Thread
+	JavaAWT java.awt - Abstract Windowing Toolkit - until java 1.1
+	JavaSwing  javax.swing - The Swing classes are part of a more general set of GUI programming capabilities that are collectively referred to as the Java Foundation Classes
+	JFC - Java Foundation Classes - GUI programming capabilities: Swing (javax.swing), 2d drawing (java.awt.geom), drag-and-drop (java.awt.dnd), accessibility (javax.accessibility)
+	Event Dispatching Thread - the thread in which all interactions with the GUI are dealt with
+	Pluggable Look and Feel - makes it possible to change the appearance of a component, to programmatically select the look-and-feel from those implemented as standard, or create custom
+	UIManager, UI Delegate - Swing component provide for plugabble look and feel
+	MVC - ModelViewController architecture  
+	SMA - Separate Model architecture (Document/View architecture)
+
+Model View Controller (MVC) architecture 
+	The MODEL that stores the data that defines the component
+	The VIEW that creates the visual representation of the component from the data in the model
+	The CONTROLLER that deals with user interaction with the component and modifies the model and/or the view in response to a user action as necessary
+
+Document/View architecture (Separate Model Architecture)
+	Because the user interacts with the physical representation of the component, the controller operation is highly dependent on the implementation of the view. 
+	For this reason, the view and controller are typically represented by a single composite object that corresponds to a view with an INTEGRATED CONTROLLER. 
+	Swing implementation of SMA
+	UI Delegate
+		The Swing components provide for a pluggable look-and-feel by making the visual appearance of a component and the interface to the user the responsibility of an independent object
+		This is the view+controller part of the MVC model. 
+		A different UI delegate can provide a component with a new look-and-feel.
+		UIManager can set the new look and feel -> UIManager.setLookAndFeel()
+
+Structure
+	Object 	<-
+			java.awt
+			Compontent (abstract) <- Container (abstract) <- Window <- Frame  	<-
+																			  	javax.swing
+																		   		JFrame 
+	Component - Defines a component, which is an entity that can be displayed such as a button or a scrollbar (java.awt)
+	Container - Defines a component that can contain other components (java.awt)
+	Window - Defines a basic window with no title bar or border (java.awt)
+	Frame - Define a window with title bar and border (java.awt)
+	JFrame - Defines a frame which is a window with extended capabilities (java.swing)
+
+Components
+	A component represents a graphical entity of one kind or another that can be displayed on the screen. A component is any object of a class that is a subclass of Component.
+	Component Subclasses summary
+		JFrame (javax.swing)
+			This is used as the basic Java application window. An object of this class has a title bar and provision for adding a menu. 
+			You can also add other components to it. You usually subclass this class to create a window class specific to your application. 
+			You then are able to add GUI components or draw in this window if required
+		JWindow (javax.swing) 
+			An object of this class type is a window with no title bar or window management icons. 
+			One typical use for a JWindow object is for a subsidiary application window that is displayed on a secondary display where two or more displays are attached to a system.
+		JDialog (javax.swing)
+			You use this class to define a dialog window that is used for entering data into a program in various ways. 
+			You usually code the creation of a dialog in response to some menu item or button being selected.
+		JApplet  (javax.swing)
+			This is the base class for a Java 2 applet — which is a program designed to run embedded in a web page. 
+			All your Java 2 applets have this class as a base. You can draw in a JApplet and also add menus and other components.
+		JComponent  (javax.swing)
+			The subclasses of JComponent define a range of standard components such as menus, buttons, checkboxes, and so on. You use these classes to create the GUI for your application or applet.
+
+JFrame
+	A JFrame object represents the main window for an application (while a Window object does not) — you always need a JFrame object before you can create a Window object.
+	Because JFrame has Container as a superclass, a JFrame object can contain other components
+	The JFrame class adds functionality to the Frame class to support much more sophisticated facilities for drawing and displaying other components
+	Display a window with Jframe
+		Phase 1. Create a method to set the properties of the Frame
+			Step 1. Create an object of type JFrame - Jframe aWindow = new JFrame("This is the window title");
+			Step 2. Call a method for the object to set the size and position of the window - aWindow.setDecorations()
+			Step 3. Call a method to display the window - aWindow.setVisible()
+			Step 4. Call a method to set default closing options aWindow.setDefaultCloseOperations(JFrame.ExitOnClose)
+				ExitOnClose - closing the window will stop the application (close all other windows)
+				DisposeOnClose - when the last JFrame is closed, the application will stop
+				DoNothingOnCloes - guess.
+		Phase 2. Create a Runnable class that will call the properties setting method in its run() method
+		Phase 3. Call SwingUtilities.invokeLater(new Runnable()); to execute the run() method for the Runnable object argument on the event dispatching thread
+	Preventing Deadlocks - use the Event Dispatching Thread
+		JFrame realization (preparing and setting to visible) should never be done in the main thread.
+		After the GUI for an application has been realized by setVisible(true), modifying or querying it on the MAIN thread can cause deadlocks.
+		Methods for Swing components are NOT THREAD-SAFE so they must all execute in a separate thread from the main thread
+		The thread in which you create the GUI and in which all interactions with the GUI are dealt with is called the SWING EVENT DISPATCHING THREAD. 
+
+JDialog
+	Because the JDialog class is derived directly from the Window class, you can create a JDialog object in an application only in the context of a JFrame object.
+	Parent of JDialog
+		The constructors for the JDialog class generally require a JFrame object to be passed as an argument. 
+		This JFrame object is referred to as the parent of the JDialog object. 
+	JDialog position
+		Because a JFrame object is the top-level window in an application, its size and location are defined relative to the screen. 
+		A JDialog object with a JFrame object as a parent is located relative to its parent.
+	JDialog as a Container
+		The JApplet, JFrame, and JDialog classes are all containers because they have Container as a base class and therefore, in principle, can contain any kind of component.
+		You DON'T ADD the components for your application or applet GUI directly to the JFrame or JApplet object for your program.
+
+Window Panes
+	When you want to add GUI components or draw in a window displayed from a JFrame object, you add the components to, or draw on, a WINDOW PANE that is managed by the JFrame object. 
+	Window Panes are container objects that represent an area of a window, and they come in several different types.
+	All the classes here that represent panes are themselves Swing components, defined in the javax.swing package
+	Root Pane
+		Corresponds
+			The area of the window below the title bar 
+		Method: .getRootPane()
+		Return type: JRootPane
+	Layered Pane
+		Corresponds
+			This pane corresponds to the whole of the area occupied by the JRootPane object in the window and manages the menu bar if the window has one
+		Method: .getLayeredPane()
+		Return type: JLayeredPane
+	Content Pane
+		Corresponds
+			The area in the layeredPane below the menu bar corresponds to the contentPane object
+			The contentPane is where you normally add components other than a menubar to a window. 
+		Method: .getContentPane()
+		Return type: Container
+	Glass Pane
+		Corresponds
+			The complete JRootPane area on top o f all the other planes
+			This is used to display components that you always want to display on top of anything else displayed in the window
+			Examples:
+				Drop-down menus
+				Animations - When part of what is displayed is to be animated, a static background can be displayed independently via the contentPane. 
+		Method: .getGlassPane()
+		Return type:  Component
+
+Components
+	Parent Component
+		When a component is contained within another component, the outer object is referred to as the parent.
+		getParent() 
+			The method is inherited from Component class.
+			It returns a reference of the parent object as a type of CONTAINER.
+			Only a subclass of Container can hold other components.
+		If there is no parent, as is the case with a JFrame component, this method returns null.
+	
+
 
 
 Source

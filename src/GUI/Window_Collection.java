@@ -1,4 +1,4 @@
-package GUI.Practice;
+package GUI;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -6,25 +6,21 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class LookAndFeel_Samples {
+public class Window_Collection {
 
-	public static int numberOfWindows = 0;
-
-	public static JFrame createWindow(String windowTitle) {
+	public static JFrame createJFrameWindow(String windowTitle) {
 		JFrame aWindow = new JFrame(windowTitle);
-		int windowWidth = 930;
-		int windowHeight = 100;
-		// int windowXpos = (int) (Math.random() * 800);
-		int windowXpos = 750;
-		int windowYpos = 30 + 100 * (numberOfWindows++);
-		aWindow.setBounds(windowXpos, windowYpos, windowWidth, windowHeight);
 		aWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		aWindow.setVisible(true); // Display the window
 		return aWindow;
 	}
 
-	public static void createWindow(String windowTitle, LookAndFeelInfo look) {
-		JFrame aWindow=createWindow(windowTitle);
+	public static void createJFrameWindow(String windowTitle, int posX, int posY, int width, int height) {
+		createJFrameWindow(windowTitle).setBounds(posX, posY, width, height);
+	}
+
+	public static void createJFrameWindow(String windowTitle, LookAndFeelInfo look) {
+		JFrame aWindow=createJFrameWindow(windowTitle);
 		try {
 			// Set the look and feel
 			UIManager.setLookAndFeel(look.getClassName());
@@ -36,8 +32,8 @@ public class LookAndFeel_Samples {
 		}
 	}
 
-	public static void createWindow(String windowTitle, String lookAndFeel) {
-		JFrame aWindow=createWindow(windowTitle);
+	public static void createJFrameWindow(String windowTitle, String lookAndFeel) {
+		JFrame aWindow=createJFrameWindow(windowTitle);
 		try {
 			UIManager.setLookAndFeel(lookAndFeel);
 			SwingUtilities.updateComponentTreeUI(aWindow);
@@ -63,13 +59,7 @@ public class LookAndFeel_Samples {
 	static class InnerRunnable implements Runnable {
 
 		public void run() {
-			createWindow("Default window");
-			UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
-			for (LookAndFeelInfo look : looks) {
-				createWindow(look.getClassName(), look);
-			}
-			createWindow("Cross Platform Look and Feel", UIManager.getCrossPlatformLookAndFeelClassName());
-			createWindow("System Look and Feel", UIManager.getSystemLookAndFeelClassName());
+			createJFrameWindow("Default window");
 		}
 	}
 }// end of class
