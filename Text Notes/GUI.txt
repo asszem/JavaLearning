@@ -146,6 +146,8 @@ Components
 			java.awt.Point
 			The position of X, Y of the component. This fixes where the object is IN RELATION TO ITS CONTAINER in the coordinate system of the container object.
 			Variables are private, so getter and setter methods to be used
+			Methods
+				.get
 			Center position
 				Set a window to the center location:
 					aWindow.setLocationRelativeTo(null); // If the argument is null, it will be centered
@@ -205,10 +207,39 @@ Components
 			The Cursor class contains a range of final static constants that specify standard cursor types
 			Static method .getPredefinedCursor
 				This method is particularly useful when you don't want to store the Cursor object, but just want to pass it to a method, such as setCursor() for a Component object.
+			Custom cursor
+				The createCustomCursor() method for a Toolkit object enables you to create a cursor.
+				Need to provide the cursor image, the coordinates of the cursor hotspot and the cursor name.
 			Examples
-				Cursros myCursor = new Cursor(Cursor.TEXT_CURSOR);
+				Cursor myCursor = new Cursor(Cursor.TEXT_CURSOR);
 				Cursor myCursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
 		Font
+			java.awt.Font
+			Fonts vs. Glyps vs. Character
+				The Font class differentiates between a character — the letter uppercase Q, say — and a glyph, which is the shape defining its appearance when it is displayed or printed. 
+				In general, a given character in one font has a different glyph in a different font.
+				A Font object contains a table that maps the Unicode value for each character to the glyph code or codes that create the visual representation of the character.
+			Logical Fonts
+				Logical fonts are five families of fonts defined by the Java platform and are therefore supported in any Java runtime. 
+				Style
+					Plain, Bold, Italic
+				Types
+					Serif, Dialog, DialogInput, Monospaced, SansSerif
+			Physical Fonts
+				Get all Fonts (slow)
+					GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+					Font[] fonts = e.getAllFonts(); 
+				Get all FontNames (faster)
+					GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+					String[] fontnames = e.getAvailableFontFamilyNames();
+			Create Font object
+				Font myFont = new Font(“Serif”, Font.ITALIC | Font.BOLD, 12);	 //Bold AND Italic
+			.deriveFont()
+				Font deriveFont(int Style): Returns a new Font object with the style specified — one of PLAIN, BOLD, ITALIC, or BOLD+ITALIC.
+				Font deriveFont(float size): Returns a new Font object with the specified point size.
+				Font deriveFont(int Style, float size): Returns a new Font object with the specified style and point size.
+				Example
+					Font newFont = fonts[fonts.length-1].deriveFont(12.0f)
 			
 		Visible
 			If not visible, it is not drawn
