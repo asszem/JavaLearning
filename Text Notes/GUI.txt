@@ -61,21 +61,23 @@ JFrame
 	Because JFrame has Container as a superclass, a JFrame object can contain other components
 	The JFrame class adds functionality to the Frame class to support much more sophisticated facilities for drawing and displaying other components
 	Display a window with Jframe
-		Phase 1. Create a method to set the properties of the Frame
-			Step 1. Create an object of type JFrame - Jframe aWindow = new JFrame("This is the window title");
-			Step 2. Call a method for the object to set the size and position of the window - aWindow.setDecorations()
-			Step 3. Call a method to display the window - aWindow.setVisible()
-			Step 4. Call a method to set default closing options aWindow.setDefaultCloseOperations(JFrame.ExitOnClose)
-				ExitOnClose - closing the window will stop the application (close all other windows)
-				DisposeOnClose - when the last JFrame is closed, the application will stop
-				DoNothingOnCloes - guess.
-		Phase 2. Create a Runnable class that will call the properties setting method in its run() method
-		Phase 3. Call SwingUtilities.invokeLater(new Runnable()); to execute the run() method for the Runnable object argument on the event dispatching thread
+		Step 1. Create a JFrame object and set it's properties. 
+			It should be in a method to set all relevant properties of the Frame
+		Step 2. Create a Runnable class 
+			This will call the properties setting method in its run() method
+			This class can be an anonymous class inside the invokeLater() method
+		Step 3. Call SwingUtilities.invokeLater(new Runnable())
+			This will execute the run() method for the Runnable object argument on the event dispatching thread
 	Preventing Deadlocks - use the Event Dispatching Thread
 		JFrame realization (preparing and setting to visible) should never be done in the main thread.
 		After the GUI for an application has been realized by setVisible(true), modifying or querying it on the MAIN thread can cause deadlocks.
 		Methods for Swing components are NOT THREAD-SAFE so they must all execute in a separate thread from the main thread
 		The thread in which you create the GUI and in which all interactions with the GUI are dealt with is called the SWING EVENT DISPATCHING THREAD. 
+	Closing options
+		.setDefaultCloseOperations()
+			ExitOnClose - closing the window will stop the application (close all other windows)
+			DisposeOnClose - when the last JFrame is closed, the application will stop
+			DoNothingOnCloes - guess.
 
 JDialog
 	Because the JDialog class is derived directly from the Window class, you can create a JDialog object in an application only in the context of a JFrame object.
@@ -127,7 +129,97 @@ Components
 			It returns a reference of the parent object as a type of CONTAINER.
 			Only a subclass of Container can hold other components.
 		If there is no parent, as is the case with a JFrame component, this method returns null.
-	
+	Components
+		Name
+			java.awt.Name
+			The name of the component (This is not the same as the Window title!!)
+		Dimension 
+			java.awt.Dimension
+			The width and height of the component. Variables are private, so getter and setter methods to be used
+			Size - Height and Size - Dimension
+				.setWidth() / .setWidth()
+				.getHeight() / .getHeight()
+				.getMinimumSize() / .setMinimumSize();
+				.setPreferredSize();
+			Dimension windowSize = window.getSize();
+		Position 
+			java.awt.Point
+			The position of X, Y of the component. This fixes where the object is IN RELATION TO ITS CONTAINER in the coordinate system of the container object.
+			Variables are private, so getter and setter methods to be used
+			Center position
+				Set a window to the center location:
+					aWindow.setLocationRelativeTo(null); // If the argument is null, it will be centered
+				Get the position of center location:
+					Point centerPoint = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+			Toolkit
+				.getToolkit() method returns an object of type Toolkit that contains information about the environment in which your application is running, including the screen size in pixels. 
+			Example
+				Point windowPosition = window.getLocation();
+				System.out.printf("PosX: %f, PosY: %f%n", windowPosition.getX(), windowPosition.getY());
+				window.getToolkit().getScreenSize();
+		Rectangle 
+			java.awt.Rectangle
+			Top left XY position and Size and Height
+			Example
+				Rectangle windowPositionAndSize = window.getBounds();	//get a Rectangle object based on window
+			Methods to manipulate rectangles
+				r1.union(r2)
+					Returns the smallest Rectangle object enclosing both the current Rectangle object and the Rectangle object r, passed as an argument.
+				r1.intersection(r2)
+					 Returns a Rectangle object that is the intersection of the current object and the argument. 
+					 If the two rectangles do not intersect, the Rectangle object returned is at position (0,0), and the width and height members are zero, so the rectangle is empty
+					 .intersects() returns true if the two rectangles intersect
+				r1.add()
+					.add(Rectangle r)
+						Expands the current Rectangle object to enclose the argument Rectangle.  
+					.add(Point p)
+						Expands the current Rectangle object to enclose the Point object p. The result is the smallest rectangle that encloses the original rectangle and the point.
+					.add(int x, int y)
+						Expands the current Rectangle object to enclose the point at (x, y)
+				r1.grow()
+					void grow(int h, int v): Enlarges the current Rectangle object by moving the boundary out from the center by h horizontally and v vertically
+				r1.contains() - Returns true if the current Rectangle object encloses p and returns false otherwise.
+				r1.equals()- The two rectangles are equal if they are at the same position and have the same width and height.
+				r1.isEmpty() - Returns true if the width and height members of the current Rectangle object are zero and returns false otherwise.
+		Color
+			java.awt.Color
+			The three arguments to the constructor correspond to the intensities of the red, green, and blue components of the color, respectively. 
+			The Color class defines a number of standard color constants as public final static variables
+			Get a color
+				.getRGB, .getREd(), getGreen(), .getBlue()
+			To set background/foreground, itneeds to be set on the ContentPanek
+			SystemColor
+				java.awt.SystemColor
+				The SystemColor is a subclass of Color and encapsulates the standard colors that the native operating system uses for displaying various components. 
+					window 			- Defines the background color for a window
+					windowText 		- Defines the text color for a window
+					windowBorder 	. Defines the border color for a window
+			Examples
+				Color myColor = new Color(0,200,0)
+				aWindow.getContentPane().setBackground(Color.RED);
+				aWindow.getContentPane().setBackground(myColor);
+				if(myColor.getRGB() == SystemColor.window.getRGB()) { // colorA is the window background color...  }
+		Cursor
+			java.awt.Cursor 
+			An object of the java.awt.Cursor class encapsulates a bitmap representation of the mouse cursor. 
+			The Cursor class contains a range of final static constants that specify standard cursor types
+			Static method .getPredefinedCursor
+				This method is particularly useful when you don't want to store the Cursor object, but just want to pass it to a method, such as setCursor() for a Component object.
+			Examples
+				Cursros myCursor = new Cursor(Cursor.TEXT_CURSOR);
+				Cursor myCursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
+		Font
+			
+		Visible
+			If not visible, it is not drawn
+		Enabled 
+			If diabled, it is grayed out, but still can originate events
+			To prevent events from a disabled component having an effect, you must call isEnabled() for the component in your event handling code to determine whether the component is enabled or not. 
+			You can then choose to do nothing when the isEnabled() method returns false.
+		Valid 
+			If an object is not valid, the layout of the entities that make up the object has not been determined.  
+			You can make a Container object invalid by changing its contents. 
+			It then needs to be validated before it is displayed correctly	
 
 
 
