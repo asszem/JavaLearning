@@ -121,7 +121,7 @@ Window Panes
 		Method: .getGlassPane()
 		Return type:  Component
 
-Components
+AWT Components
 	Parent Component
 		When a component is contained within another component, the outer object is referred to as the parent.
 		getParent() 
@@ -129,7 +129,7 @@ Components
 			It returns a reference of the parent object as a type of CONTAINER.
 			Only a subclass of Container can hold other components.
 		If there is no parent, as is the case with a JFrame component, this method returns null.
-	Components
+	AWT Components
 		Name
 			java.awt.Name
 			The name of the component (This is not the same as the Window title!!)
@@ -240,7 +240,6 @@ Components
 				Font deriveFont(int Style, float size): Returns a new Font object with the specified style and point size.
 				Example
 					Font newFont = fonts[fonts.length-1].deriveFont(12.0f)
-			
 		Visible
 			If not visible, it is not drawn
 		Enabled 
@@ -251,6 +250,96 @@ Components
 			If an object is not valid, the layout of the entities that make up the object has not been determined.  
 			You can make a Container object invalid by changing its contents. 
 			It then needs to be validated before it is displayed correctly	
+
+Swing Components 
+	JComponent
+		Swing components all have the JComponent class as a base, which itself extends the Component class to add the following capability:
+			Support for pluggable look-and-feel for components, allowing you to change the look-and-feel programmatically, or implement your own look-and-feel for all components displayed.
+			Support for tooltips — a tooltip being a message describing the purpose of a component when the mouse cursor lingers over it. Tooltips are defined by the JToolTip class.
+			Support for automatic scrolling in a list, a table, or a tree when a component is dragged with the mouse.
+			Component class extensions to enable you to create your own custom components.
+		All the Swing component classes are defined in the javax.swing package and have class names that begin with J.
+	Buttons
+		All the buttons can be displayed with a text label, an icon, or both.
+		JButton
+			The JButton class defines a regular pushbutton that can be used in a regular dialog box or in a toolbar, where the buttons might provide alternatives to using menu items. 
+		JToolBar
+			The JToolBar class is used in conjunction with the JButton class to create a toolbar containing buttons. 
+			A toolbar is dockable without any additional programming effort on your part.
+		JToggleButton
+			Two-state button, pressed or not
+			JRadioButton (ButtonGroup)
+				Radio buttons defined as JRadioButton objects generally operate in a group so that only one button can be in the pressed state at any one time. 
+				This grouping is established by adding the JRadioButton object to a ButtonGroup object that takes care of the state of the buttons in the group.
+		JCheckbox
+			A JCheckBox object is a button with a square checkbox to the left. Clicking on the checkbox changes its state from checked to unchecked or vice versa.
+	Menus
+		JMenuBar
+			The JMenuBar class defines a menu bar usually found at the top of an application window.
+		JPopupMenu
+			 The JPopupMenu class defines a context menu that is typically implemented to appear at the current cursor position when the right mouse button is clicked. 
+		JMenuItem
+			The items in a menu are defined by the JMenuItem class.
+			JMenu
+				A JMenu object represents a TOP-LEVEL MENU ITEM on a menu bar that drops down a list of menu items when it is clicked. 
+			JRadioButtonMenuItem (ButtonGroup)
+				The JRadioButtonMenuItem class defines a menu item that is part of a group where only one item can be selected at any time. 
+				The group is created by adding JRadioButtonMenuItem objects to a ButtonGroup object. 
+			JCheckBoxMenuItem
+				A JCheckBoxMenuItem component is a menu item with a checkbox that is ticked when the item is selected.
+				LIne
+	Text
+		JLabel
+			Non-editable single line of text
+		JTextField
+			Editable single line of text
+		JFormattedTextField
+			Editable text field where input and displayed data can be formatted. Supports automatic formattig, for entering a Date for example
+		JPasswordField
+			Enter a single line of passwords with entered characters not being seen
+		JTextArea (JScrollPane container)
+			Editable mulitline text that is contained within a given area. 
+			A JTextArea component does not support scrolling directly, but it's easy to add scrollbars by placing the JTextArea component in a JScrollPane container.
+		JEditorPane
+			The JEditorPane supports editing of plaintext, text in HTML, and RTF (Rich Text Format). 
+		JTextPane
+			The JTextPane class extends JEditorPane and enables you to embed images or other components within the text managed by the component.
+	JPanel
+		The JPanel class defines something like a physical panel that you can use as a container to group a set of components
+	JList
+		A JList<E> component displays a list of items of type E with one item per line from which a user can select an item.
+		Creating a JList<E> component from from a javax.swing.DefaultListModel<E> object in which you store the items you want to have displayed in the list. 
+		A DefaultListModel<> object is much like a vector<> container. You add items to the list model by calling the addElement().
+	JTable
+		A JTable component displays items in a rectangular table with column headers with the items stored in a table model. 
+		You can create your own table model class by using the javax.swing.table.AbstractTableModel class as a base. 
+		A user can edit a single cell, or relocate or delete an entire row or column. 
+		A JTable component automatically takes care of reordering the columns when a column is dragged to a new position using the mouse.
+
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
