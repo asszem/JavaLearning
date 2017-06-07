@@ -263,6 +263,7 @@ Swing Components
 		All the buttons can be displayed with a text label, an icon, or both.
 		JButton
 			The JButton class defines a regular pushbutton that can be used in a regular dialog box or in a toolbar, where the buttons might provide alternatives to using menu items. 
+			.setPreferredSize(Dimension) - sets the size (widht, height) for the button object
 		JToolBar
 			The JToolBar class is used in conjunction with the JButton class to create a toolbar containing buttons. 
 			A toolbar is dockable without any additional programming effort on your part.
@@ -316,16 +317,124 @@ Swing Components
 		A user can edit a single cell, or relocate or delete an entire row or column. 
 		A JTable component automatically takes care of reordering the columns when a column is dragged to a new position using the mouse.
 
+Swing Containers
+	All Swing Components are Containers
+		Because the Container class is an abstract class, you cannot create instances of Container.
+		The components within a container are displayed within the area occupied by the container on the display screen
+		The container also controls how its embedded components are laid out by means of an object called a layout manager.
+	Container Methods
+		int getComponentCount() 			- Returns a count of the number of components contained by the current container.
+		Component getComponent(int index) 	- Returns the component identified by the index value (0-one less than the nomber of components contained).
+		Component[] getComponents() 		- Returns an array of all the components in the current container
 
+Layout Managers
+	Overview of Layout Managers
+		The layout manager for a container determines the position and size of all the components in the container.
+		Layout managers automatically adjust the size and positions of components to fi t within the space available. 
+		All containers have a default layout manager, but you can choose a different layout manager when necessary
+		Because the classes that define layout managers all implement the LayoutManager interface, you can use a variable of type LayoutManager to reference any of them.
+	Set Gaps
+		set the gaps in constructor -> .getHGap()/setHGap() and .getVGap()  / .setVGap()
+		layoutObject.setVGap()
+		layoutObject.setHGap()
+	Set Borders
+		Create Border objects
+			EtchedBorder edge = new EtchedBorder(EtchedBorder.RAISED);
+			BevelBorder edge = new BevelBorder(BevelBorder.RAISED); 
+			Border edge = BorderFactory.createRaisedBevelBorder();					//Using BorderFactory class's static factory methods 
+			Border doubleBorder = new CompoundBorder(outerBorder, innerBorder);		//First argument: outer border, second argument: inner border	
+			Border lineBorder = BorderFactory.createLineBorder(Color.Black, 12) 	//Line with color, and size in pixel
+			Border blackLineBorder = BorderFactory.createBlackLineBorder()
+		Set the border for a Button
+			content.add(button = new JButton("EAST Border Button"), BorderLayout.EAST);
+			button.setBorder(edge);
+    		leftPanel.setBorder(new TitledBorder( new EtchedBorder(),  "Line Color"));     
+
+   			bottomPanel.setBorder(new CompoundBorder(
+        	BorderFactory.createLineBorder(Color.black, 1),             // Outer border
+          	BorderFactory.createBevelBorder(BevelBorder.RAISED)));      // Inner border
 			
-
-
-
-
-
-
-
-
+	.pack() method
+		 Causes this Window to be sized to fit the preferred size and layouts of its subcomponents. 
+		 To make the window ssume a size that just accommodates the components it contains, call the pack() method on the JFrame.
+	Overview of Layout Managers
+		FlowLayout	
+			FlowLayout places components in successive rows in a container, fitting as many on each row as possible and starting on the next row as soon as a row is full. 
+			Its primary use is for arranging buttons, although you can use it with other components. 
+			It is the default layout manager for JPanel objects.
+		BorderLayout
+			BorderLayout places components against any of the four borders of the container and in the center.
+			The component in the center fills the available space. 
+			This layout manager is the default for the content pane in a JFrame, JDialog, or JApplet object.
+		CardLayout
+			CardLayout places components in a container one on top of the other — like a deck of cards.
+			Only the "top" component is visible at any one time.
+		GridLayout
+			GridLayout places components in the container in a rectangular grid with the number of rows and columns that you specify.
+		GridBagLayout
+			GridBagLayout also places the components into an arrangement of rows and columns, but the rows and columns can vary in length. 
+			This is a complicated layout manager with a lot of flexibility in how you control where components are placed in a container.
+		BoxLayout
+			BoxLayout arranges components either in a row or in a column. 
+			In either case the components are clipped to fit if necessary, rather than wrapping to the next row or column. 
+			The BoxLayout manager is the default for the Box container class.
+		SpringLayout
+			SpringLayout allows components to have their positions defined by "springs" or "struts" fixed to an
+			edge of the container or other components in the container.
+	Create and set a layout manager
+		FlowLayout flow = new FlowLayout();
+		Container content = aWindow.getContentPane();               // Get the content pane
+    	content.setLayout(flow);                                    // Set the container layout mgr
+		bWindow.getContentPane().setLayout(flow);					//Set the container layout mgr directly
+	FlowLayout
+		The flow layout manager places components in a row, and when the row is full, it automatically spills components onto the next row. 
+		Defaults
+			Default positioning: CENTERED
+			Default orientation: left to right
+			Default component distance: 5 unit gap
+			default row distance: 5 unit gap (even from the top)
+		Example	
+			FlowLayout flow = new FlowLayout(FlowLayout.LEFT, 20, 30); //left alignment, horizontal gap, vertical gap
+			flow.setHgap(30)
+			flow.setVGap(40)
+	BorderLayout
+		The border layout manager is intended to place up to FIVE components in a container. 
+		With this layout manager you can place components on any of the four borders of the container and in the center. 
+		Only one component can be at each position. 
+		If you add a component at a position that is already occupied, the previous component is displaced. 
+		A border is selected by specifying a constraint that can be NORTH, SOUTH, EAST, WEST, or CENTER. 
+		You can't specify the constraints in the BorderLayout constructor because a different constraint has to be applied to each component. 
+		You specify the position of each component in a container when you add it using the add() method. 
+		Gaps
+			You can alter the spacing between components by passing arguments to the BorderLayout constructor — the default gaps are zero. 
+		Example
+			BorderLayout border = new BorderLayout();                          // Create a layout manager
+			Container content = aWindow.getContentPane();                      // Get the content pane
+			content.setLayout(border); 
+			EtchedBorder edge = new EtchedBorder(EtchedBorder.RAISED);         // Button border
+			JButton button;
+			content.add(button = new JButton("EAST Border Button"), BorderLayout.EAST);
+			button.setBorder(edge);
+	CardLayout
+		The card layout manager generates a stack of components, one on top of the other. 
+		The first component that you add to the container is at the top of the stack, and therefore visible, and the last one is at the bottom.
+		Using card layout requires that you identify each component by an object of some class type 
+		and you supply this via the second argument to the add() method — the method parameter is of type Object. 
+		Note: NOT the card ID will be displayed, but the button label
+		Example
+			pass a String object as the second argument to the add() method consisting of the string “Card” with the sequence number of the button appended to it.
+			content.add(button = new JButton(" Press ", "CardIdentifier");   
+			card.show(content, "CardIdentifier");                       
+	GridLayout
+		If you specify the number of rows/columns as zero, the layout manager provides as many rows/columns in the grid as are necessary to accommodate the number of components
+		If you fix both the rows and the columns, and add more components to the container than the grid accommodates, the number of columns is increased.
+		Example
+			GridLayout grid = new GridLayout( int rows,int cols,int hgap,int vgap);
+	BoxLayout
+		The javax.swing.BoxLayout class defines a layout manager that arranges components in either a SINGLE row or a single column. 
+		Components are added from left to right in a row, or from top to bottom in a column. 
+		Components in a given row or column do not spill onto the next row or column when the row or column is full. 
+		The layout manager reduces the size of the components or even clips them if necessary to keep them all in a single row or column. 
 
 
 
