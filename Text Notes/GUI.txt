@@ -379,13 +379,15 @@ Layout Managers
 			In either case the components are clipped to fit if necessary, rather than wrapping to the next row or column. 
 			The BoxLayout manager is the default for the Box container class.
 		SpringLayout
-			SpringLayout allows components to have their positions defined by "springs" or "struts" fixed to an
-			edge of the container or other components in the container.
+			SpringLayout allows components to have their positions defined by "springs" or "struts" fixed to an edge of the container or other components in the container.
 	Create and set a layout manager
-		FlowLayout flow = new FlowLayout();
-		Container content = aWindow.getContentPane();               // Get the content pane
-    	content.setLayout(flow);                                    // Set the container layout mgr
-		bWindow.getContentPane().setLayout(flow);					//Set the container layout mgr directly
+		1. Create LayoutManager object
+			FlowLayout flow = new FlowLayout();
+		2. Get the Content Pane of frame
+			Container content = aWindow.getContentPane();               // Get the content pane
+		3. Set the layout of the content pane
+			content.setLayout(flow);                                    // Set the container layout mgr
+			bWindow.getContentPane().setLayout(flow);					//Set the container layout mgr directly
 	FlowLayout
 		The flow layout manager places components in a row, and when the row is full, it automatically spills components onto the next row. 
 		Defaults
@@ -508,6 +510,57 @@ Layout Managers
 		Sources on GridBagConstraints
 			http://www.java2s.com/Tutorial/Java/0240__Swing/UsingGridBagConstraints.htm
 	Spring Layout
+		Spring Layout determines the position and size of each component in the container according to a set of constraints that are defined by javax.swing.Spring objects. 
+		Setting up a Spring Layout
+			Create the Spring Layout object
+				SpringLayout layout = new SpringLayout(); 		// Create a layout manager
+				Container content = aWindow.getContentPane(); 	// Get the content pane
+				content.setLayout(layout);
+			Before you can access the SpringLayout.constraints object for a component object, you must first add the component to the container
+				JButton button = new JButton(“Press Me”);
+				content.add(button);
+			Now you can call the getConstraint() method for the SpringLayout object to obtain the object encapsulating the constraints:
+				SpringLayout.Constraints constraints = layout.getConstraints(button);
+		Spring Constraints
+			The top, bottom, left, and right edges of a component are referred to by their compass points: north, south, west, and east
+			X,Y - defines North & West edge
+			width, height - defines East & North edges
+				East = X+width
+				North = Y+height
+			The X, Y, width, and height constraints can be set independently and a constraint can set explicitly for any edge.
+			If setting values violates the constraints,  the layout manager adjusts one or other of the constraints so that the preceding relationships still apply.
+			The SpringLayout manager automatically adds Spring constraints that control the width and height of a component based on the component's minimum, maximum, and preferred sizes.
+		Spring Object (not teh same as the SpringLayout!)
+			The Spring class in the javax.swing package defines the Spring object that represents a constraint. 
+			A Spring object is defined by three integer values that relate to the notional (képzeletbeli) length of the spring:
+				the minimum length,
+				the preferred length
+				the maximum length. 
+			A Spring object also has an actual length value that lies between the minimum and the maximum, and that determines the location of the edge to which it applies.
+			Creating Spring Object
+				The static constant() method in the Spring class creates a Spring object from the three arguments that are the minimum, preferred, and maximum values for the Spring object.
+				If all three values are equal,the object is called a strut because its value is fixed at the common value you set for all three.
+				Example
+					Spring spring = Spring.constant(10, 30, 50); 	// min=10, pref=30, max=50
+					Spring strut = Spring.constant(40); 			// min, pref, and max all set to 40
+				The Spring class also defines static methods that operate on Spring objects:
+					Spring sum(Spring spr1, Spring spr2)
+						Returns a reference to a new object that has minimum, preferred, and maximum values that are the sum of the corresponding values of the arguments.
+					Spring minus(Spring spr)
+						Returns a reference to a new object with minimum, preferred, and maximum values that are the same magnitude as those of the argument but with opposite signs.
+					Spring max(Spring spr1,Spring spr2)
+						Returns a reference to a new object that has minimum, preferred, and maximum values that are the maximum of the corresponding values of the arguments.
+		Setting Constraints with Spring objects for a Component (button)
+			SpringLayout.Constraints constraints = layout.getConstraints(button);
+			Spring xSpring = Spring.constant(5,10,20); 										// Spring we’ll use for X
+			Spring ySpring = Spring.constant(3,5,8); 										// Spring we’ll use for Y
+			constraints.setX(xSpring); 														// Set the WEST edge constraint
+			constraints.setY(xSpring); 														// Set the NORTH edge constrain
+			Spring wSpring = Spring.constant(30,50,70); 									// Spring we’ll use for width
+			Spring hSpring = Spring.constant(15); 											// Strut we’ll use for height
+			constraints.setWidth(wSpring); 													// Set component width constraint
+			constraints.setHeight(hSpring); 												// Set component height constraint
+
 
 
 
