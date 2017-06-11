@@ -435,8 +435,79 @@ Layout Managers
 		Components are added from left to right in a row, or from top to bottom in a column. 
 		Components in a given row or column do not spill onto the next row or column when the row or column is full. 
 		The layout manager reduces the size of the components or even clips them if necessary to keep them all in a single row or column. 
-
-
+		Example:
+			Box fullContentBox=Box.createVerticalBox();
+			fullContentBox.add(topPanel);
+			fullContentBox.add(bottomPanel);
+	GridBAGLayout
+		General
+			Arranges components in an arbitrary rectangular grid, but the rows and columns of the grid are not necessarily the same height or width	
+			A component is placed at a given cell position in the grid specified by the coordinates of the cell.
+			Top-left corner is at position (0,0). 
+			A component can be spread over several cells in a row and/or column in the grid, but a component always occupies a rectangular group of cells.
+		Skeleton
+			1. Create jFrame
+				JFrame mainFrame = new JFrame();
+			2. Create GridBagLayout object
+				GridBagLayout gridBagLayout=new GridBagLayout();
+			3. Set jFrame's Content Pane layout to GridBagLayout 
+				mainFrame.getContentPane().setLayout(gridBagLayout);
+			4. (optional) Create GridBagConstraints object
+				GridBagConstraints gridBagLayoutConstraints = new GridBagConstraints(); 
+			5. Create Components and add to content pane
+			6. (optional) set constraints for Components
+		Constraints
+			Each component in a GridBagLayout has its own set of constraints. 
+			These are defined by an object of type GridBagConstraints that you associate with each component BEFORE adding the component to the container.
+				Example:
+					gridBagLayoutObject.setConstraints(componentObject, gridBagConstraintsObject);
+			Setting A Constraint
+				Set the value of one of the instance variables
+				When setConstraints() is called to associate the GridBagConstraints object with a component object
+					It CREATES A COPY OF THE CONSTRAINTS OBJECT that was passed as the argument 
+					AND a reference to the copy is stored in the layout not a reference to the object that you created.
+				This enables to change the constraints object to use it for another component without affecting the constraints for the first.
+				Example:
+					gridBagConstraintsObject.fill = GridBagConstraints.BOTH				//GridBagConstraints class has constants for values that can be used for instance variables
+			Instance Variables of GridBagConstraints
+				gridx and gridy  - POSITION
+					Determines the position of the component in the container as coordinate positions of cells in the grid, where (0,0) is the top-left position in the grid.
+					The position of a component is defining where the top-left cell that it occupies is.
+					Either relative to the grid origin or relative to the last component that was added to the container.
+					Default: RELATIVE
+						GridBagContstraints.REALATIVE - places top-left grid position for the component in the column immediately to the right of the previous component. 
+				gridwidth and gridheight  - SIZE
+					Determines the size of the area occupied by the component in the container.
+					The number of cells to be occupied by a component horizontally and vertically 
+					Default: 1
+					GridBagConstraints.REMAINDER
+						makes the component the last one in the row or column and occupies the remaining cells.
+					GridBagConstraints.RELATIVE
+						the component is the penultimate (utolsó elõtti) one in the row or column.
+				weightx and weighty - Available space distribution
+					Determines how free space is distributed between components in the container in the horizontal and vertical directions.
+					The absolute values for weightx and weighty ar
+					If all the values are set to the same (but not zero), the space for each component is distributed uniformly. 
+					Space is distributed between components in the proportions defined by the values of weightx and weighty.
+					The proportion of the available space that a component gets in the x direction is the weightx value for the component divided by the sum of the weightx values in the row. 
+					This also applies to the weighty values for allocating space in the y direction.
+					Example
+						If three components in a row have weightx values of 1.0, 2.0, and 3.0 (sum of weitghtx=6)
+							the first gets 1/6 of the total in the x direction
+							the second gets 2/6, which is 1/3, 
+							the third gets 3/6, which is half. 
+					Default: 0 (components bunched together in the center of the container)
+				anchor 
+					Determines where a component is positioned within the area allocated to it in the container.
+				ipadx and ipady 
+					Determines by how much the component size is to be increased above its minimum size.
+				fill 
+					Determines how the component is to be enlarged to fill the space allocated to it.
+				insets 
+					Specifies the free space that is to be provided around the component within the space allocated to it in the container.
+		Sources on GridBagConstraints
+			http://www.java2s.com/Tutorial/Java/0240__Swing/UsingGridBagConstraints.htm
+	Spring Layout
 
 
 
