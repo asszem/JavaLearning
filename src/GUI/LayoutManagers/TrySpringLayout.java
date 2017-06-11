@@ -46,6 +46,7 @@ public class TrySpringLayout {
     SpringLayout.Constraints constraint = layout.getConstraints(contentPane);
     
     //Set a constraint for the right side (EAST) of the contentPane of of current+15
+    //This positions the right edge of the container 15 units to the right of the right edge of the last button
     constraint.setConstraint(SpringLayout.EAST,
                              Spring.sum(springLayoutConstraints.getConstraint(SpringLayout.EAST),
                              Spring.constant(15)));

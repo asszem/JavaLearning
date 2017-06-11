@@ -561,6 +561,26 @@ Layout Managers
 			constraints.setWidth(wSpring); 													// Set component width constraint
 			constraints.setHeight(hSpring); 												// Set component height constraint
 
+JMenu
+	JMenuBar
+		JMenuBar menuBar = new JMenuBar();
+		containerObject.setJMenuBar(menuBar); //Adds the menu bar to the container (JFrame)
+	JMenu
+		JMenu fileMenu = new JMenu(“File”);
+		fileMenu.addSeparator();
+	JMenuItem
+		You need the reference to the menu item to enable the program to react to the user clicking the item.
+		JMenuItem openMenuItem = new JMenuItem(“Open”);
+		Methods on JMenuItem
+			Because the JMenu class is a subclass of JMenuItem, these methods also apply to JMenu objects
+			void setEnabled(boolean b): If b has the value true, the menu item is enabled; false makes it.  The default state is enabled.
+			void setText(String label): Sets the menu item label to the string stored in the label.
+			String getText(): Returns the current menu item label
+	JCheckBoxMenuItem
+		JCheckboxMenuItem lineItem = new JCheckboxMenuItem(“Line”, true);
+	JRadioButtonMenuItem
+		JRadioButtonMenuItem item = new JRadioButtonMenuItem(“Curve”, true); //Radiobutton pressed
+	
 
 
 
