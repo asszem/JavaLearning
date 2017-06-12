@@ -580,6 +580,27 @@ JMenu
 		JCheckboxMenuItem lineItem = new JCheckboxMenuItem(“Line”, true);
 	JRadioButtonMenuItem
 		JRadioButtonMenuItem item = new JRadioButtonMenuItem(“Curve”, true); //Radiobutton pressed
+	Keyboard Shortcuts & Accllerators
+		Shortcuts
+			A shortcut is a unique key combination used to select a menu on the menu bar directly from the keyboard to display the drop-down menu.
+			Example:
+				fileMenu.setMnemonic(‘F’);	
+		Accellerator
+			An accelerator is a key combination that you can enter to select an item from a drop-down menu without having to go through the process of displaying the menu.
+			KeyStroke class
+				The javax.swing.KeyStroke class defines a keystroke combination. 
+				The static method getKeyStroke() in the KeyStroke class returns the KeyStroke object corresponding to the arguments. 
+				The first argument is a character in the keystroke combination and the second argument specifies one or more modifier keys.
+				Only use uppercase letters to identify a letter for a keystroke. Lowercase letters select the non-alphabetic keys, such as the numeric keypad and the function keys. 
+				The modifier keys are specified as a combination of single-bit constants that are defined in the InputEvent class that appears in the java.awt.event package.
+			InputEvent class
+				The InputEvent class defines constants that identify control keys on the keyboard and mouse buttons. 
+				Constants
+			 	SHIFT_DOWN_MASK, ALT_DOWN_MASK, META_DOWN_MASK, CTRL_DOWN_MASK. 
+				Constants can be combinded:
+					InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK
+			Accellerator Example:
+				lineItem.setAccelerator(KeyStroke.getKeyStroke(‘L’, InputEvent.CTRL_DOWN_MASK));
 	
 
 
