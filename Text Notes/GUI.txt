@@ -599,6 +599,9 @@ JMenu
 			 	SHIFT_DOWN_MASK, ALT_DOWN_MASK, META_DOWN_MASK, CTRL_DOWN_MASK. 
 				Constants can be combinded:
 					InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK
+				Note: manually import InputEvent from awt or Eclipse will mark getKeyStroke as deprecated
+					import static java.awt.event.InputEvent.*;
+				
 			Accellerator Example:
 				lineItem.setAccelerator(KeyStroke.getKeyStroke(‘L’, InputEvent.CTRL_DOWN_MASK));
 	
