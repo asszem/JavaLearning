@@ -510,17 +510,25 @@ Layout Managers
 		Sources on GridBagConstraints
 			http://www.java2s.com/Tutorial/Java/0240__Swing/UsingGridBagConstraints.htm
 	Spring Layout
-		Spring Layout determines the position and size of each component in the container according to a set of constraints that are defined by javax.swing.Spring objects. 
+		Overview
+			Spring Layout determines the position and size of each component in the container according to a set of constraints that are defined by javax.swing.Spring objects. 
+			To constrain the location and size of a component, you call methods for the constraints object to set individual constraints.
 		Setting up a Spring Layout
-			Create the Spring Layout object
+			1. Create the Spring Layout object
 				SpringLayout layout = new SpringLayout(); 		// Create a layout manager
 				Container content = aWindow.getContentPane(); 	// Get the content pane
 				content.setLayout(layout);
-			Before you can access the SpringLayout.constraints object for a component object, you must first add the component to the container
+			2. Add the Component to the Container
+				Before you can access the SpringLayout.constraints object for a component object, you must first add the component to the container
 				JButton button = new JButton(“Press Me”);
 				content.add(button);
-			Now you can call the getConstraint() method for the SpringLayout object to obtain the object encapsulating the constraints:
+			3. Call .getConstraints(Component c)
+				Now you can call the getConstraint() method for the SpringLayout object to obtain the object encapsulating the constraints:
 				SpringLayout.Constraints constraints = layout.getConstraints(button);
+			4. Create Spring object(s)
+				Spring spring = Spring.constant(10,100,1000);
+			5. Assign the Spring object to Component's Constraints to set their constraints
+				constraints.setX(spring)
 		Spring Constraints
 			The top, bottom, left, and right edges of a component are referred to by their compass points: north, south, west, and east
 			X,Y - defines North & West edge
@@ -530,14 +538,14 @@ Layout Managers
 			The X, Y, width, and height constraints can be set independently and a constraint can set explicitly for any edge.
 			If setting values violates the constraints,  the layout manager adjusts one or other of the constraints so that the preceding relationships still apply.
 			The SpringLayout manager automatically adds Spring constraints that control the width and height of a component based on the component's minimum, maximum, and preferred sizes.
-		Spring Object (not teh same as the SpringLayout!)
+		Spring Object (not the same as the SpringLayout!)
 			The Spring class in the javax.swing package defines the Spring object that represents a constraint. 
-			A Spring object is defined by three integer values that relate to the notional (képzeletbeli) length of the spring:
+			A Spring object is defined by three integer values that relate to the notional (képzeletbeli) length of the spring (rugó):
 				the minimum length,
 				the preferred length
 				the maximum length. 
-			A Spring object also has an actual length value that lies between the minimum and the maximum, and that determines the location of the edge to which it applies.
-			Creating Spring Object
+			A Spring object also has an ACTUAL LENGTH value that lies between the minimum and the maximum, and that determines the location of the edge to which it applies.
+			Creating Spring Object - Spring.constant(min, pref, max)
 				The static constant() method in the Spring class creates a Spring object from the three arguments that are the minimum, preferred, and maximum values for the Spring object.
 				If all three values are equal,the object is called a strut because its value is fixed at the common value you set for all three.
 				Example
@@ -550,16 +558,35 @@ Layout Managers
 						Returns a reference to a new object with minimum, preferred, and maximum values that are the same magnitude as those of the argument but with opposite signs.
 					Spring max(Spring spr1,Spring spr2)
 						Returns a reference to a new object that has minimum, preferred, and maximum values that are the maximum of the corresponding values of the arguments.
+				Spring.width(Component c) and Spring.height(Component c)
+					Automatically set the width/height for the Spring object based on the component' dimension that was passed as argument
 		Setting Constraints with Spring objects for a Component (button)
-			SpringLayout.Constraints constraints = layout.getConstraints(button);
-			Spring xSpring = Spring.constant(5,10,20); 										// Spring we’ll use for X
-			Spring ySpring = Spring.constant(3,5,8); 										// Spring we’ll use for Y
-			constraints.setX(xSpring); 														// Set the WEST edge constraint
-			constraints.setY(xSpring); 														// Set the NORTH edge constrain
-			Spring wSpring = Spring.constant(30,50,70); 									// Spring we’ll use for width
-			Spring hSpring = Spring.constant(15); 											// Strut we’ll use for height
-			constraints.setWidth(wSpring); 													// Set component width constraint
-			constraints.setHeight(hSpring); 												// Set component height constraint
+			.setX()
+				Set the WEST(left) edge constraint of the component and the container
+			.setY()
+				Set the NORTH(top) edge constraint of the component and the container
+			.setWidth()
+				Set the Width(size, EAST) of the component
+			.setHeight()
+				Set the Height(size, NORTH) of the component
+			.setConstraint
+				Explicitely set a constraint for an edge
+				layout.getConstraints(newButton).setConstraint( StringLayout.EAST, Spring.sum(xSpring, wSpring));
+			Examples
+				SpringLayout.Constraints constraints = layout.getConstraints(button);			// Get the Constraints for the Component
+				Spring xSpring = Spring.constant(5,10,20); 										// Spring we’ll use for X
+				Spring ySpring = Spring.constant(3,5,8); 										// Spring we’ll use for Y
+				constraints.setX(xSpring); 														// Set the WEST edge constraint
+				constraints.setY(xSpring); 														// Set the NORTH edge constrain
+				Spring wSpring = Spring.constant(30,50,70); 									// Spring we’ll use for width
+				Spring hSpring = Spring.constant(15); 											// Strut we’ll use for height
+				constraints.setWidth(wSpring); 													// Set component width constraint
+				constraints.setHeight(hSpring); 												// Set component height constraint
+				constraints.setHeight(Spring.height(button1Component));							// Set the constraint height based on the height of component passed to Spring.height(comp) method
+		putConstraints
+		
+		Sources on Spring Layouts
+			https://docs.oracle.com/javase/tutorial/uiswing/layout/spring.html
 
 JMenu
 	JMenuBar
