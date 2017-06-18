@@ -569,24 +569,37 @@ Layout Managers
 				Set the Width(size, EAST) of the component
 			.setHeight()
 				Set the Height(size, NORTH) of the component
-			.setConstraint
+			.setConstraint()
 				Explicitely set a constraint for an edge
 				layout.getConstraints(newButton).setConstraint( StringLayout.EAST, Spring.sum(xSpring, wSpring));
-			Examples
-				SpringLayout.Constraints constraints = layout.getConstraints(button);			// Get the Constraints for the Component
-				Spring xSpring = Spring.constant(5,10,20); 										// Spring we値l use for X
-				Spring ySpring = Spring.constant(3,5,8); 										// Spring we値l use for Y
-				constraints.setX(xSpring); 														// Set the WEST edge constraint
-				constraints.setY(xSpring); 														// Set the NORTH edge constrain
-				Spring wSpring = Spring.constant(30,50,70); 									// Spring we値l use for width
-				Spring hSpring = Spring.constant(15); 											// Strut we値l use for height
-				constraints.setWidth(wSpring); 													// Set component width constraint
-				constraints.setHeight(hSpring); 												// Set component height constraint
-				constraints.setHeight(Spring.height(button1Component));							// Set the constraint height based on the height of component passed to Spring.height(comp) method
-		putConstraints
+			.putConstraints()
+				Creates constraints between two components with a spring object between them
+				//										DEPENDENT component					REFERENCE component
+				springLayout.putConstraint(SpringLayout.NORTH, button2, springBetween, SpringLayout.SOUTH, button1);
+			
+		Setting Constraints on the Entire Content Pane
+			SpringLayout does not adjust the size of the container by default so the effect of pack() is as though the content pane were empty
+			You can set constraints on the edges of the content pane using springs that control its size.
+		Examples
+			SpringLayout.Constraints constraints = layout.getConstraints(button);			// Get the Constraints for the Component
+			Spring xSpring = Spring.constant(5,10,20); 										// Spring we値l use for X
+			Spring ySpring = Spring.constant(3,5,8); 										// Spring we値l use for Y
+			constraints.setX(xSpring); 														// Set the WEST edge constraint
+			constraints.setY(xSpring); 														// Set the NORTH edge constrain
+			Spring wSpring = Spring.constant(30,50,70); 									// Spring we値l use for width
+			Spring hSpring = Spring.constant(15); 											// Strut we値l use for height
+			constraints.setWidth(wSpring); 													// Set component width constraint
+			constraints.setHeight(hSpring); 												// Set component height constraint
+			constraints.setHeight(Spring.height(button1Component));							// Set the constraint height based on the height of component passed to Spring.height(comp) method
+			Aligning a Component to Center
+				// For Horizontal Alignment    
+				layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, component, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
+				// For Vertical Alignment
+				layout.putConstraint(SpringLayout.VERTICAL_CENTER, component, 0, SpringLayout.VERTICAL_CENTER, contentPane);
 		
 		Sources on Spring Layouts
 			https://docs.oracle.com/javase/tutorial/uiswing/layout/spring.html
+			https://stackoverflow.com/questions/21622148/how-can-i-center-align-a-component-with-springlayout
 
 JMenu
 	JMenuBar
