@@ -661,3 +661,6 @@ JMenu
 
 Source
 	Horton, Chapter 17, p661
+	https://docs.oracle.com/javase/tutorial/uiswing/layout/spring.html
+	https://docs.oracle.com/javase/7/docs/api/javax/swing/SpringLayout.html
+	https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
