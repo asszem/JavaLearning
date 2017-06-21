@@ -591,9 +591,14 @@ Layout Managers
 			constraints.setWidth(wSpring); 													// Set component width constraint
 			constraints.setHeight(hSpring); 												// Set component height constraint
 			constraints.setHeight(Spring.height(button1Component));							// Set the constraint height based on the height of component passed to Spring.height(comp) method
-		
+		Aligning a Component to Center
+			// For Horizontal Alignment    
+			layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, component, 0, SpringLayout.HORIZONTAL_CENTER, contentPane);
+			// For Vertical Alignment
+			layout.putConstraint(SpringLayout.VERTICAL_CENTER, component, 0, SpringLayout.VERTICAL_CENTER, contentPane);
 		Sources on Spring Layouts
 			https://docs.oracle.com/javase/tutorial/uiswing/layout/spring.html
+			https://stackoverflow.com/questions/21622148/how-can-i-center-align-a-component-with-springlayout
 
 JMenu
 	JMenuBar
