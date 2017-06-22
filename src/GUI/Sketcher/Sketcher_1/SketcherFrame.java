@@ -1,4 +1,4 @@
-package GUI.Practice.Sketcher.Sketcher_1;
+package GUI.Sketcher.Sketcher_1;
 
 // Main window for the Sketcher application
 import javax.swing.*;
