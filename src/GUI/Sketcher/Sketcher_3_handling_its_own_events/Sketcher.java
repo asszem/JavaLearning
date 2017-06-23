@@ -1,4 +1,4 @@
-package GUI.Sketcher.Sketcher_3_handling_its_own_closing_events;
+package GUI.Sketcher.Sketcher_3_handling_its_own_events;
 // Sketching application
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class Sketcher {
   }
 
   public static void createWindow(){
-    window = new SketcherFrame("Sketcher handling its own closing event");                            // Create the app window
+    window = new SketcherFrame("Sketcher handling its own events");                            // Create the app window
     Toolkit theKit = window.getToolkit();                              // Get the window toolkit
     Dimension wndSize = theKit.getScreenSize();                        // Get screen size
 
