@@ -1,16 +1,9 @@
-/* Warning. 
- * Using listeners is the recommended approach to handling events in the majority of circumstances.
-Separating the event handling from the object that originated the event 
-results in a simpler code structure that is easier to understand and is less error prone.
- * */
-package GUI.Sketcher.Sketcher_3_handling_its_own_events;
+package GUI.Sketcher.Sketcher_4_event_listener;
 
 // Main window for the Sketcher application
 import javax.swing.*;
-import static java.awt.event.InputEvent.*;                             // For modifier constants
+import static java.awt.event.InputEvent.*; 			//For the .getKeyStrokes method to work
 
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 
 @SuppressWarnings("serial")
 public class SketcherFrame extends JFrame {
@@ -28,47 +21,6 @@ public class SketcherFrame extends JFrame {
 			greenItem, blueItem;
 	
 	
-	//Enabling Events
-	// Override methods for selected event IDs of enabled events and make sure super is called for the rest
-	@Override
-	protected void processMouseEvent(MouseEvent m) {
-		if (m.getID() == MouseEvent.MOUSE_CLICKED) {
-			System.out.println("Mouse clicked");
-		}
-		super.processMouseEvent(m);
-	}
-
-	@Override
-	protected void processWindowFocusEvent(WindowEvent e) {
-		if (e.getID() == WindowEvent.WINDOW_LOST_FOCUS) {
-			System.out.println("Window lost focus");
-		}
-		if (e.getID() == WindowEvent.WINDOW_GAINED_FOCUS) {
-			System.out.println("Window gained focus");
-		}
-		super.processWindowFocusEvent(e);
-
-	}
-
-	@Override
-	protected void processWindowStateEvent(WindowEvent e) {
-
-		if (e.getID() == WindowEvent.WINDOW_STATE_CHANGED) {
-			System.out.println("Window state changed");
-		}
-		super.processWindowStateEvent(e); 							// if the event is NOT exit, pass it to superclass (JFRAME) so
-	}
-
-	@Override
-	protected void processWindowEvent(WindowEvent e) { 						// Overrides processWindowEvent in JFrame
-		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			System.out.println("Window is closing");
-			dispose(); // Release resources - inherited from java.awt.Window
-			System.exit(0); // Exit the program
-		}
-		super.processWindowEvent(e); // if the event is NOT exit, pass it to superclass (JFRAME) so
-		// this allows the event to be passed on to any listeners that have been registered for these events
-	}
 
 	// Constructor
 	public SketcherFrame(String title) {
@@ -131,8 +83,6 @@ public class SketcherFrame extends JFrame {
 		menuBar.add(fileMenu);                                             // Add the file menu
 		menuBar.add(elementMenu);                                          // Add the element menu
 
-		// Enable multiple events with bitwise OR operater
-		enableEvents(WINDOW_EVENT_MASK | WINDOW_STATE_EVENT_MASK | WINDOW_FOCUS_EVENT_MASK | MOUSE_EVENT_MASK);
 	} // End SketcherFrame constructor method
 
 }
