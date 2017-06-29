@@ -39,5 +39,11 @@ public class maxMirrorTest {
 		int[] b={4,3,2,1};
 		assertTrue(maxMirror.compareMirror(a, b));
 	}
+	@Test
+	public void testCompareMirror_validOddMirror() {
+		int[] a={1,2,1};
+		int[] b={1,2,1};
+		assertTrue(maxMirror.compareMirror(a, b));
+	}
 
 }
