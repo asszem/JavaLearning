@@ -1,4 +1,4 @@
-oummary
+Summary
 
 Keywords
 	JavaAWT java.awt - Abstract Windowing Toolkit - until java 1.1
@@ -644,7 +644,65 @@ JMenu
 			Accellerator Example:
 				lineItem.setAccelerator(KeyStroke.getKeyStroke(‘L’, InputEvent.CTRL_DOWN_MASK));
 	
-
+Events
+	Description
+		The signals that a program receives from the operating system as a result of your actions are called events. 
+		Each event that the program does recognize is associated with one or more methods.
+		When the event occurs the appropriate methods are called automatically. 
+		A window-based program is called an event-driven program because the sequence of events created as a result of your interaction with the GUI drives and determines what happens in the program.
+	Overview
+		Source of the Event (Source Object)
+			An event always have a source object. A JButton for example.
+		Event Object (ActionEvent object)
+			Any event that is passed to a Java program is represented by a particular event object
+		Target for an Event (Listener object)
+			A listener object that has previously registered an interest in this kind of event — a listener object being simply an object that listens for particular events. 
+			A listener object can listen for events for a particular object — just a single button, for example — or it can listen for events for several different objects 
+		Event handling method
+			 The ActionEvent object is passed as an argument to the method that is to handle the event.
+	Low Level vs Semantic Events
+		Low Level events
+			System-level events: mouse movement, window state change, window resize, keyboard pressed
+			.getSource() method that returns the source of an event as type Object
+			java.awt.events classes:
+				FocusEvent
+				MouseEvent
+				KeyEvent
+				WindowEvent
+				... there are many more 
+		Semantic events
+			Specific GUI component-level events:  selecting a button by clicking it to cause some program action or adjusting a scrollbar. 
+			They originate, and you interpret them, in the context of the GUI you have created for your program. 
+	Enable Event directly for an object
+		Description
+			Enable event if you want an object to handle some of its own events, although you can achieve the same result using a listener.
+		Note
+			There are masks for component events represented by objects of the class ComponentEvent and for container events. 	
+		Process
+			0. create object (for example a JFrame)
+			1. enableEvents(EVENT_TYPE_MASK)
+			2. @override processEvent method
+			3. identify eventID to determine action
+			4. call super process method for other listeners
+			Example
+				instance.enableEvent(EVENT_TYPE_MASK);
+				protected void processEVENT_TYPE(EVENT_TYPE eventObject){
+					if (eventObject.getID==EVENT_TYPE.EVENT_ACTION) {
+						...implement action for the event
+						}
+					super.processEVENT_TYPE(eventObject);
+					}
+	Event Listener
+		Process
+			Create Source Object -> make class implement Listener interface -> add listener to object -> implement event process method
+			1. Register the component with Listener
+			2. Create event handling code
+				2.1. Within class
+					Class must implement xxxListener (ActionListener)
+				2.2. Other class
+					External class must implement ActionListener
+				2.3. Anonymous class
+					object.addActionListener(new ActionListener(){ .... code here ....}  )
 
 
 
@@ -660,7 +718,12 @@ JMenu
 
 
 Source
-	Horton, Chapter 17, p661
-	https://docs.oracle.com/javase/tutorial/uiswing/layout/spring.html
-	https://docs.oracle.com/javase/7/docs/api/javax/swing/SpringLayout.html
-	https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
+	Detailed description of creating JFrame, components, layout managers
+		Horton, Chapter 17, p661 - Creating Windows
+		Horton, Chapter 18, pxxx - Handling Events
+	Official decriptions
+		https://docs.oracle.com/javase/tutorial/uiswing/layout/spring.html
+		https://docs.oracle.com/javase/7/docs/api/javax/swing/SpringLayout.html
+		https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
+	Great, simple tutorial of event handling
+		https://www.javatpoint.com/event-handling-in-java

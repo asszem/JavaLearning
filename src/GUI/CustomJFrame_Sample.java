@@ -6,12 +6,13 @@ import java.awt.Toolkit;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
-public class MyCustomJFrame extends JFrame {
+public class CustomJFrame_Sample extends JFrame {
 
 	private JMenuBar menuBar = new JMenuBar();                            // Window menu bar
+	private static CustomJFrame_Sample mainJFrame;
 
 	// Constructor
-	public MyCustomJFrame(String title) {
+	public CustomJFrame_Sample(String title) {
 		setTitle(title);                                                  // Set the window title
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -37,5 +38,20 @@ public class MyCustomJFrame extends JFrame {
 		fileInnerMenu.addSeparator();
 		JMenuItem openFile = fileInnerMenu.add("Open file");
 		
+	}
+
+	private static void createWindow(String title) {
+		mainJFrame = new CustomJFrame_Sample(title);
+		mainJFrame.setVisible(true);
+	}
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				createWindow("Test");
+			}
+		});
 	}
 }
