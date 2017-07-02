@@ -43,7 +43,7 @@ public class JMenuBar_Sample {
 		jSubMenu.add(jcbMenuItem2);
 		jSubMenu.add(jrbMenuItem2);
 
-		// Create shortcuts for menu
+		// Create shortcuts for Menu - Alt-M will open Menu
 		jMenu.setMnemonic('M');
 		
 		//Create accelerator for menu items
