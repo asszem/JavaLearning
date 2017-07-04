@@ -4,6 +4,9 @@ import static java.awt.AWTEvent.MOUSE_EVENT_MASK;
 import static java.awt.AWTEvent.WINDOW_EVENT_MASK;
 import static java.awt.AWTEvent.WINDOW_FOCUS_EVENT_MASK;
 import static java.awt.AWTEvent.WINDOW_STATE_EVENT_MASK;
+
+import java.awt.AWTEvent;
+
 import static java.awt.AWTEvent.KEY_EVENT_MASK;
 
 import java.awt.event.KeyEvent;
@@ -43,6 +46,14 @@ class EnableEvents_JFrame extends JFrame {
 	}
 
 	// Override methods for selected event IDs of enabled events and make sure super is called for the rest
+
+	@Override
+	protected void processEvent(AWTEvent e) {	// must use AWTEvent
+		// This is called fi rst for any events that are enabled for the component.
+		// If you implement this and fail to call the base class method, none of the methods for specifi c groups of events are called.
+		System.out.println("An event occured!");
+		super.processEvent(e);
+	}
 
 	@Override
 	protected void processKeyEvent(KeyEvent k) {

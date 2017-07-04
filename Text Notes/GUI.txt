@@ -678,6 +678,24 @@ Events
 			Enable event if you want an object to handle some of its own events, although you can achieve the same result using a listener.
 		Note
 			There are masks for component events represented by objects of the class ComponentEvent and for container events. 	
+		Window Class Methods to handel Component Events
+			processEvent(AWTEvent e) 
+				This is called first for any events that are enabled for the component. 
+				If you implement this and fail to call the base class method, none of the methods for specific groups of events are called.
+			processWindowFocusEvent( WindowEvent e) 
+				This is called for any window focus events that arise as long as such events are enabled for the window.
+			processWindowStateEvent( WindowEvent e) 
+				This is called for events resulting from the window changing state.
+			processFocusEvent(FocusEvent e) 
+				This is called for focus events, if they are enabled for the component.
+			processKeyEvent(KeyEvent e) 
+				This is called for key events, if they are enabled for the component.
+			processMouseEvent(MouseEvent e) 
+				This is called for mouse button events, if they are enabled for the component.
+			processMouseMotionEvent(MouseEvent e) 
+				This is called for mouse move and drag events, if they are enabled for the component.
+			processMouseWheelEvent(MouseWheelEvent e) 
+				This is called for mouse wheel rotation events, if they are enabled for the component.
 		Process
 			0. create object (for example a JFrame)
 			1. enableEvents(EVENT_TYPE_MASK)
@@ -693,14 +711,56 @@ Events
 					super.processEVENT_TYPE(eventObject);
 					}
 	Event Listener
-		Process
+		Description
+			A class that defines an event listener must implement a listener interface. 
+			All event listener interfaces extend the interface java.util.EventListener. 
+			This interface doesn't declare any methods, though — it's just used to identify event listener objects. 
+			You can use a variable of type EventListener to hold a reference to any kind of event listener object.
+		Semantic Listeners and Low-Level Listeners
+			Low-Level Listener Interfaces
+				A class must implement all methods (even if empty) of a listener interface to be able to use it
+				List of Low-Level Interfaces
+					WindowListener
+					WindowFocusListener
+					WindowStateListener
+					MouseListener
+					MouseMotionListener
+					MouseWheelListener
+					KeyListener
+					FocusListener
+			Adapter Classes
+				An adapter class is a term for a class that implements a listener interface with methods that have no content, so they do nothing.
+				Adapter classes must be extended to
+				It is very important to use the @Override annotation when you are using adapter classes
+				List of Adapter Classes:
+					MouseAdapter
+					MouseInputAdapter
+					MouseMotionAdapter
+					WindowAdapter
+					KeyAdapter
+					FocusAdapter
+			Semantic Listeners
+				Semantic events relate to operations on the components in the GUI for your program. Different kinds of components can produce different kinds of semantic events. 
+				ActionEvent
+					ActionEvent is generated when you perform an action on a component such as clicking on a menu item or a button. 
+						Buttons: JButton, JToggleButton, JCheckBox
+						Menus: JMenuItem, JMenu, JCheckBoxMenuItem, JRadioButtonMenuItem
+				ItemEvent
+					ItemEvent occurs when a component is selected or deselected
+						Buttons: JButton, JToggleButton, JCheckBox
+						Menus: JMenuItem, JMenu, JCheckBoxMenuItem, JRadioButtonMenuItem
+				AdjustmentEvent
+					AdjustmentEvent is produced when an adjustable object, such as a scrollbar, is adjusted.
+						Scrollbar: JScrollbar
+		Process of creating EventListeners
 			Create Source Object -> make class implement Listener interface -> add listener to object -> implement event process method
 			1. Register the component with Listener
+				object.addXXXListener(ObjectThatImplementsXXXListener);
 			2. Create event handling code
 				2.1. Within class
-					Class must implement xxxListener (ActionListener)
+					Class must implement xxxListener (ActionListener) or extend to Adapter
 				2.2. Other class
-					External class must implement ActionListener
+					External class must implement ActionListener or extend to Adapter
 				2.3. Anonymous class
 					object.addActionListener(new ActionListener(){ .... code here ....}  )
 

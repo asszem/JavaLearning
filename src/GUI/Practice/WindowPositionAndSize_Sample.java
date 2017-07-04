@@ -6,14 +6,14 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-import GUI.Window_Collection;
+import GUI.JFrame_Collection;
 
 public class WindowPositionAndSize_Sample {
 
 	JFrame window;
 
 	public WindowPositionAndSize_Sample(String title) {
-		window = Window_Collection.createJFrameWindow(title);
+		window = JFrame_Collection.createJFrameWindow(title);
 	}
 
 	public void displayWindowPositionAndSize() {

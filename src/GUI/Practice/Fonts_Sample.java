@@ -2,12 +2,12 @@ package GUI.Practice;
 
 import java.awt.Font;
 
-import GUI.Window_Collection;
+import GUI.JFrame_Collection;
 
 public class Fonts_Sample {
 
 	public static void main(String[] args) {
-		Font[] fonts = Window_Collection.getAllFonts();
+		Font[] fonts = JFrame_Collection.getAllFonts();
 //		System.out.println(java.util.Arrays.toString(fonts));
 		int counter=0;
 		for (Font font:fonts){
@@ -19,7 +19,7 @@ public class Fonts_Sample {
 		Font myTimes = fonts[357].deriveFont(Font.BOLD, 20);
 		System.out.println(myTimes);
 		
-		String[] fontnames = Window_Collection.getAllFontNames();
+		String[] fontnames = JFrame_Collection.getAllFontNames();
 		counter=0;
 		System.out.println("Printing out fontnames only");
 		for (String font:fontnames){

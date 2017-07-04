@@ -16,7 +16,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class Window_Collection {
+public class JFrame_Collection {
 
 	// Start an Event Dispatching Thread by using SwingUtilities.invokeLater
 	public static void main(String[] args) {
