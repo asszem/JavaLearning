@@ -1,6 +1,6 @@
 package GUI.Sketcher.Sketcher_6_elementType_Listeners;
 
-// Main window for the Sketcher application
+// Main window for the Sketcher6 application
 import javax.swing.*;
 import static java.awt.event.InputEvent.*;                             // For modifier constants
 import java.awt.event.*;
@@ -9,10 +9,23 @@ import static java.awt.Color.*;														// To use all color names
 import static GUI.Sketcher.Sketcher_6_elementType_Listeners.SketcherConstants.*;	//Import all static constants
 
 @SuppressWarnings("serial")
-public class SketcherFrame extends JFrame {
+public class Sketcher6Frame extends JFrame {
+
+	private JMenuBar menuBar = new JMenuBar();                           // Window menu bar
+
+	// File menu items
+	private JMenuItem newItem, openItem, closeItem, saveItem, saveAsItem, printItem;
+
+	// Element menu items
+	private JRadioButtonMenuItem lineItem, rectangleItem, circleItem,   // Types
+			curveItem, textItem;
+	private JCheckBoxMenuItem redItem, yellowItem,             // Colors
+			greenItem, blueItem;
+	private Color elementColor = DEFAULT_ELEMENT_COLOR;        // Current element color, default is BLUE
+	private int currentElementType = DEFAULT_ELEMENT_TYPE;            // Current element type, defined in constants, which is LINE (101)
 
 	// Constructor
-	public SketcherFrame(String title) {
+	public Sketcher6Frame(String title) {
 		setTitle(title);                                                   // Set the window title
 		setJMenuBar(menuBar);                                              // Add the menu bar to the window
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -39,11 +52,11 @@ public class SketcherFrame extends JFrame {
 		printItem.setAccelerator(KeyStroke.getKeyStroke('P', CTRL_DOWN_MASK));
 
 		// Construct the Element drop-down menu
-		// If the elementType==defaultElement, then it will result in True and the element button will be in selected state
-		elementMenu.add(lineItem = new JRadioButtonMenuItem("Line", elementType == LINE)); // 2nd parameter: boolean selected
-		elementMenu.add(rectangleItem = new JRadioButtonMenuItem("Rectangle", elementType == RECTANGLE));
-		elementMenu.add(circleItem = new JRadioButtonMenuItem("Circle", elementType == CIRCLE));
-		elementMenu.add(curveItem = new JRadioButtonMenuItem("Curve", elementType == CURVE));
+		// If the currentElementType==defaultElement, then it will result in True and the element button will be in selected state
+		elementMenu.add(lineItem = new JRadioButtonMenuItem("Line", currentElementType == LINE)); // 2nd parameter: boolean selected
+		elementMenu.add(rectangleItem = new JRadioButtonMenuItem("Rectangle", currentElementType == RECTANGLE));
+		elementMenu.add(circleItem = new JRadioButtonMenuItem("Circle", currentElementType == CIRCLE));
+		elementMenu.add(curveItem = new JRadioButtonMenuItem("Curve", currentElementType == CURVE));
 		ButtonGroup types = new ButtonGroup();
 		types.add(lineItem);
 		types.add(rectangleItem);
@@ -63,18 +76,29 @@ public class SketcherFrame extends JFrame {
 		colorMenu.add(yellowItem = new JCheckBoxMenuItem("Yellow", elementColor.equals(YELLOW)));
 		colorMenu.add(greenItem = new JCheckBoxMenuItem("Green", elementColor.equals(GREEN)));
 		colorMenu.add(blueItem = new JCheckBoxMenuItem("Blue", elementColor.equals(BLUE)));
-
+		ButtonGroup colors = new ButtonGroup(); //To make sure only one color checkbox can be selected
+		colors.add(redItem);
+		colors.add(yellowItem);
+		colors.add(greenItem);
+		colors.add(blueItem);
+		
 		// Add element color accelerators
 		redItem.setAccelerator(KeyStroke.getKeyStroke('R', CTRL_DOWN_MASK));
 		yellowItem.setAccelerator(KeyStroke.getKeyStroke('Y', CTRL_DOWN_MASK));
 		greenItem.setAccelerator(KeyStroke.getKeyStroke('G', CTRL_DOWN_MASK));
 		blueItem.setAccelerator(KeyStroke.getKeyStroke('B', CTRL_DOWN_MASK));
 
-		// Add type menu item listeners
+		// Add type menu item listeners using constants from SketcherConstants
 		lineItem.addActionListener(new TypeListener(LINE));
 		rectangleItem.addActionListener(new TypeListener(RECTANGLE));
 		circleItem.addActionListener(new TypeListener(CIRCLE));
 		curveItem.addActionListener(new TypeListener(CURVE));
+
+		// Add color menu item listeners
+		redItem.addActionListener(new ColorListener(Color.RED));
+		yellowItem.addActionListener(new ColorListener(Color.YELLOW));
+		greenItem.addActionListener(new ColorListener(Color.GREEN));
+		blueItem.addActionListener(new ColorListener(Color.BLUE));
 
 		menuBar.add(fileMenu);                                             // Add the file menu
 		menuBar.add(elementMenu);                                          // Add the element menu
@@ -83,6 +107,8 @@ public class SketcherFrame extends JFrame {
 	// Handles element type menu items
 	class TypeListener implements ActionListener {
 
+		private int type;                                                  // Store the type for the menu
+
 		// Constructor
 		TypeListener(int type) {
 			this.type = type;
@@ -90,23 +116,26 @@ public class SketcherFrame extends JFrame {
 
 		// Sets the element type
 		public void actionPerformed(ActionEvent e) {
-			elementType = type; // change the element type to the type that is clicked
-			System.out.println("Element type changed to:"+elementType);
+			currentElementType = type; // change the element type to the type that is clicked
+			System.out.println("Element type changed to:" + currentElementType);
 		}
-
-		private int type;                                                  // Store the type for the menu
 	}
 
-	private JMenuBar menuBar = new JMenuBar();                           // Window menu bar
+	class ColorListener implements ActionListener {
 
-	// File menu items
-	private JMenuItem newItem, openItem, closeItem, saveItem, saveAsItem, printItem;
+		private Color color;
 
-	// Element menu items
-	private JRadioButtonMenuItem lineItem, rectangleItem, circleItem,   // Types
-			curveItem, textItem;
-	private JCheckBoxMenuItem redItem, yellowItem,                  // Colors
-			greenItem, blueItem;
-	private Color elementColor = DEFAULT_ELEMENT_COLOR;                  // Current element color, deault is BLUE
-	private int elementType = DEFAULT_ELEMENT_TYPE;                      // Current element type, defined in constants, which is LINE (101)
+		ColorListener(Color color) {
+			this.color = color;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			elementColor = color;
+			System.out.println("Color changed to" + elementColor);
+			System.out.println("Color event: " + e.toString());
+		}
+
+	}
+
 }

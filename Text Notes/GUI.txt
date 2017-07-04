@@ -272,8 +272,16 @@ Swing Components
 			JRadioButton (ButtonGroup)
 				Radio buttons defined as JRadioButton objects generally operate in a group so that only one button can be in the pressed state at any one time. 
 				This grouping is established by adding the JRadioButton object to a ButtonGroup object that takes care of the state of the buttons in the group.
-		JCheckbox
-			A JCheckBox object is a button with a square checkbox to the left. Clicking on the checkbox changes its state from checked to unchecked or vice versa.
+			JCheckbox
+				A JCheckBox object is a button with a square checkbox to the left. Clicking on the checkbox changes its state from checked to unchecked or vice versa.
+		ButtonGroup object
+			The ButtonGroup object tracks the state of all of the buttons in the group. 
+			When any button is turned on, all the others are turned off, so only one button in the group can be on at one time
+			Only one button can be selected from the buttons(checkboxes, radiobuttons) that are added to a ButtonGroup
+			Example:
+				ButtonGroup checkboxGroup = new ButtonGroup();
+				checkBoxGroup.add(checkboxitem1);
+				checkBoxGroup.add(checkboxitem2);
 	Menus
 		JMenuBar
 			The JMenuBar class defines a menu bar usually found at the top of an application window.
