@@ -272,8 +272,16 @@ Swing Components
 			JRadioButton (ButtonGroup)
 				Radio buttons defined as JRadioButton objects generally operate in a group so that only one button can be in the pressed state at any one time. 
 				This grouping is established by adding the JRadioButton object to a ButtonGroup object that takes care of the state of the buttons in the group.
-		JCheckbox
-			A JCheckBox object is a button with a square checkbox to the left. Clicking on the checkbox changes its state from checked to unchecked or vice versa.
+			JCheckbox
+				A JCheckBox object is a button with a square checkbox to the left. Clicking on the checkbox changes its state from checked to unchecked or vice versa.
+		ButtonGroup object
+			The ButtonGroup object tracks the state of all of the buttons in the group. 
+			When any button is turned on, all the others are turned off, so only one button in the group can be on at one time
+			Only one button can be selected from the buttons(checkboxes, radiobuttons) that are added to a ButtonGroup
+			Example:
+				ButtonGroup checkboxGroup = new ButtonGroup();
+				checkBoxGroup.add(checkboxitem1);
+				checkBoxGroup.add(checkboxitem2);
 	Menus
 		JMenuBar
 			The JMenuBar class defines a menu bar usually found at the top of an application window.
@@ -763,9 +771,52 @@ Events
 					External class must implement ActionListener or extend to Adapter
 				2.3. Anonymous class
 					object.addActionListener(new ActionListener(){ .... code here ....}  )
-
-
-
+	Action Objects
+		Description
+			An Action is an object of any class that implements the javax.swing.Action interface
+			This interface declares methods that operate on an Action object — for example, storing properties relating to the action, enabling it, and disabling it. 
+			The Action interface extends to the ActionListener interface, so an Action object is a listener as well as an action.
+		Adding Action as arguments
+			Some Swing components (JMenu, JToolbar) have an .add() method that accepts an argument of type Action. 
+			The method creates a component from the Action object that is automatically of the right type. 
+			You can add the very same Action object to both a menu and a toolbar.
+			Because the Action object is its own listener, you automatically get both the menu item and the toolbar button supported by the same action.
+		Action Properties
+			Properties are items of information that relate to a particular object and are stored as part of the object. Often stored in a map with key:value pairs
+			The Action interface has provision for storing several basic standard properties that relate to an Action object. Keys are String
+			Properties
+				NAME: A String object that is the label for a menu item or a toolbar button.
+				SMALL_ICON: A javax.Swing.Icon reference to a small icon for a menu item (typically a javax.Swing.ImageIcon object).
+				LARGE_ICON_KEY: An Icon reference to a large icon for a toolbar button (typically an ImageIcon object).
+				SHORT_DESCRIPTION: A String object that is a tooltip.
+				LONG_DESCRIPTION: A String object that is a context-sensitive help message.
+				ACCELERATOR_KEY: A javax.swing.KeyStroke object that represents a key combination is the accelerator for the action.
+				DISPLAYED_MNEMONIC_INDEX_KEY: An Integer object indicating where in the NAME property value the decoration (which is an underline) for a mnemonic should be rendered. 
+				MNEMONIC_KEY: An Integer that corresponds to a KeyEvent key code.
+				SELECTED_KEY: A Boolean object that records the selected or unselected state.
+				ACTION_COMMAND_KEY: A String object that is the command string for the action
+		Action Methods
+			void putValue(String key,Object value)
+				Stores the object value associated with the key constant key in the action object. 
+				Example to store String object "Save all" as NAME value
+					putValue(NAME, “Save All”);
+			Object getValue(String key)
+				This retrieves the object from the map corresponding to the key key. 
+				Example to retrieve a small icon from an action object, action:
+					ImageIcon lineIcon = (ImageIcon)(action.getValue(SMALL_ICON));
+			boolean isEnabled()
+				This returns true if the action object is enabled and false otherwise.
+			void setEnabled(boolean state)
+				This sets the Action object as enabled if state is true and disabled if it is false. 
+				This operates on BOTH the toolbar button and the menu item if they have been created using the same Action object.
+			void addPropertyChangeListener(PropertyChangeListener listener)
+				This adds the listener passed as an argument, which listens for changes to properties such as the enabled state of the object. 
+				This is used by a container for an Action object to track property changes.
+			void removePropertyChangeListener(PropertyChangeListener listener)
+				This removes the listener passed as an argument. This is also for use by a Container object.
+		AbstractAction javax.swing
+			The javax.swing package defines the AbstractAction class that already implements the Action interface. 
+			If you EXTEND this class to create your own action class, you get a basic infrastructure for free, including the ability to handle events.
 
 
 

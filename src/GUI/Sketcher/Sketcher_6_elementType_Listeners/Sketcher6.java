@@ -5,10 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Sketcher {
+public class Sketcher6 {
 
 	public static void main(String[] args) {
-		theApp = new Sketcher();                                          // Create the application object
+		theApp = new Sketcher6();                                          // Create the application object
 		SwingUtilities.invokeLater(new Runnable() {
 
 			public void run() {
@@ -19,7 +19,7 @@ public class Sketcher {
 
 	// Method to create the application GUI
 	private void createGUI() {
-		window = new SketcherFrame("Sketcher");                            // Create the app window
+		window = new Sketcher6Frame("Sketcher6 - Element Type Listeners"); // Create the app window
 		Toolkit theKit = window.getToolkit();                              // Get the window toolkit
 		Dimension wndSize = theKit.getScreenSize();                        // Get screen size
 
@@ -31,7 +31,7 @@ public class Sketcher {
 		window.setVisible(true);
 	}
 
-	// Handler class for window events
+	// Handler class for window events - used as addWindowListener method's argument
 	class WindowHandler extends WindowAdapter {
 
 		// Handler for window closing event
@@ -42,6 +42,6 @@ public class Sketcher {
 		}
 	}
 
-	private SketcherFrame window;                                        // The application window
-	private static Sketcher theApp;                                      // The application object
+	private Sketcher6Frame window;                                        // The application window
+	private static Sketcher6 theApp;                                      // The application object
 }
