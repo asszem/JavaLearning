@@ -838,3 +838,5 @@ Source
 		https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
 	Great, simple tutorial of event handling
 		https://www.javatpoint.com/event-handling-in-java
+	Sample of using Action objects for buttons
+		https://docs.oracle.com/javase/tutorial/uiswing/misc/action.html
