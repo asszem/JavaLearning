@@ -4,8 +4,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -14,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -84,8 +81,13 @@ public class Window_Menu_Buttons_ActionObjects_Sample {
 
 	public void setButtons() {
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(new JButton(button1));
+		buttonPanel.add(new JButton(button1)); //JButton objects are created from Action objects
 		buttonPanel.add(new JButton(button2));
+		JButton button=new JButton(openFile) ;
+		button.setHideActionText(true);			//To hide the NAME attribute of Action button
+		button.setText("Open File Button");		//To overwrite the displayed attribute
+		buttonPanel.add(button); //Button created from the same Action object as for OpenFile
+		buttonPanel.add(new JButton(quitProgram) ); //Button created from the same Action object as for quitProgram
 		Container content = jFrame.getContentPane();
 		content.add(buttonPanel);
 	}
