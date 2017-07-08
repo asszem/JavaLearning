@@ -7,7 +7,6 @@ import java.awt.event.*;
 import java.awt.*;
 
 import static java.awt.event.InputEvent.*;
-import static java.awt.AWTEvent.*;
 import static java.awt.Color.*;
 import static GUI.Sketcher.Sketcher_7_WithToolbar.Sketcher7Constants.*;
 import static javax.swing.Action.*;
@@ -64,6 +63,12 @@ public class Sketcher7Frame extends JFrame {
 		printAction = new FileAction("Print", 'P', CTRL_DOWN_MASK);
 		exitAction = new FileAction("Exit", 'X', CTRL_DOWN_MASK);
 
+		// Disable some items by default
+		 closeAction.setEnabled(false);
+		 saveAction.setEnabled(false);
+		 saveAsAction.setEnabled(false);
+		 printAction.setEnabled(false);
+
 		// Initialize the array
 		FileAction[] actions = { openAction, closeAction, saveAction, saveAsAction, printAction, exitAction };
 		fileActions = actions;
@@ -74,6 +79,20 @@ public class Sketcher7Frame extends JFrame {
 		saveAction.putValue(LARGE_ICON_KEY, SAVE24);
 		saveAsAction.putValue(LARGE_ICON_KEY, SAVEAS24);
 		printAction.putValue(LARGE_ICON_KEY, PRINT24);
+
+		// Add small menu icons
+		newAction.putValue(SMALL_ICON, NEW16);
+		openAction.putValue(SMALL_ICON, OPEN16);
+		saveAction.putValue(SMALL_ICON, SAVE16);
+		saveAsAction.putValue(SMALL_ICON, SAVEAS16);
+		printAction.putValue(SMALL_ICON, PRINT16);
+
+		// Add tooltips
+		newAction.putValue(SHORT_DESCRIPTION, "Create new file");
+		openAction.putValue(SHORT_DESCRIPTION, "Open file");
+		saveAction.putValue(SHORT_DESCRIPTION, "Save file");
+		saveAsAction.putValue(SHORT_DESCRIPTION, "Save as...");
+		printAction.putValue(SHORT_DESCRIPTION, "Print file");
 	}
 
 	// Create the File menu
@@ -107,11 +126,22 @@ public class Sketcher7Frame extends JFrame {
 		TypeAction[] actions = { lineAction, rectangleAction, circleAction, curveAction };
 		typeActions = actions;
 
-		// Add toolbar icons
+		// Add large toolbar icons to Action objects
 		lineAction.putValue(LARGE_ICON_KEY, LINE24); // Icon references are from Sketcher7Constants file
 		rectangleAction.putValue(LARGE_ICON_KEY, RECTANGLE24);
 		circleAction.putValue(LARGE_ICON_KEY, CIRCLE24);
 		curveAction.putValue(LARGE_ICON_KEY, CURVE24);
+
+		// Add small menu icons to Action objects
+		lineAction.putValue(SMALL_ICON, LINE16); // Icon references are from Sketcher7Constants file
+		rectangleAction.putValue(SMALL_ICON, RECTANGLE16);
+		circleAction.putValue(SMALL_ICON, CIRCLE16);
+		curveAction.putValue(SMALL_ICON, CURVE16);
+
+		lineAction.putValue(SHORT_DESCRIPTION, "Draw lines");
+		rectangleAction.putValue(SHORT_DESCRIPTION, "Draw rectangles");
+		circleAction.putValue(SHORT_DESCRIPTION, "Draw circles");
+		curveAction.putValue(SHORT_DESCRIPTION, "Draw curves");
 	}
 
 	// Create the Elements menu
@@ -139,6 +169,17 @@ public class Sketcher7Frame extends JFrame {
 		yellowAction.putValue(LARGE_ICON_KEY, YELLOW24);
 		greenAction.putValue(LARGE_ICON_KEY, GREEN24);
 		blueAction.putValue(LARGE_ICON_KEY, BLUE24);
+
+		redAction.putValue(SMALL_ICON, RED16);
+		yellowAction.putValue(SMALL_ICON, YELLOW16);
+		greenAction.putValue(SMALL_ICON, GREEN16);
+		blueAction.putValue(SMALL_ICON, BLUE16);
+
+		// Add tool tips
+		redAction.putValue(SHORT_DESCRIPTION, "Draw in red");
+		blueAction.putValue(SHORT_DESCRIPTION, "Draw in blue");
+		greenAction.putValue(SHORT_DESCRIPTION, "Draw in green");
+		yellowAction.putValue(SHORT_DESCRIPTION, "Draw in yellow");
 	}
 
 	// Create the Color menu
@@ -158,6 +199,8 @@ public class Sketcher7Frame extends JFrame {
 			group.add(menu.add(item = new JRadioButtonMenuItem(action)));
 			if (action == selected) {
 				item.setSelected(true);                                        // This is default selected
+			} else {
+				item.setIcon(null); // If not selected, hide the small icon
 			}
 		}
 	}
@@ -199,13 +242,14 @@ public class Sketcher7Frame extends JFrame {
 			// Iterate through available JMenu items
 			for (int i = 0; i < sourceMenu.getItemCount(); i++) {
 				// Create a temp reference for the current menu item
-				JMenuItem tempItem=sourceMenu.getItem(i);
+				JMenuItem tempItem = sourceMenu.getItem(i);
 				// Set the state checked if the current JMenu item's Action object equals with the event source
 				// Action object
-				boolean isSameAction=tempItem.getAction().equals(sourceActionObject);
-				tempItem.setSelected(isSameAction);
-				if (isSameAction){
-					System.out.println("Menu item set to "+sourceActionObject.getValue(NAME));
+				boolean isSameAction = tempItem.getAction().equals(sourceActionObject);
+				if (isSameAction) {
+					tempItem.setSelected(isSameAction);
+					tempItem.setIcon(tempItem.getIcon());  // Does not work.
+					System.out.println("Menu item set to " + sourceActionObject.getValue(NAME));
 				}
 
 			}

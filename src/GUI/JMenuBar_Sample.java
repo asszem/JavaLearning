@@ -1,5 +1,14 @@
 package GUI;
 
+import static java.awt.event.InputEvent.ALT_DOWN_MASK;
+import static java.awt.event.InputEvent.CTRL_DOWN_MASK;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -9,29 +18,23 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import static java.awt.event.InputEvent.*;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 public class JMenuBar_Sample implements ActionListener, ItemListener {
 
-	private static JFrame window;
-	private static JMenuBar mainMenuBar = new JMenuBar();
-	private static JMenu jMenu = new JMenu("Menu");
-	private static JMenu jSubMenu = new JMenu("SubMenu");
-	private static JMenuItem menuItem1 = new JMenuItem("MenuItem 1");
-	private static JMenuItem menuItem2 = new JMenuItem("MenuItem 2");
-	private static JMenuItem quitMenuItem = new JMenuItem("Quit");
-	private static JCheckBoxMenuItem jcbMenuItem1 = new JCheckBoxMenuItem("Checkbox 1");
-	private static JCheckBoxMenuItem jcbMenuItem2 = new JCheckBoxMenuItem("Checkbox 2");
-	private static JRadioButtonMenuItem jrbMenuItem1 = new JRadioButtonMenuItem("Button 1");
-	private static JRadioButtonMenuItem jrbMenuItem2 = new JRadioButtonMenuItem("Button 2");
-	private static ButtonGroup radioButtonGroup = new ButtonGroup();
+	private JFrame window;
+	private JMenuBar mainMenuBar = new JMenuBar();
+	private JMenu jMenu = new JMenu("Menu");
+	private JMenu jSubMenu = new JMenu("SubMenu");
+	private JMenuItem menuItem1 = new JMenuItem("MenuItem 1");
+	private JMenuItem menuItem2 = new JMenuItem("MenuItem 2");
+	private JMenuItem quitMenuItem = new JMenuItem("Quit");
+	private JCheckBoxMenuItem jcbMenuItem1 = new JCheckBoxMenuItem("Checkbox 1");
+	private JCheckBoxMenuItem jcbMenuItem2 = new JCheckBoxMenuItem("Checkbox 2");
+	private JRadioButtonMenuItem jrbMenuItem1 = new JRadioButtonMenuItem("Button 1");
+	private JRadioButtonMenuItem jrbMenuItem2 = new JRadioButtonMenuItem("Button 2");
+	private ButtonGroup radioButtonGroup = new ButtonGroup();
 
-	private static void addMenuBar(JFrame jFrame) {
+	private void addMenuBar(JFrame jFrame) {
 		jFrame.setJMenuBar(mainMenuBar);
 		radioButtonGroup.add(jrbMenuItem1);
 		radioButtonGroup.add(jrbMenuItem2);
@@ -72,7 +75,7 @@ public class JMenuBar_Sample implements ActionListener, ItemListener {
 		});
 	}//end of addMenuBar method
 
-	public static void createJFrame() {
+	public void createJFrame() {
 		window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLocationRelativeTo(null);
@@ -81,12 +84,26 @@ public class JMenuBar_Sample implements ActionListener, ItemListener {
 		window.setVisible(true);
 	}
 
+	// Menu creation helper - copied from Sketcher7 for reference
+	// Method creates radio buttons from Action objects array and set the selected button based on 3rd argument
+	private void createRadioButtonDropDown(JMenu menu, Action[] actions, Action selected) {
+		ButtonGroup group = new ButtonGroup();
+		JRadioButtonMenuItem item = null;
+		for (Action action : actions) {
+			group.add(menu.add(item = new JRadioButtonMenuItem(action)));
+			if (action == selected) {
+				item.setSelected(true);                                        // This is default selected
+			}
+		}
+	}
+
 	public static void main(String[] args) {
+		JMenuBar_Sample theAppInstance=new JMenuBar_Sample();
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				createJFrame();
+				theAppInstance.createJFrame();
 			}
 		});
 	}

@@ -850,24 +850,35 @@ Events
 			getContentPane().add(toolBar, BorderLayout.NORTH);
 			toolBar.add(new JButton(actionObject));
 			toolBar.addSeparator();
-		Icons
-			A reference to an icon is stored in a variable of type javax.swing.Icon interface.
-			javax.swing.Icon
-				- getHeight() and getWidhth() to return icon size in pixels
-				- paint() - to paint the image to the component
-			javax.swing.ImageIcon
-				Implements the Icon interface
-				The ImageIcon class has several constructors, and the one you use accepts a String argument that specifies the path for the file in which the icon image is found. 
-				Accepted Icon Filetypes
-					- PNG (Portable Network Graphics) 
-					- GIF (Graphics Interchange Format)
-					- JPEG (Joint Photographic Experts Group)
-			Icon Size
-				Size is identified by the LARGE_ICON_KEY key in the Action object. 
-				Large icon: 24x24 pixel.
-				Small icon: 16x16 pixel.j
-			Suggested Icon repository
-				Find some good resources if needed on the net
+	Icons
+		A reference to an icon is stored in a variable of type javax.swing.Icon interface.
+		javax.swing.Icon
+			- getHeight() and getWidhth() to return icon size in pixels
+			- paint() - to paint the image to the component
+		javax.swing.ImageIcon
+			Implements the Icon interface
+			The ImageIcon class has several constructors, and the one you use accepts a String argument that specifies the path for the file in which the icon image is found. 
+			Accepted Icon Filetypes
+				- PNG (Portable Network Graphics) 
+				- GIF (Graphics Interchange Format)
+				- JPEG (Joint Photographic Experts Group)
+		Icon Size
+			Size is identified by the LARGE_ICON_KEY key in the Action object. 
+			Large icon: 24x24 pixel.
+			Small icon: 16x16 pixel.j
+		Suggested Icon repository
+			Find some good resources if needed on the net
+		Create an Icon reference
+			String imagePath="J:/icons/";
+			public final static Icon CURVE24 = new ImageIcon(imagePath + "curve24.gif");
+		Icons in Toolbar
+			Set an Action object LARGE_ICON_KEY property
+				curveAction.putValue(LARGE_ICON_KEY, CURVE24);  //CURVE24 is a static final ICON type object
+		Icons on JMenu
+			Set an Action object SMALL_ICON property
+				lineAction.putValue(SMALL_ICON, LINE16); 
+		Hide icon
+			menuItem.setIcon(null)
 		Separating events originated from Toolbar(JButton) or Menu
 			Problem
 				When a toolbar button is pressed, the state of the menuitem in the menubar is not updated

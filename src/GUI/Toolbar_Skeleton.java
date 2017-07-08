@@ -1,7 +1,7 @@
 package GUI;
 
-import static java.awt.event.InputEvent.CTRL_DOWN_MASK;
-import static javax.swing.Action.LARGE_ICON_KEY;
+import static java.awt.event.InputEvent.*;		//To import accelerator key masks
+import static javax.swing.Action.*;				//To import Action object property keys
 import static javax.swing.Action.NAME;
 
 import java.awt.BorderLayout;
