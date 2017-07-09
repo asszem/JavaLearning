@@ -5,6 +5,7 @@ import static javax.swing.Action.*;				//To import Action object property keys
 import static javax.swing.Action.NAME;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -54,7 +55,7 @@ public class Toolbar_Skeleton {
 
 	public void setIconForToolbarObjects() {
 		tbaOpen.putValue(LARGE_ICON_KEY, OPEN24);
-		tbaSave.putValue(LARGE_ICON_KEY,  SAVE24);
+		tbaSave.putValue(LARGE_ICON_KEY, SAVE24);
 		// no icon gif for tbaQuit
 	}
 
@@ -62,6 +63,10 @@ public class Toolbar_Skeleton {
 		toolBar = new JToolBar();
 		toolBar.setRollover(true);
 		toolBar.setFloatable(true);
+		toolBar.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.darkGray),
+				BorderFactory.createEmptyBorder(2, 2, 4, 2)));
+
+		// Add the toolbar to the container
 		Container content = window.getContentPane();
 		content.add(toolBar, BorderLayout.NORTH); // Default layout mgr is BorderLayout for content pane
 	}
@@ -112,6 +117,14 @@ public class Toolbar_Skeleton {
 		// Basic constructor
 		public ToolbarAction(String name) {
 			super(name);
+			//Toolbar icon also could be set here based on action name
+			/*
+			String fileName=name.equals("Change color")?"color":"numbers";
+			String iconFileName = "J:\\Exercises\\Ch18\\" + fileName + ".gif";
+			if (Files.exists(Paths.get(iconFileName))) {
+				putValue(SMALL_ICON, new ImageIcon(iconFileName));
+			}
+			*/
 		}
 
 		// Constructor for menu item accellerators
@@ -128,17 +141,17 @@ public class Toolbar_Skeleton {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Object eventSource=e.getSource();
-			if (eventSource instanceof JButton){
+			Object eventSource = e.getSource();
+			if (eventSource instanceof JButton) {
 				System.out.println("Event source: JButton");
-				Action currentAction= ((JButton) eventSource).getAction();
-				if (currentAction==tbaOpen){
+				Action currentAction = ((JButton) eventSource).getAction();
+				if (currentAction == tbaOpen) {
 					System.out.println("Open pressed");
 				}
-				if (currentAction==tbaSave){
+				if (currentAction == tbaSave) {
 					System.out.println("Save pressed");
 				}
-				if (currentAction==tbaQuit){
+				if (currentAction == tbaQuit) {
 					System.out.println("Quit pressed");
 					System.exit(0);
 				}
@@ -146,7 +159,7 @@ public class Toolbar_Skeleton {
 		}
 	}
 
-	//Method is not used, but included here only for reference
+	// Method is not used, but included here only for reference
 	private void setMenuItemCorrespondToolbarItem(JMenu sourceMenu, Object eventSource) {
 		// Check if eventSource is JButton
 		if (eventSource instanceof JButton) {
@@ -157,13 +170,13 @@ public class Toolbar_Skeleton {
 			// Iterate through available JMenu items
 			for (int i = 0; i < sourceMenu.getItemCount(); i++) {
 				// Create a temp reference for the current menu item
-				JMenuItem tempItem=sourceMenu.getItem(i);
+				JMenuItem tempItem = sourceMenu.getItem(i);
 				// Set the state checked if the current JMenu item's Action object equals with the event source
 				// Action object
-				boolean isSameAction=tempItem.getAction().equals(sourceActionObject);
+				boolean isSameAction = tempItem.getAction().equals(sourceActionObject);
 				tempItem.setSelected(isSameAction);
-				if (isSameAction){
-					System.out.println("Menu item set to "+sourceActionObject.getValue(NAME));
+				if (isSameAction) {
+					System.out.println("Menu item set to " + sourceActionObject.getValue(NAME));
 				}
 
 			}

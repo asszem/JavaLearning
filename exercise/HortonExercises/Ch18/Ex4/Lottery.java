@@ -5,16 +5,41 @@
  * */
 package HortonExercises.Ch18.Ex4;
 
-// Applet to generate lottery entries
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;                                               // For random number generator
+
+// Applet to generate lottery entries
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JApplet;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class Lottery extends JApplet {
 
-	// Variables
+	// Toolbar
+	private JToolBar toolBar;
+
+	// Action Objects for the two handle buttons
+	private HandleActionObject changeColor, getNewNumbers;
+	private JButton changeColorButton;
+
+	// Final Variables
 	final static int NUMBER_COUNT = 6;                                   // Number of lucky numbers
 	final static int MIN_VALUE = 1;                                      // Minimum in range
 	final static int MAX_VALUE = 49;                                     // Maximum in range
@@ -82,12 +107,43 @@ public class Lottery extends JApplet {
 
 	// Create User Interface for applet
 	public void createGUI() {
-		// Set up the selection buttons
+
 		Container content = getContentPane();								// Content pane of the whole applet
 
-		// The layout will have two Panes (NumberButton buttons on top panel and control buttons on bottom panel)
-		// The panes will be arranged in one column, so the gridlayout setup is 0 row 1 column
-		content.setLayout(new GridLayout(0, 1));                            // Set the layout for the applet
+		// Set up the toolbar
+
+		// Add toolbar for the two action buttons
+		toolBar = new JToolBar("Control Buttons Toolbar");
+		content.add(toolBar, BorderLayout.NORTH);
+
+		// Create the action objects
+		changeColor = new HandleActionObject("Change color");
+		getNewNumbers = new HandleActionObject("Get new numbers");
+
+		// Add the action objects to the toolbar
+
+		// Method 1: add action object to toolbar and set Jbutton properties after
+		toolBar.add(getNewNumbers);
+
+		// Update the button instances in the toolbar
+		for (int i = 0; i < toolBar.getComponentCount(); i++) {
+			if (toolBar.getComponent(i) instanceof JButton) {
+				Dimension buttonSize = new Dimension(150, 20);                    	// Button size
+				JButton temp = ((JButton) toolBar.getComponent(i));
+				temp.setBorder(BorderFactory.createRaisedBevelBorder());
+				// temp.setPreferredSize(buttonSize);
+				// button.addActionListener(new HandleControlButton(PICK_LUCKY_NUMBERS)); // Create the button object with ID=PICK_LUCKY_NUMBERS
+				// button.setPreferredSize(buttonSize);
+			}
+		}
+
+		// Method 2: create a JButton instance variable and use it as a reference
+		changeColorButton = toolBar.add(changeColor);
+		changeColorButton.setBorder(BorderFactory.createRaisedBevelBorder());
+
+		// Set up the selection buttons
+
+		// content.setLayout(new GridLayout(0, 1)); // Set the layout for the applet
 
 		// Set up the panel to hold the lucky number buttons. No layout specified. Flow layout is default
 		JPanel buttonPane = new JPanel();                                  // Add the pane containing numbers
@@ -120,27 +176,6 @@ public class Lottery extends JApplet {
 		}
 		content.add(buttonPane);										// Add buttonPane to the contentPane
 
-		// Add the pane containing control buttons
-		// FlowLayout arguments to make the components centered and the horizontal and vertical gaps to be 5 and 10 pixels
-		JPanel controlPane = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 10));
-
-		// Add the two control buttons
-
-		// The button variable is temporary store for the reference to each button to setup border, size, actionlistener
-		JButton button;                                                     // A button variable
-		Dimension buttonSize = new Dimension(150, 20);                    	// Button size
-
-		controlPane.add(button = new JButton("Generate Numbers!"));			// Adds the button to the ControlPane
-		button.setBorder(BorderFactory.createRaisedBevelBorder());
-		button.addActionListener(new HandleControlButton(PICK_LUCKY_NUMBERS)); // Create the button object with ID=PICK_LUCKY_NUMBERS
-		button.setPreferredSize(buttonSize);
-
-		controlPane.add(button = new JButton("Change Color"));
-		button.setBorder(BorderFactory.createRaisedBevelBorder());
-		button.addActionListener(new HandleControlButton(COLOR));
-		button.setPreferredSize(buttonSize);
-
-		content.add(controlPane);											// Add controlPane to the content pane
 	}
 
 	// Class defining custom buttons showing lottery selection
@@ -294,4 +329,46 @@ public class Lottery extends JApplet {
 
 	}
 
-}
+	private class HandleActionObject extends AbstractAction {
+
+		// Constructor
+		public HandleActionObject(String name) {
+			super(name);
+			// Use a small icon for the toolbar items
+			String fileName=name.equals("Change color")?"color":"numbers";
+			String iconFileName = "J:\\Exercises\\Ch18\\" + fileName + ".gif";
+			if (Files.exists(Paths.get(iconFileName))) {
+				putValue(SMALL_ICON, new ImageIcon(iconFileName));
+			}
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("Toolbar Handle button pressed");
+			// changeColor = new HandleActionObject("Change color");
+			// getNewNumbers = new HandleActionObject("Get new numbers");
+			if (getValue(NAME).equals("Change color")) {
+				System.out.println("Color");
+				// The new color will be based on the flip color and the actual color
+				// get the flipColor RGB value and XOR with the actual background color of the buttons
+				Color color = new Color(flipColor.getRGB() ^ luckyNumberButtons[0].getBackground().getRGB());
+				for (int i = 0; i < NUMBER_COUNT; ++i)
+					luckyNumberButtons[i].setBackground(color); // Set the button colors to the new color
+			}
+			if (getValue(NAME).equals("Get new numbers")) {
+				System.out.println("New numbers");
+				int[] numbers = getNumbers(); // Get maxCount random numbers
+				numbers = sortNumbersAscending(numbers);
+				for (int i = 0; i < NUMBER_COUNT; ++i) {
+					luckyNumberButtons[i].setValue(numbers[i]); // Set the button VALUES to the new numbers
+				}
+			}
+
+			// If a JButton object was created from an Action Object then it can be used to identify action
+			if (e.getSource() == changeColorButton) {
+				System.out.println("Change color source identified");
+			}
+		} // action performed
+	} // HandleAction Object subclass
+
+}// applet
