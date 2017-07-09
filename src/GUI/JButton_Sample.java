@@ -31,6 +31,7 @@ public class JButton_Sample extends JButton implements ActionListener {
 		this.setText(buttonTitle + " ID:" + buttonID);
 		this.setPreferredSize(buttonSize);
 		this.setSize(buttonSize);
+		this.setToolTipText("Tooltip for "+buttonTitle);
 	}
 
 	public static void createGUI() {

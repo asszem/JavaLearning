@@ -42,6 +42,7 @@ public class Toolbar_Skeleton {
 		window = createJFrame();
 		createActionObjects();
 		setIconForToolbarObjects();
+		setTooltipForToolBarObjects();
 		createToolbar();
 		addToolbarItems();
 		window.setVisible(true);
@@ -57,6 +58,10 @@ public class Toolbar_Skeleton {
 		tbaOpen.putValue(LARGE_ICON_KEY, OPEN24);
 		tbaSave.putValue(LARGE_ICON_KEY, SAVE24);
 		// no icon gif for tbaQuit
+	}
+	public void setTooltipForToolBarObjects(){
+		tbaOpen.putValue(SHORT_DESCRIPTION, "Toolbar open tooltip");
+		tbaSave.putValue(SHORT_DESCRIPTION, "Toolbar save tooltip");
 	}
 
 	public void createToolbar() {
