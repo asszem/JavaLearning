@@ -1,4 +1,6 @@
 Summary
+	- Use ActionObjects
+	- Look for the sample Windows_... classes for structure of building a Window with buttons, toolbars and menus
 
 Keywords
 	JavaAWT java.awt - Abstract Windowing Toolkit - until java 1.1
