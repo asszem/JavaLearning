@@ -1,4 +1,4 @@
-package HortonExercises.Ch12.Ex1234;
+package HortonExercises.Ch12;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package HortonExercises.Ch12.Ex1234;
+package HortonExercises.Ch12;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

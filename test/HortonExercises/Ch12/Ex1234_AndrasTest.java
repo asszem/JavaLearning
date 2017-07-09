@@ -1,10 +1,13 @@
-package HortonExercises.Ch12.Ex1234;
+package HortonExercises.Ch12;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import HortonExercises.Ch12.Person;
+
 import static org.junit.Assert.*;
 
 /**
@@ -34,8 +37,8 @@ public class Ex1234_AndrasTest {
 
 	@Test
 	public void testSearchPersonObjectByName(){
-		String inputNameString="AndrásTeszt";
-		Person foundPerson = Ex1234_Andras.searchPersonObjectByName(inputNameString);
+		String inputNameString="AndrasTeszt";
+		Person foundPerson = HortonExercises.Ch12.Ex1234_Andras.searchPersonObjectByName(inputNameString);
 		String actualNameString = foundPerson.getPersonNameObject().name;
 		assertEquals(inputNameString, actualNameString);
 	}

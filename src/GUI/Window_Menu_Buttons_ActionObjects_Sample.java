@@ -44,6 +44,7 @@ public class Window_Menu_Buttons_ActionObjects_Sample {
 	// Toolbar icons
 	public final static String imagePath = "J:/Horton Assets/Sketcher/";
 	public final static Icon OPEN24 = new ImageIcon(imagePath + "Open24.gif");
+	public final static Icon QUITPROGRAM = new ImageIcon("J:/virag24.jpg");
 	public final static Icon SAVE24 = new ImageIcon(imagePath + "Save24.gif");
 	public final static Icon OPEN16 = new ImageIcon(imagePath + "Open16.gif");
 	public final static Icon SAVE16 = new ImageIcon(imagePath + "Save16.gif");
@@ -103,7 +104,8 @@ public class Window_Menu_Buttons_ActionObjects_Sample {
 		openFile.putValue(SMALL_ICON, OPEN16);
 		saveFile.putValue(LARGE_ICON_KEY, SAVE24);
 		saveFile.putValue(SMALL_ICON, SAVE16);
-		// quitProgram does not have an icon
+		quitProgram.putValue(LARGE_ICON_KEY, QUITPROGRAM);
+		quitProgram.putValue(SMALL_ICON, QUITPROGRAM);
 		// use SMALL_ICON property to set icon for JMenu
 	}
 

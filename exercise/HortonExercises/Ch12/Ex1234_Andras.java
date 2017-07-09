@@ -34,7 +34,7 @@ a message indicating the entry is not present in the fi le. The process is to fi
 an object with a name fi eld matching the keyboard entry. When an IndexEntry is found, you use the
 sequence number it contains to retrieve the appropriate Person object.
  */
-package HortonExercises.Ch12.Ex1234;
+package HortonExercises.Ch12;
 
 import FilesAndDirectories.AppendableObjectOutputStream;
 import java.io.BufferedInputStream;
