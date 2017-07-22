@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Events;
 
 import static java.awt.AWTEvent.MOUSE_EVENT_MASK;
 import static java.awt.AWTEvent.WINDOW_EVENT_MASK;

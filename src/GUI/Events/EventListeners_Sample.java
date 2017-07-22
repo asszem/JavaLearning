@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Events;
 
 import java.awt.Color;
 import java.awt.Container;

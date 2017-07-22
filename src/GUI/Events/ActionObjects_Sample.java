@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Events;
 //Create frame
 
 import static java.awt.event.InputEvent.ALT_DOWN_MASK;

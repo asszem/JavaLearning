@@ -25,7 +25,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-public class Toolbar_Skeleton {
+public class JToolbar_Skeleton {
 
 	private JFrame window;
 	private ToolbarAction tbaOpen;
@@ -106,7 +106,7 @@ public class Toolbar_Skeleton {
 	}
 
 	public static void main(String[] args) {
-		Toolbar_Skeleton appInstance = new Toolbar_Skeleton();
+		JToolbar_Skeleton appInstance = new JToolbar_Skeleton();
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -188,4 +188,4 @@ public class Toolbar_Skeleton {
 		}
 	}
 
-} // end of Toolbar_Skeleton class
+} // end of JToolbar_Skeleton class
