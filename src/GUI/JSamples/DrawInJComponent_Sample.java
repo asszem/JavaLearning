@@ -56,30 +56,55 @@ public class DrawInJComponent_Sample {
 		@Override
 		public void paint(Graphics g) {
 			Graphics2D g2DContext = (Graphics2D) g;
-			setDrawColor(g2DContext, Color.RED);
+			setDrawColor(g2DContext, Color.BLACK);
 			int startX = 200;
 			int startY = 200;
 			float startXF=(float) startX;
 			float startYF=(float) startY;
+			float width=100.0f;
+			float height=100.0f;
 			
 			// Line
-			drawString(g2DContext, "Line from start/end X,Y coordinates", startX, startY-100);
-			drawLine(g2DContext, startX, startY-100, startX + 100, startY - 100);
+			drawString(g2DContext, "Line from start/end X,Y coordinates at "+startX+","+(startY-100), startX, startY-100);
+			drawLine(g2DContext, startX, startY-100, startX + (int)width, startY - 100);
 
-			drawString(g2DContext, "Line from two Point2D objects", startX, startY-50);
+			drawString(g2DContext, "Line from two Point2D objects at " + startX+","+(startY-50), startX, startY-50);
 			Point2D.Float startPoint = new Point2D.Float(startXF, startYF-50.0f);
-			Point2D.Float endPoint = new Point2D.Float(startX+100.0f, startY-50.0f); //Auto cast
+			Point2D.Float endPoint = new Point2D.Float(startX+width, startY-50.0f); //Auto cast
 			drawLine(g2DContext, startPoint, endPoint);
 
 			// Rectangle
-			drawString(g2DContext, "Rectangle at "+startX+", "+startY, startX, startY);
-			drawRectangle(g2DContext, startX, startY, 100, 100, true);
-			
-			Rectangle2D rectangle2D = new Rectangle2D.Float(startXF+200, startYF+200, 100, 100);
-			drawString(g2DContext, "Rectangle at "+(startX+200)+", "+(startY+200), startX+200, startY+200);
-			drawRectangle(g2DContext, rectangle2D);
-			
+			drawString(g2DContext, "1st Rectangle at "+ startX+", "+startY, startX, startY);
+			drawRectangle(g2DContext, startX, startY, (int)width, (int)height, true);
+		
+			int offsetX=125;
+			int offsetY=140;
+			float xF=startXF+offsetX;
+			float yF=startYF+offsetY;
+			Rectangle2D secondRectangle = new Rectangle2D.Float(xF, yF, width, height);
+			drawString(g2DContext, "2nd Rectangle at "+xF+", "+yF, (int)xF, (int)yF);
+			drawRectangle(g2DContext, secondRectangle);
+		
+			xF=startXF+offsetX+50;
+			yF=startYF+offsetY+50;
+			Rectangle2D thirdRectangle = new Rectangle2D.Float(xF, yF, width, height);
+			drawString(g2DContext, "3rd Rectangle at "+xF+", "+yF, (int)xF, (int)yF);
+			drawRectangle(g2DContext, thirdRectangle);
 
+			setDrawColor(g2DContext, Color.RED);
+			Rectangle2D rectangleIntersect=secondRectangle.createIntersection(thirdRectangle);
+			drawRectangle(g2DContext, rectangleIntersect);
+
+			setDrawColor(g2DContext, Color.GREEN);
+			Rectangle2D rectangleUnion=secondRectangle.createUnion(thirdRectangle);
+			drawRectangle(g2DContext, rectangleUnion);
+			
+			//Draw lines to connect Rectangle 1 and 2
+			setDrawColor(g2DContext, Color.BLUE);
+			drawLine(g2DContext, startX, startY, startX+offsetX, startY+offsetY);
+			drawLine(g2DContext, startX, startY+(int) height, startX+offsetX, startY+offsetY+(int)height);
+			drawLine(g2DContext, startX+(int) width, startY, startX+offsetX+(int)width, startY+offsetY);
+			drawLine(g2DContext, startX+(int) width, startY+(int) height, startX+offsetX+(int) width, startY+offsetY+(int)height);
 		}
 
 		@Override
@@ -95,8 +120,8 @@ public class DrawInJComponent_Sample {
 
 	// Method to setup the JFrame
 	public void setupJFrame() {
-		window = new JFrame("Draw in JComponent Skeleton");
-		window.setBounds(50, 50, 600, 600);
+		window = new JFrame("Draw in JComponent Sample");
+		window.setBounds(50, 50, 800, 800);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JComponent viewJComponent = this.createJComponent(); // Create the JComponent on the AppInstance
 		window.getContentPane().add(viewJComponent, BorderLayout.CENTER); // Add the jComponent to the CENTER
