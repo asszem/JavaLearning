@@ -6,7 +6,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-import GUI.JFrame_Collection;
+
+import GUI.Collections.JFrame_Collection;
 
 public class WindowPositionAndSize_Sample {
 

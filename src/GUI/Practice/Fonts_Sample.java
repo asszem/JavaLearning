@@ -2,7 +2,7 @@ package GUI.Practice;
 
 import java.awt.Font;
 
-import GUI.JFrame_Collection;
+import GUI.Collections.JFrame_Collection;
 
 public class Fonts_Sample {
 
