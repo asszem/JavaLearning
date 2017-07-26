@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Arc2D;
+import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -93,7 +94,7 @@ public class ShapesToDrawOnAJComponent_Collection {
 			context.draw(circle);
 		}
 
-		public void drawQuadCurve(Graphics2D context, Point2D.Double startP, Point2D.Double endP,
+		public void drawQuadraticCurve(Graphics2D context, Point2D.Double startP, Point2D.Double endP,
 				Point2D.Double tangent) {
 			int offset = 25;
 			Point textPos = new Point((int) startP.x, (int) startP.y - offset);
@@ -114,6 +115,33 @@ public class ShapesToDrawOnAJComponent_Collection {
 			context.setColor(Color.RED);
 			context.drawLine((int) tangent.getX(), (int) tangent.getY(), (int) startP.getX(), (int) startP.getY());
 			context.drawLine((int) tangent.getX(), (int) tangent.getY(), (int) endP.getX(), (int) endP.getY());
+			context.setColor(Color.BLUE);
+		}
+
+		public void drawCubicCurve(Graphics2D context, Point2D.Double startP, Point2D.Double endP,
+				Point2D.Double tangentStart, Point2D.Double tangentEnd) {
+
+			int offset = 25;
+			Point textPos = new Point((int) startP.x, (int) startP.y - offset);
+			String message = String.format("Cubic curve startP(%.0f,%.0f), endP(%.0f,%.0f)", startP.x, startP.y, endP.x,
+					endP.y);
+			drawString(context, message, textPos.x, textPos.y);
+			CubicCurve2D.Double cubicCurve = new CubicCurve2D.Double(startP.x, startP.y, tangentStart.x, tangentStart.y,
+					tangentEnd.x, tangentEnd.y, endP.x, endP.y);
+			context.draw(cubicCurve);
+
+			// Draw the pointer
+			PointMarker quadMarkerStart = new PointMarker(context, tangentStart, 5);
+			PointMarker quadMarkerEnd = new PointMarker(context, tangentEnd, 5);
+			quadMarkerStart.drawMarker();
+			quadMarkerEnd.drawMarker();
+
+			// Draw the marker lines
+			context.setColor(Color.RED);
+			context.drawLine((int) tangentStart.getX(), (int) tangentStart.getY(), (int) startP.getX(), (int) startP.getY());
+			context.drawLine((int) tangentStart.getX(), (int) tangentStart.getY(), (int) endP.getX(), (int) endP.getY());
+			context.drawLine((int) tangentEnd.getX(), (int) tangentEnd.getY(), (int) startP.getX(), (int) startP.getY());
+			context.drawLine((int) tangentEnd.getX(), (int) tangentEnd.getY(), (int) endP.getX(), (int) endP.getY());
 			context.setColor(Color.BLUE);
 		}
 
@@ -204,16 +232,27 @@ public class ShapesToDrawOnAJComponent_Collection {
 			Point2D.Double arcStart = new Point2D.Double(600, 300);
 			drawArc(g2DContext, arcStart, 200, 100, 30, 100);
 
-			// Draw Quad Curve
+			// Draw Quadratic Curve (one tangent point)
 			Point2D.Double start = new Point2D.Double(900, 550);
 			Point2D.Double end = new Point2D.Double(1100, 650);
 			Point2D.Double tangent = new Point2D.Double(850, 600);
-			drawQuadCurve(g2DContext, start, end, tangent);
+			drawQuadraticCurve(g2DContext, start, end, tangent);
 			start.setLocation(1200, 550);
 			end.setLocation(1400, 650);
 			tangent.setLocation(1350, 750);
-			drawQuadCurve(g2DContext, start, end, tangent);
-		}
+			drawQuadraticCurve(g2DContext, start, end, tangent);
+
+			// Draw Cube Curve (2 tangent points)
+			
+			start.setLocation(200, 600);
+			end.setLocation(400, 700);
+			tangent.setLocation(100, 650);
+			Point2D.Double tangent2 =new Point2D.Double(500, 600);
+			drawCubicCurve(g2DContext, start, end, tangent, tangent2);
+			
+			
+			
+		}//End of Paint method
 
 		// Inner-inner class to represent a circle marking the pointer
 		class PointMarker {
