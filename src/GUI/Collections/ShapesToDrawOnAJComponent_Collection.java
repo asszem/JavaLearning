@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -104,13 +102,19 @@ public class ShapesToDrawOnAJComponent_Collection {
 			String message2 = String.format("TangentP(%.0f,%.0f)", tangent.x, tangent.y);
 			drawString(context, message, textPos.x, textPos.y);
 			drawString(context, message2, textPos.x, textPos.y + 20);
-			QuadCurve2D.Double qCurve = new QuadCurve2D.Double(startP.x, startP.y, endP.x, endP.y, tangent.x,
-					tangent.y);
+			QuadCurve2D.Double qCurve = new QuadCurve2D.Double(startP.x, startP.y, tangent.x, tangent.y, endP.x,
+					endP.y);
 			context.draw(qCurve);
 
-			//Draw the pointer 
+			// Draw the pointer
 			PointMarker quadMarker = new PointMarker(context, tangent, 5);
 			quadMarker.drawMarker();
+
+			// Draw the marker lines
+			context.setColor(Color.RED);
+			context.drawLine((int) tangent.getX(), (int) tangent.getY(), (int) startP.getX(), (int) startP.getY());
+			context.drawLine((int) tangent.getX(), (int) tangent.getY(), (int) endP.getX(), (int) endP.getY());
+			context.setColor(Color.BLUE);
 		}
 
 		// This method will do the actual drawing by calling the specific methods
@@ -202,15 +206,14 @@ public class ShapesToDrawOnAJComponent_Collection {
 
 			// Draw Quad Curve
 			Point2D.Double start = new Point2D.Double(900, 550);
-			Point2D.Double end = new Point2D.Double(1300, 650);
+			Point2D.Double end = new Point2D.Double(1100, 650);
 			Point2D.Double tangent = new Point2D.Double(850, 600);
 			drawQuadCurve(g2DContext, start, end, tangent);
 			start.setLocation(1200, 550);
 			end.setLocation(1400, 650);
-			tangent.setLocation(1300, 600);
+			tangent.setLocation(1350, 750);
 			drawQuadCurve(g2DContext, start, end, tangent);
 		}
-
 
 		// Inner-inner class to represent a circle marking the pointer
 		class PointMarker {
@@ -221,9 +224,9 @@ public class ShapesToDrawOnAJComponent_Collection {
 
 			// Constructor
 			public PointMarker(Graphics2D context, Point2D.Double center, int markerRadius) {
-				this.context=context;
-				this.centerCoords=center;
-				this.markerRadius=markerRadius;
+				this.context = context;
+				this.centerCoords = center;
+				this.markerRadius = markerRadius;
 			}
 
 			// Draw the marker, using drawCircle method from parent class
@@ -232,10 +235,9 @@ public class ShapesToDrawOnAJComponent_Collection {
 			}
 		}
 
-
 		@Override
 		public void update(Observable o, Object arg) {
-			
+
 		}
 	}
 
