@@ -1,4 +1,4 @@
-package GUI.JSamples;
+package GUI.Collections;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,14 +20,14 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class shapesToDrawOnAJComponent_Collection {
+public class ShapesToDrawOnAJComponent_Collection {
 
 	JFrame window;
 
 	// Inner class implementing JComponent's paint() and Observer's update() methods
 	// Class is static so static methods can be used
 	@SuppressWarnings("serial")
-	class innerJComponentView extends JComponent implements Observer, MouseListener {
+	class ContentPaneToDraw extends JComponent implements Observer {
 
 		public void setDrawColor(Graphics2D context, Color color) {
 			context.setPaint(color);
@@ -99,14 +99,18 @@ public class shapesToDrawOnAJComponent_Collection {
 				Point2D.Double tangent) {
 			int offset = 25;
 			Point textPos = new Point((int) startP.x, (int) startP.y - offset);
-			String message = String.format("Quad curve startP(%.0f,%.0f), endP(%.0f,%.0f)", startP.x, startP.y,
-					endP.x, endP.y);
+			String message = String.format("Quad curve startP(%.0f,%.0f), endP(%.0f,%.0f)", startP.x, startP.y, endP.x,
+					endP.y);
 			String message2 = String.format("TangentP(%.0f,%.0f)", tangent.x, tangent.y);
 			drawString(context, message, textPos.x, textPos.y);
-			drawString(context, message2, textPos.x, textPos.y+20);
-			QuadCurve2D.Double qCurve = new QuadCurve2D.Double(startP.x, startP.y, endP.x, endP.y, tangent.x, tangent.y);
+			drawString(context, message2, textPos.x, textPos.y + 20);
+			QuadCurve2D.Double qCurve = new QuadCurve2D.Double(startP.x, startP.y, endP.x, endP.y, tangent.x,
+					tangent.y);
 			context.draw(qCurve);
-			
+
+			//Draw the pointer 
+			PointMarker quadMarker = new PointMarker(context, tangent, 5);
+			quadMarker.drawMarker();
 		}
 
 		// This method will do the actual drawing by calling the specific methods
@@ -195,11 +199,11 @@ public class shapesToDrawOnAJComponent_Collection {
 			// Draw Arch
 			Point2D.Double arcStart = new Point2D.Double(600, 300);
 			drawArc(g2DContext, arcStart, 200, 100, 30, 100);
-			
+
 			// Draw Quad Curve
-			Point2D.Double start= new Point2D.Double(900, 550);
-			Point2D.Double end= new Point2D.Double(1300,  650);
-			Point2D.Double tangent=new Point2D.Double(850,  600);
+			Point2D.Double start = new Point2D.Double(900, 550);
+			Point2D.Double end = new Point2D.Double(1300, 650);
+			Point2D.Double tangent = new Point2D.Double(850, 600);
 			drawQuadCurve(g2DContext, start, end, tangent);
 			start.setLocation(1200, 550);
 			end.setLocation(1400, 650);
@@ -207,61 +211,52 @@ public class shapesToDrawOnAJComponent_Collection {
 			drawQuadCurve(g2DContext, start, end, tangent);
 		}
 
-		// Mouse Listener impelmented objects - TODO remove from this subclass, create own
+
+		// Inner-inner class to represent a circle marking the pointer
+		class PointMarker {
+
+			Point2D.Double centerCoords;
+			int markerRadius;
+			Graphics2D context;
+
+			// Constructor
+			public PointMarker(Graphics2D context, Point2D.Double center, int markerRadius) {
+				this.context=context;
+				this.centerCoords=center;
+				this.markerRadius=markerRadius;
+			}
+
+			// Draw the marker, using drawCircle method from parent class
+			public void drawMarker() {
+				drawCircle(context, centerCoords, markerRadius);
+			}
+		}
+
+
 		@Override
 		public void update(Observable o, Object arg) {
-			// Actions to take when the Observable object changes
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			System.out.println("Mouse entered");
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+			
 		}
 	}
 
 	// Factory method to instantiate a JComponent object
-	public JComponent createJComponent() {
-		return new innerJComponentView();
+	public ContentPaneToDraw createContentPaneToDraw() {
+		return new ContentPaneToDraw();
 	}
 
 	// Method to setup the JFrame
 	public void setupJFrame() {
-		window = new JFrame("Drawing Shapes to a JComponent: Line2D, Rectangle2D, Ellipse2D, Arc2D");
+		window = new JFrame("Drawing Shapes to a JComponent: Line2D, Rectangle2D, Ellipse2D, Arc2D, Curve");
 		window.setBounds(50, 50, 1500, 900);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JComponent viewJComponent = this.createJComponent(); // Create the JComponent on the AppInstance
-		viewJComponent.addMouseListener((MouseListener) viewJComponent);
-		window.getContentPane().add(viewJComponent, BorderLayout.CENTER); // Add the jComponent to the CENTER
+		ContentPaneToDraw contentPaneToDraw = this.createContentPaneToDraw(); // Create the JComponent on the AppInstance
+		window.getContentPane().add(contentPaneToDraw, BorderLayout.CENTER); // Add the jComponent to the CENTER
 		window.setVisible(true);
 	}
 
 	// Main method to start Event Dispatcher thread and call createJFrame method
 	public static void main(String[] args) {
-		shapesToDrawOnAJComponent_Collection theAppInstance = new shapesToDrawOnAJComponent_Collection();
+		ShapesToDrawOnAJComponent_Collection theAppInstance = new ShapesToDrawOnAJComponent_Collection();
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
