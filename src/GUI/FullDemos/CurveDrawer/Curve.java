@@ -36,6 +36,7 @@ public class Curve {
 			this.quadMarker = new QuadMarker(Color.RED);
 			this.setQuadCurve(new QuadCurve2D.Double(startP.x, startP.y, controlOne.x, controlOne.y, endP.x, endP.y));
 			appInstance.getCurves().add(this); // Add the newly created curve to the array list of curves
+			System.out.println("Curve count: "+appInstance.getCurves().size());
 		}
 	}// End of QUAD constructor
 
@@ -51,7 +52,7 @@ public class Curve {
 	}
 
 	// Factory method to create a Curve object and add to the curves ArrayList
-	// static so it can be called when there is no Curve object created yet
+	// Static so it can be called when there is no Curve object created yet
 	public static Curve createQuadCurve(CurveDrawer appInstance, Point2D.Double startP, Point2D.Double endP,
 			Point2D.Double controlOne) {
 		Curve newCurve = new Curve(appInstance, QUAD, startP, endP, controlOne);
@@ -59,19 +60,23 @@ public class Curve {
 	}
 
 	// This method can update the coordinates of a curve - to be called from the mouse adapter
-	public void updateCurve(Curve curve) {
-		curve.startP.setLocation(1000, 500);
-		curve.controlOne.setLocation(600, 300);
-		curve.getQuadCurve().setCurve(curve.startP, curve.controlOne, curve.endP);
-		curve.quadMarker.setQuadMarker(Color.GREEN);
+	public void updateCurve(Point2D.Double newStartP, Point2D.Double newEndP, Point2D.Double newControlP) {
+		startP.setLocation(newStartP);
+		endP.setLocation(newEndP);
+		controlOne.setLocation(newControlP);
+		getQuadCurve().setCurve(startP, controlOne, endP);
+		quadMarker.updateQuadMarker();
+//		appInstance.getDrawingPane().repaint();
 	}
 
 	public QuadCurve2D.Double getQuadCurve() {
 		return quadCurve;
 	}
+
 	public QuadMarker getQuadMarker(){
-		return getQuadMarker();
+		return quadMarker;
 	}
+
 	public Color getCurveColor(){
 		return curveColor;
 	}
@@ -79,9 +84,16 @@ public class Curve {
 	public void setQuadCurve(QuadCurve2D.Double quadCurve) {
 		this.quadCurve = quadCurve;
 	}
+	
+	public Point2D.Double getStartP(){
+		return startP;
+	}
+	public Point2D.Double getEndP(){
+		return endP;
+	}
 
 	// Inner class to have all info for a QUAD marker - the circle and the lines
-	class QuadMarker {
+ 	class QuadMarker {
 
 		// The class should have access to the private fields of Curve to be able to draw the marker and the lines
 		Color markerColor;
@@ -98,13 +110,12 @@ public class Curve {
 			this.lineMarkerToEnd = new Line2D.Double(controlOne.x, controlOne.y, endP.x, endP.y);
 		}
 
-		// Public method to set the QuadMarker coordinates
-		public void setQuadMarker(Color markerColor) {
-			this.markerColor = markerColor;
+		// Updates the QuadMarker based on the Curve's coordinates - to be called when a curve is modified
+		public void updateQuadMarker() {
 			this.markerEllipse.setFrame(controlOne.x - markerRadius, controlOne.y - markerRadius, markerRadius * 2,
 					markerRadius * 2);
-			// this.lineMarkerToStart.setLine(controlOne.x, controlOne.y, startP.x, startP.y);
-			// this.lineMarkerToEnd.setLine(controlOne.x, controlOne.y, endP.x, endP.y);
+			this.lineMarkerToStart.setLine(controlOne.x, controlOne.y, startP.x, startP.y);
+			this.lineMarkerToEnd.setLine(controlOne.x, controlOne.y, endP.x, endP.y);
 		}
 
 	}// End of QuadMarker

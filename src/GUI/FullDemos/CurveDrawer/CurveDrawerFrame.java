@@ -18,6 +18,7 @@ public class CurveDrawerFrame extends JFrame {
 		Container contentPane = getContentPane();
 		contentPane.add(appInstance.getDrawingPane(), BorderLayout.CENTER);
 		contentPane.addMouseListener(appInstance.getDrawingPane().getMouseHandler());
+		contentPane.addMouseMotionListener(appInstance.getDrawingPane().getMouseHandler());		//This is required to listen to drag and drop!
 		setVisible(true);
 	}
 }

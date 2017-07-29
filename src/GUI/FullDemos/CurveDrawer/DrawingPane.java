@@ -19,42 +19,69 @@ public class DrawingPane extends JComponent {
 
 	private MouseHandler mouseHandler;			// The MouseHandler object for the whole drawing pane
 	CurveDrawer appInstance;
-	
-	public MouseHandler getMouseHandler(){
+
+	public MouseHandler getMouseHandler() {
 		return mouseHandler;
 	}
 
 	// Constructor
 	DrawingPane(CurveDrawer appInstance) {
 		mouseHandler = new MouseHandler();
-		this.appInstance=appInstance;
+		this.appInstance = appInstance;
 	}
 
 	class MouseHandler extends MouseInputAdapter {
 
+		Curve curveToUpdate;
+
 		@Override
 		public void mousePressed(MouseEvent m) {
-			// walk through the available curves and see if the pressed location is within the marker's location
+			System.out.println("Mouse pressed");
+			// Walk through the available curves and see if the pressed location is within the marker's location
 			for (Curve curve : appInstance.getCurves()) {
+				if (curve.getQuadMarker().markerEllipse.contains(m.getX(), m.getY())) {
+					System.out.println("Curve selected: " + curve.toString());
+					curveToUpdate = curve;
+				}
 			}
 		}
+
+		@Override
+		public void mouseDragged(MouseEvent m) {
+			System.out.println("Mouse is dragged");
+			if (curveToUpdate != null) {
+				Point2D.Double controlP = new Point2D.Double(m.getX(), m.getY());
+				curveToUpdate.updateCurve(curveToUpdate.getStartP(), curveToUpdate.getEndP(), controlP);
+				appInstance.getDrawingPane().repaint();
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent m) {
+			if (curveToUpdate != null) {
+				System.out.println("Mouse released");
+				curveToUpdate = null;
+			}
+		}
+
 	} // End of MouseHandler class
 
 	public void drawCurve(Graphics2D context, Curve curve) {
+		// Update the Curve to get the latest coordinates before drawing
 		context.draw(curve.getQuadCurve());						// Draw the curve itself
-//		context.setColor(curve.getQuadMarker().markerColor);
-//		context.draw(curve.getQuadMarker().markerEllipse);		// Draw the marker
-//						     						// Draw the connecting lines
-//		context.draw(curve.getQuadMarker().lineMarkerToStart);
-//		context.draw(curve.getQuadMarker().lineMarkerToEnd);
-//		context.setColor(curve.getCurveColor());
+		context.setColor(curve.getQuadMarker().markerColor);
+		context.draw(curve.getQuadMarker().markerEllipse); // Draw the marker
+		// Draw the connecting lines
+		context.draw(curve.getQuadMarker().lineMarkerToStart);
+		context.draw(curve.getQuadMarker().lineMarkerToEnd);
+		context.setColor(curve.getCurveColor());
 	}
 
-	@Override // overrides JComponent paint method
-	public void paint(Graphics g) { // this will get the graphics
-		Graphics2D g2dcontext = (Graphics2D) g; // casts the graphics to Graphics2D type. This will be the graphics context to draw upon
-		// Draw all curves 
-			System.out.println("curve drwa");
+	@Override
+	public void paint(Graphics g) {
+		Graphics2D g2dcontext = (Graphics2D) g;
+		System.out.println("Paint method called");
+		// System.out.println(appInstance.getCurves().size());
 		for (Curve curve : appInstance.getCurves()) {
 			drawCurve(g2dcontext, curve);
 		}
