@@ -11,7 +11,7 @@ import static GUI.FullDemos.CurveDrawer.CurveDrawer.CUBE;
 
 public class Curve {
 
-	private CurveDrawer appInstance;
+	private CurveDrawer appInstance;			// A reference to the CurveDrawer object, which is the app instance
 	private int curveType;						// Type of the curve. 0=Quadratic, 1=Cubic
 	private Point2D.Double startP;				// Start position of the curve
 	private Point2D.Double endP;				// End position of the curve
@@ -32,7 +32,7 @@ public class Curve {
 		this.endP = endP;
 		this.controlOne = controlOne;
 		this.curveType = curveType;
-		if (curveType == QUAD) {				// create the QUAD object only if the type is QUAD
+		if (curveType == QUAD) {				// instantiate a QuadCurve2D.Double object only if the type is QUAD
 			this.quadMarker = new QuadMarker(Color.RED);
 			this.setQuadCurve(new QuadCurve2D.Double(startP.x, startP.y, controlOne.x, controlOne.y, endP.x, endP.y));
 			appInstance.getCurves().add(this); // Add the newly created curve to the array list of curves
@@ -92,6 +92,7 @@ public class Curve {
 		return endP;
 	}
 
+	// TODO update class to be able to draw CUBE as well based on passed curve type reference
 	// Inner class to have all info for a QUAD marker - the circle and the lines
  	class QuadMarker {
 
