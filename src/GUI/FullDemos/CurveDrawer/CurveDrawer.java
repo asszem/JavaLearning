@@ -18,15 +18,15 @@ public class CurveDrawer {
 		drawingPane = new DrawingPane(this); // passing the reference of this CurveDrawer object to the DrawingPane
 		window = new CurveDrawerFrame(this); // passing the reference of this CurverDrawer object to the CurveDrawerFrame
 
-		Point2D.Double startP = new Point2D.Double(100, 100);
-		Point2D.Double endP = new Point2D.Double(200, 200);
-		Point2D.Double controlP = new Point2D.Double(230, 140);
-		createNewCurve(startP, endP, controlP);
+//		Point2D.Double startP = new Point2D.Double(100, 100);
+//		Point2D.Double endP = new Point2D.Double(200, 200);
+//		Point2D.Double controlP = new Point2D.Double(230, 140);
+//		createNewCurve(startP, endP, controlP);
 
-		startP = new Point2D.Double(300, 500);
-		endP = new Point2D.Double(100, 600);
-		controlP = new Point2D.Double(70, 520);
-		createNewCurve(startP, endP, controlP);
+//		startP = new Point2D.Double(300, 500);
+//		endP = new Point2D.Double(100, 600);
+//		controlP = new Point2D.Double(70, 520);
+//		createNewCurve(startP, endP, controlP);
 		drawingPane.repaint();
 	}
 

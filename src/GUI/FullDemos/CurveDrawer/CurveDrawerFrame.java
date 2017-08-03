@@ -3,6 +3,7 @@ package GUI.FullDemos.CurveDrawer;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
+import java.awt.geom.Point2D;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -28,17 +29,16 @@ public class CurveDrawerFrame extends JFrame {
 		JPanel buttonPanel = new JPanel();
 		TitledBorder titledBorder = new TitledBorder(new EtchedBorder(), "Button Panel");
 		buttonPanel.setBorder(titledBorder);
-		
-		//  Create the buttons with different button name and button label text
-		JButton quadButton=new JButton(new CurveButton("Quad")); //"Quad" is to identify the action object
-		JButton cubeButton=new JButton(new CurveButton("Cubic"));
+
+		// Create the buttons with different button name and button label text
+		JButton quadButton = new JButton(new CurveButton("Quad")); // "Quad" is to identify the action object
+		JButton cubeButton = new JButton(new CurveButton("Cubic"));
 		quadButton.setText("Add Quad Curve");
 		cubeButton.setText("Add Cubic Curve");
 		buttonPanel.add(quadButton);
 		buttonPanel.add(cubeButton);
 		contentPane.add(buttonPanel, BorderLayout.NORTH);
-		
-		
+
 		// Create a Container for the DrawingPane
 		Container drawingPaneContainer = appInstance.getDrawingPane();
 		// The MouseListener needs to be added to a separate drawingPane container, not to the full content Pane
@@ -79,6 +79,11 @@ public class CurveDrawerFrame extends JFrame {
 			System.out.println("Button is pressed");
 			if (getValue(NAME).equals("Quad")) {
 				System.out.println("Quad button pressed");
+				Point2D.Double startP = new Point2D.Double(100, 100);
+				Point2D.Double endP = new Point2D.Double(200, 200);
+				Point2D.Double controlP = new Point2D.Double(230, 140);
+				appInstance.createNewCurve(startP, endP, controlP);
+				appInstance.getDrawingPane().repaint();
 			}
 			if (getValue(NAME).equals("Cubic")) {
 				System.out.println("Cubic button pressed");
