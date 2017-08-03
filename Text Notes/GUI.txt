@@ -519,6 +519,8 @@ Layout Managers
 					Specifies the free space that is to be provided around the component within the space allocated to it in the container.
 		Sources on GridBagConstraints
 			http://www.java2s.com/Tutorial/Java/0240__Swing/UsingGridBagConstraints.htm
+		Drawing on a GridBagLayout
+			https://stackoverflow.com/questions/22127307/gridbaglayout-and-drawing
 	Spring Layout
 		Overview
 			Spring Layout determines the position and size of each component in the container according to a set of constraints that are defined by javax.swing.Spring objects. 

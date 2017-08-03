@@ -24,20 +24,29 @@ public class CurveDrawerFrame extends JFrame {
 		setBounds(50, 50, 1000, 800);
 		Container contentPane = getContentPane();
 
-		// Create a button Panel (which is a Component and also a Container)
+		// Create a JPanel for the buttons
 		JPanel buttonPanel = new JPanel();
 		TitledBorder titledBorder = new TitledBorder(new EtchedBorder(), "Button Panel");
 		buttonPanel.setBorder(titledBorder);
-		buttonPanel.add(new JButton(new CurveButton("Create Quadratic Curve Button")));
-		buttonPanel.add(new JButton(new CurveButton("Create Cubic Curve Button")));
+		
+		//  Create the buttons with different button name and button label text
+		JButton quadButton=new JButton(new CurveButton("Quad")); //"Quad" is to identify the action object
+		JButton cubeButton=new JButton(new CurveButton("Cubic"));
+		quadButton.setText("Add Quad Curve");
+		cubeButton.setText("Add Cubic Curve");
+		buttonPanel.add(quadButton);
+		buttonPanel.add(cubeButton);
 		contentPane.add(buttonPanel, BorderLayout.NORTH);
-
+		
+		
+		// Create a Container for the DrawingPane
+		Container drawingPaneContainer = appInstance.getDrawingPane();
 		// The MouseListener needs to be added to a separate drawingPane container, not to the full content Pane
 		// Otherwise the mouse coordinates will be including area outside of drawing pane
-		Container drawingPaneContainer = appInstance.getDrawingPane();
 		drawingPaneContainer.addMouseMotionListener(appInstance.getDrawingPane().getMouseHandler());		// This is required to listen to drag and drop!
 		drawingPaneContainer.addMouseListener(appInstance.getDrawingPane().getMouseHandler());
 
+		// Create a JPanel for the drawing Pane
 		JPanel drawingPanel = new JPanel();
 		drawingPanel.setLayout(new BorderLayout());
 		drawingPanel.add(drawingPaneContainer, BorderLayout.CENTER);
@@ -67,8 +76,13 @@ public class CurveDrawerFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			System.out.println("Button is pressed");
+			if (getValue(NAME).equals("Quad")) {
+				System.out.println("Quad button pressed");
+			}
+			if (getValue(NAME).equals("Cubic")) {
+				System.out.println("Cubic button pressed");
+			}
 
 		}
 

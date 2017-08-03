@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.BorderFactory;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -16,4 +17,7 @@ public class Border_Sample {
 	CompoundBorder compoundBorder = new CompoundBorder(BorderFactory.createLineBorder(Color.black, 1),              // Outer border
 			BorderFactory.createBevelBorder(BevelBorder.RAISED));      												// Inner border
 	TitledBorder titledBorder = new TitledBorder(new EtchedBorder(), "Line Color");
+	Border edge = BorderFactory.createRaisedBevelBorder();					//Using BorderFactory class's static factory methods 
+	Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 12); 	//Line with color, and size in pixel
+
 }
