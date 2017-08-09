@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 
-public class CurveDrawer {
+public class CurveApp {
 
 	public static final int QUAD = 0; 			// Curve type constant
 	public static final int CUBE = 1;				// Curve type constant
@@ -13,10 +13,10 @@ public class CurveDrawer {
 	private DrawingPane drawingPane;
 
 	// Constructor to create a new app instance
-	CurveDrawer() {
+	CurveApp() {
 		curves = new ArrayList<>();
-		drawingPane = new DrawingPane(this); // passing the reference of this CurveDrawer object to the DrawingPane
-		window = new CurveDrawerFrame(this); // passing the reference of this CurverDrawer object to the CurveDrawerFrame
+		drawingPane = new DrawingPane(this); // passing the reference of this CurveApp object to the DrawingPane
+		window = new CurveDrawerFrame(this); // passing the reference of this CurverApp object to the CurveDrawerFrame
 
 //		Point2D.Double startP = new Point2D.Double(100, 100);
 //		Point2D.Double endP = new Point2D.Double(200, 200);
@@ -32,6 +32,7 @@ public class CurveDrawer {
 
 	public Curve createNewCurve(Point2D.Double startP, Point2D.Double endP, Point2D.Double controlP) {
 		Curve newCurve = Curve.createQuadCurve(this, startP, endP, controlP);
+		//TODO add option to create Cube curve as well based on method parameter
 		return newCurve;
 	}
 
@@ -48,9 +49,9 @@ public class CurveDrawer {
 
 			@Override
 			public void run() {
-				CurveDrawer theAppInstance = new CurveDrawer();
+				CurveApp theAppInstance = new CurveApp();
 			}
 		});
 	}// end main
 
-}// end of CurveDrawer class
+}// end of CurveApp class

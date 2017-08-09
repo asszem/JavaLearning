@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -12,13 +14,16 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import static GUI.FullDemos.CurveDrawer.CurveApp.QUAD;
+import static GUI.FullDemos.CurveDrawer.CurveApp.CUBE;
+
 @SuppressWarnings("serial")
 public class CurveDrawerFrame extends JFrame {
 
-	CurveDrawer appInstance;	 // A reference to the CurveDrawer object, which is the app instance
+	CurveApp appInstance;	 // A reference to the CurveApp object, which is the app instance
 	CurveButton curveButton;
 
-	CurveDrawerFrame(CurveDrawer appInstance) {
+	CurveDrawerFrame(CurveApp appInstance) {
 		this.appInstance = appInstance;
 		setTitle("Curve with dragabble markers");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,10 +57,15 @@ public class CurveDrawerFrame extends JFrame {
 		drawingPanel.add(drawingPaneContainer, BorderLayout.CENTER);
 		TitledBorder drawingBorder = new TitledBorder(new EtchedBorder(), "Drawing Panel");
 		drawingPanel.setBorder(drawingBorder);
-
 		contentPane.add(drawingPanel, BorderLayout.CENTER);
-
+		// System.out.println("Drawing Panel size:"+drawingPanel.getSize().getWidth()+", "+drawingPanel.getSize().getHeight());
 		setVisible(true);
+		// Size will be determined after setVisible. If resized, call validate() or doLayout()
+		validate();
+		doLayout();
+		double drawingPaneWidth = appInstance.getDrawingPane().getSize().getWidth();
+		double drawingPaneHeight = appInstance.getDrawingPane().getSize().getHeight();
+		System.out.println("DrawingPane size: " + drawingPaneWidth + ", " + drawingPaneHeight);
 
 		// NOTE Do not add the MouseListener directly to the content Pane!
 		// contentPane.add(appInstance.getDrawingPane());
@@ -79,9 +89,14 @@ public class CurveDrawerFrame extends JFrame {
 			System.out.println("Button is pressed");
 			if (getValue(NAME).equals("Quad")) {
 				System.out.println("Quad button pressed");
-				Point2D.Double startP = new Point2D.Double(100, 100);
-				Point2D.Double endP = new Point2D.Double(200, 200);
-				Point2D.Double controlP = new Point2D.Double(230, 140);
+				// TODO generate random position considering the size of the panel
+//				Point2D.Double startP = new Point2D.Double(100, 100);
+//				Point2D.Double endP = new Point2D.Double(200, 200);
+//				Point2D.Double controlP = new Point2D.Double(230, 140);
+				ArrayList<Point2D.Double> newPositions = getRandomPosition(QUAD);
+				Point2D.Double startP = newPositions.get(0);
+				Point2D.Double endP = newPositions.get(1);
+				Point2D.Double controlP = newPositions.get(2);
 				appInstance.createNewCurve(startP, endP, controlP);
 				appInstance.getDrawingPane().repaint();
 			}
@@ -91,5 +106,32 @@ public class CurveDrawerFrame extends JFrame {
 
 		}
 
+		// Generate random points and marker(s) for curves
+		public ArrayList<Point2D.Double> getRandomPosition(int curveType) {
+			ArrayList<Point2D.Double> positions = new ArrayList<>();
+			Point2D.Double startP;
+			Point2D.Double endP;
+			Point2D.Double controlOne;	// For QUAD and CUBE
+			Point2D.Double controlTwo;	// For CUBE only
+			Random rnd = new Random();
+			appInstance.getDrawingPane().validate();		// To get the correct size before creating random object
+			int drawingPaneWidth = (int) appInstance.getDrawingPane().getSize().getWidth();
+			int drawingPaneHeight = (int) appInstance.getDrawingPane().getSize().getHeight();
+			int offlimit = 100; // to make sure new Curve wont be drawed to the right-bottom part of drawing pane
+//			System.out.println("DrawingPane size: " + drawingPaneWidth + ", " + drawingPaneHeight);
+
+			startP = new Point2D.Double(rnd.nextInt(drawingPaneWidth) - offlimit,
+					rnd.nextInt(drawingPaneHeight) - offlimit);
+
+			int xSize = rnd.nextInt(drawingPaneWidth/2);	// horizontal size of new curve
+			int ySize = rnd.nextInt(drawingPaneHeight)/2;	// vertical size of new curve
+			endP = new Point2D.Double(startP.getX() + xSize, startP.getY() + ySize);
+			controlOne = new Point2D.Double(startP.getX() + rnd.nextInt(xSize), startP.getY() + rnd.nextInt(ySize));
+			positions.add(startP);
+			positions.add(endP);
+			positions.add(controlOne);
+			System.out.println(positions);
+			return positions;
+		}
 	}
 }

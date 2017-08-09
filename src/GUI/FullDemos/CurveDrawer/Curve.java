@@ -6,12 +6,15 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
-import static GUI.FullDemos.CurveDrawer.CurveDrawer.QUAD;
-import static GUI.FullDemos.CurveDrawer.CurveDrawer.CUBE;
+import java.util.ArrayList;
+import java.util.Random;
+
+import static GUI.FullDemos.CurveDrawer.CurveApp.QUAD;
+import static GUI.FullDemos.CurveDrawer.CurveApp.CUBE;
 
 public class Curve {
 
-	private CurveDrawer appInstance;			// A reference to the CurveDrawer object, which is the app instance
+	private CurveApp appInstance;				// A reference to the CurveApp object, which is the app instance
 	private int curveType;						// Type of the curve. 0=Quadratic, 1=Cubic
 	private Point2D.Double startP;				// Start position of the curve
 	private Point2D.Double endP;				// End position of the curve
@@ -25,7 +28,7 @@ public class Curve {
 	// private QuadMarker markerEnd; // Marker for Cube curve
 
 	// Constructor to create a QUAD - one control point
-	private Curve(CurveDrawer appInstance, int curveType, Point2D.Double startP, Point2D.Double endP,
+	private Curve(CurveApp appInstance, int curveType, Point2D.Double startP, Point2D.Double endP,
 			Point2D.Double controlOne) {
 		this.appInstance = appInstance;
 		this.startP = startP;
@@ -36,7 +39,7 @@ public class Curve {
 			this.quadMarker = new QuadMarker(Color.RED);
 			this.setQuadCurve(new QuadCurve2D.Double(startP.x, startP.y, controlOne.x, controlOne.y, endP.x, endP.y));
 			appInstance.getCurves().add(this); // Add the newly created curve to the array list of curves
-			System.out.println("Curve count: "+appInstance.getCurves().size());
+			System.out.println("Curve count: " + appInstance.getCurves().size());
 		}
 	}// End of QUAD constructor
 
@@ -53,48 +56,51 @@ public class Curve {
 
 	// Factory method to create a Curve object and add to the curves ArrayList
 	// Static so it can be called when there is no Curve object created yet
-	public static Curve createQuadCurve(CurveDrawer appInstance, Point2D.Double startP, Point2D.Double endP,
+	public static Curve createQuadCurve(CurveApp appInstance, Point2D.Double startP, Point2D.Double endP,
 			Point2D.Double controlOne) {
 		Curve newCurve = new Curve(appInstance, QUAD, startP, endP, controlOne);
 		return newCurve;
 	}
 
 	// This method can update the coordinates of a curve - to be called from the mouse adapter
+	// TODO update this method to be able to handle both Quad and Cube curves
 	public void updateCurve(Point2D.Double newStartP, Point2D.Double newEndP, Point2D.Double newControlP) {
 		startP.setLocation(newStartP);
 		endP.setLocation(newEndP);
 		controlOne.setLocation(newControlP);
 		getQuadCurve().setCurve(startP, controlOne, endP);
 		quadMarker.updateQuadMarker();
-//		appInstance.getDrawingPane().repaint();
+		// appInstance.getDrawingPane().repaint();
 	}
 
 	public QuadCurve2D.Double getQuadCurve() {
 		return quadCurve;
 	}
 
-	public QuadMarker getQuadMarker(){
+	public QuadMarker getQuadMarker() {
 		return quadMarker;
 	}
 
-	public Color getCurveColor(){
+	public Color getCurveColor() {
 		return curveColor;
 	}
 
 	public void setQuadCurve(QuadCurve2D.Double quadCurve) {
 		this.quadCurve = quadCurve;
 	}
-	
-	public Point2D.Double getStartP(){
+
+	public Point2D.Double getStartP() {
 		return startP;
 	}
-	public Point2D.Double getEndP(){
+
+	public Point2D.Double getEndP() {
 		return endP;
 	}
 
 	// TODO update class to be able to draw CUBE as well based on passed curve type reference
+	// OR keep it as it is and create an entirely new clss for CubeMarker
 	// Inner class to have all info for a QUAD marker - the circle and the lines
- 	class QuadMarker {
+	class QuadMarker {
 
 		// The class should have access to the private fields of Curve to be able to draw the marker and the lines
 		Color markerColor;

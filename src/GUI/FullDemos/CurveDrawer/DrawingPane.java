@@ -11,10 +11,10 @@ import javax.swing.event.MouseInputAdapter;
 public class DrawingPane extends JComponent {
 
 	private MouseHandler mouseHandler;			// The MouseHandler object for the whole drawing pane
-	CurveDrawer appInstance; 					// A reference to the CurveDrawer object, which is the app instance
+	CurveApp appInstance; 					// A reference to the CurveApp object, which is the app instance
 
 	// Constructor
-	DrawingPane(CurveDrawer appInstance) {
+	DrawingPane(CurveApp appInstance) {
 		mouseHandler = new MouseHandler();
 		this.appInstance = appInstance;
 	}
@@ -24,7 +24,7 @@ public class DrawingPane extends JComponent {
 		context.draw(curve.getQuadCurve());						// Draw the curve itself
 		context.setColor(curve.getQuadMarker().markerColor);
 		context.draw(curve.getQuadMarker().markerEllipse); // Draw the marker
-		// TODO if curve type is Cube, draw the second ellipse
+		// TODO if curve type is Cube, draw the second marker ellipse
 		// Draw the connecting lines
 		context.draw(curve.getQuadMarker().lineMarkerToStart);
 		context.draw(curve.getQuadMarker().lineMarkerToEnd);
@@ -37,6 +37,7 @@ public class DrawingPane extends JComponent {
 		Graphics2D g2dcontext = (Graphics2D) g;
 		System.out.println("Paint method called");
 		// System.out.println(appInstance.getCurves().size());
+		// Draw all the curves that are stored in the appInstance
 		for (Curve curve : appInstance.getCurves()) {
 			drawCurve(g2dcontext, curve);
 		}
@@ -71,7 +72,7 @@ public class DrawingPane extends JComponent {
 
 		@Override
 		public void mouseDragged(MouseEvent m) {
-			System.out.println("Mouse is dragged");
+//			System.out.println("Mouse is dragged");
 			if (curveSelected != null) {
 				Point2D.Double controlP = new Point2D.Double(m.getX(), m.getY());
 				curveSelected.updateCurve(curveSelected.getStartP(), curveSelected.getEndP(), controlP);
