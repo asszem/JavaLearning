@@ -24,7 +24,8 @@ public class Curve {
 	private CubicCurve2D.Double cubicCurve;		// The cubicCurve object itself
 	private Color curveColor = Color.BLUE;		// The color of the Curve
 	private int markerRadius = 5;				// The radius for the marker circle
-	private QuadMarker quadMarker;				// Marker for Quad and Cube curve
+	private QuadMarker quadMarker;				// Marker for Quad curve
+	private CubeMarker cubeMarker;				// Marker object for Cube curve
 	// private QuadMarker markerEnd; // Marker for Cube curve
 
 	// Constructor to create a QUAD - one control point
@@ -39,26 +40,36 @@ public class Curve {
 			this.quadMarker = new QuadMarker(Color.RED);
 			this.setQuadCurve(new QuadCurve2D.Double(startP.x, startP.y, controlOne.x, controlOne.y, endP.x, endP.y));
 			appInstance.getCurves().add(this); // Add the newly created curve to the array list of curves
-			System.out.println("Curve count: " + appInstance.getCurves().size());
+			System.out.println("Quad curve created. Curve count: " + appInstance.getCurves().size());
 		}
 	}// End of QUAD constructor
 
 	// TODO complete constructor
 	// Constructor to create a CUBE - two control points
-	Curve(int curveType, Point2D.Double startP, Point2D.Double endP, Point2D.Double controlStart,
+	Curve(CurveApp appInstance, int curveType, Point2D.Double startP, Point2D.Double endP, Point2D.Double controlStart,
 			Point2D.Double controlEnd) {
-		// this(curveType, startP, endP, controlStart); // call the Quad constructor
-		// this.controlTwo = controlEnd; // define the end control
-		// TODO create the cubic curve object
-		// TODO create the CUBE marker
-		// this.markerEnd = new QuadMarker(controlOne, markerRadius, Color.RED);
+		this(appInstance, curveType, startP, endP, controlStart);  // Call the basic constructor to create these
+		this.controlTwo = controlEnd; 								 // define the end control for the CUBE
+		this.cubeMarker = new CubeMarker(Color.CYAN, Color.BLUE);
+		this.setCubeCurve(new CubicCurve2D.Double(startP.x, startP.y, controlOne.x, controlOne.y, controlTwo.x,
+				controlTwo.y, endP.x, endP.y));
+		appInstance.getCurves().add(this); // Add the newly created curve to the array list of curves
+		System.out.println("Cube curve created. New Curve count: " + appInstance.getCurves().size());
 	}
 
 	// Factory method to create a Curve object and add to the curves ArrayList
 	// Static so it can be called when there is no Curve object created yet
-	public static Curve createQuadCurve(CurveApp appInstance, Point2D.Double startP, Point2D.Double endP,
+	// Creates QUAD curve with one control point only
+	public static Curve createCurve(CurveApp appInstance, Point2D.Double startP, Point2D.Double endP,
 			Point2D.Double controlOne) {
 		Curve newCurve = new Curve(appInstance, QUAD, startP, endP, controlOne);
+		return newCurve;
+	}
+
+	// Creates CUBE curve with two control points
+	public static Curve createCurve(CurveApp appInstance, Point2D.Double startP, Point2D.Double endP,
+			Point2D.Double controlOne, Point2D.Double controlTwo) {
+		Curve newCurve = new Curve(appInstance, CUBE, startP, endP, controlOne, controlTwo);
 		return newCurve;
 	}
 
@@ -77,16 +88,24 @@ public class Curve {
 		return quadCurve;
 	}
 
-	public QuadMarker getQuadMarker() {
-		return quadMarker;
+	public void setQuadCurve(QuadCurve2D.Double quadCurve) {
+		this.quadCurve = quadCurve;
+	}
+
+	public CubicCurve2D.Double getCubeCurve() {
+		return cubicCurve;
+	}
+
+	public void setCubeCurve(CubicCurve2D.Double cubeCurve) {
+		this.cubicCurve = cubeCurve;
 	}
 
 	public Color getCurveColor() {
 		return curveColor;
 	}
 
-	public void setQuadCurve(QuadCurve2D.Double quadCurve) {
-		this.quadCurve = quadCurve;
+	public int getCurveType(){
+		return curveType;
 	}
 
 	public Point2D.Double getStartP() {
@@ -97,8 +116,14 @@ public class Curve {
 		return endP;
 	}
 
-	// TODO update class to be able to draw CUBE as well based on passed curve type reference
-	// OR keep it as it is and create an entirely new clss for CubeMarker
+	public QuadMarker getQuadMarker() {
+		return quadMarker;
+	}
+
+	public CubeMarker getCubeMarker() {
+		return cubeMarker;
+	}
+
 	// Inner class to have all info for a QUAD marker - the circle and the lines
 	class QuadMarker {
 
@@ -126,5 +151,39 @@ public class Curve {
 		}
 
 	}// End of QuadMarker
+
+	// Inner class to have all info for CUBE markers - the two circles and the lines
+	class CubeMarker {
+
+		// The class should have access to the private fields of Curve to be able to draw the marker and the lines
+		Color markerOneColor;
+		Color markerTwoColor;
+		Ellipse2D.Double markerOneEllipse;
+		Ellipse2D.Double markerTwoEllipse;
+		Line2D.Double lineMarkerToStart;
+		Line2D.Double lineMarkerToEnd;
+
+		// Constructor for CUBE marker
+		CubeMarker(Color markerOneColor, Color markerTwoColor) {
+			this.markerOneColor = markerOneColor;
+			this.markerOneEllipse = new Ellipse2D.Double(controlOne.x - markerRadius, controlOne.y - markerRadius,
+					markerRadius * 2, markerRadius * 2);
+			this.markerTwoEllipse = new Ellipse2D.Double(controlTwo.x - markerRadius, controlTwo.y - markerRadius,
+					markerRadius * 2, markerRadius * 2);
+			this.lineMarkerToStart = new Line2D.Double(controlOne.x, controlOne.y, startP.x, startP.y);
+			this.lineMarkerToEnd = new Line2D.Double(controlTwo.x, controlTwo.y, endP.x, endP.y);
+		}
+
+		// Updates the QuadMarker based on the Curve's coordinates - to be called when a curve is modified
+		public void updateCubeMarker() {
+			this.markerOneEllipse.setFrame(controlOne.x - markerRadius, controlOne.y - markerRadius, markerRadius * 2,
+					markerRadius * 2);
+			this.lineMarkerToStart.setLine(controlOne.x, controlOne.y, startP.x, startP.y);
+			this.markerTwoEllipse.setFrame(controlTwo.x - markerRadius, controlTwo.y - markerRadius, markerRadius * 2,
+					markerRadius * 2);
+			this.lineMarkerToEnd.setLine(controlTwo.x, controlTwo.y, endP.x, endP.y);
+		}
+
+	}// End of CubeMarker
 
 } // End of Curve class

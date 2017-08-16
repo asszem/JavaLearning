@@ -93,21 +93,28 @@ public class CurveDrawerFrame extends JFrame {
 //				Point2D.Double startP = new Point2D.Double(100, 100);
 //				Point2D.Double endP = new Point2D.Double(200, 200);
 //				Point2D.Double controlP = new Point2D.Double(230, 140);
-				ArrayList<Point2D.Double> newPositions = getRandomPosition(QUAD);
+				ArrayList<Point2D.Double> newPositions = getRandomPosition();
 				Point2D.Double startP = newPositions.get(0);
 				Point2D.Double endP = newPositions.get(1);
 				Point2D.Double controlP = newPositions.get(2);
-				appInstance.createNewCurve(startP, endP, controlP);
+				appInstance.createNewCurve(startP, endP, controlP, null);  //4th parameter must be null
 				appInstance.getDrawingPane().repaint();
 			}
 			if (getValue(NAME).equals("Cubic")) {
 				System.out.println("Cubic button pressed");
+				ArrayList<Point2D.Double> newPositions = getRandomPosition();
+				Point2D.Double startP = newPositions.get(0);
+				Point2D.Double endP = newPositions.get(1);
+				Point2D.Double controlOne = newPositions.get(2);
+				Point2D.Double controlTwo = newPositions.get(3);
+				appInstance.createNewCurve(startP, endP, controlOne, controlTwo);
+				appInstance.getDrawingPane().repaint();
 			}
 
 		}
 
 		// Generate random points and marker(s) for curves
-		public ArrayList<Point2D.Double> getRandomPosition(int curveType) {
+		public ArrayList<Point2D.Double> getRandomPosition() {
 			ArrayList<Point2D.Double> positions = new ArrayList<>();
 			Point2D.Double startP;
 			Point2D.Double endP;
@@ -127,9 +134,11 @@ public class CurveDrawerFrame extends JFrame {
 			int ySize = rnd.nextInt(drawingPaneHeight)/2;	// vertical size of new curve
 			endP = new Point2D.Double(startP.getX() + xSize, startP.getY() + ySize);
 			controlOne = new Point2D.Double(startP.getX() + rnd.nextInt(xSize), startP.getY() + rnd.nextInt(ySize));
+			controlTwo = new Point2D.Double(endP.getX() + rnd.nextInt(xSize), endP.getY() + rnd.nextInt(ySize));
 			positions.add(startP);
 			positions.add(endP);
 			positions.add(controlOne);
+			positions.add(controlTwo);
 			System.out.println(positions);
 			return positions;
 		}

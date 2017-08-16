@@ -6,6 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import javax.swing.JComponent;
 import javax.swing.event.MouseInputAdapter;
+import static GUI.FullDemos.CurveDrawer.CurveApp.QUAD;
+import static GUI.FullDemos.CurveDrawer.CurveApp.CUBE;
 
 @SuppressWarnings("serial")
 public class DrawingPane extends JComponent {
@@ -21,15 +23,29 @@ public class DrawingPane extends JComponent {
 
 	public void drawCurve(Graphics2D context, Curve curve) {
 		// Update the Curve to get the latest coordinates before drawing
-		context.draw(curve.getQuadCurve());						// Draw the curve itself
-		context.setColor(curve.getQuadMarker().markerColor);
-		context.draw(curve.getQuadMarker().markerEllipse); // Draw the marker
-		// TODO if curve type is Cube, draw the second marker ellipse
-		// Draw the connecting lines
-		context.draw(curve.getQuadMarker().lineMarkerToStart);
-		context.draw(curve.getQuadMarker().lineMarkerToEnd);
-		// TODO if curve type is CUBE, draw the ControlTwo markers
-		context.setColor(curve.getCurveColor());
+		if (curve.getCurveType() == QUAD) {
+			context.draw(curve.getQuadCurve());						// Draw the curve itself
+			context.setColor(curve.getQuadMarker().markerColor);
+			context.draw(curve.getQuadMarker().markerEllipse); // Draw the marker
+			// Draw the connecting lines
+			context.draw(curve.getQuadMarker().lineMarkerToStart);
+			context.draw(curve.getQuadMarker().lineMarkerToEnd);
+			// TODO if curve type is CUBE, draw the ControlTwo markers
+			context.setColor(curve.getCurveColor());
+		}
+		if (curve.getCurveType() == CUBE) {
+			context.draw(curve.getCubeCurve());						// Draw the curve itself
+			//Draw the first marker
+			context.setColor(curve.getCubeMarker().markerOneColor);	
+			context.draw(curve.getCubeMarker().markerOneEllipse); // Draw the first ellipse
+			context.draw(curve.getCubeMarker().lineMarkerToStart);
+			
+			//Draw the second marker
+			context.setColor(curve.getCubeMarker().markerTwoColor);	
+			context.draw(curve.getCubeMarker().markerTwoEllipse); // Draw the first ellipse
+			context.draw(curve.getCubeMarker().lineMarkerToEnd);
+			context.setColor(curve.getCurveColor()); //Reset the original curve color
+		}
 	}
 
 	@Override
@@ -72,7 +88,7 @@ public class DrawingPane extends JComponent {
 
 		@Override
 		public void mouseDragged(MouseEvent m) {
-//			System.out.println("Mouse is dragged");
+			// System.out.println("Mouse is dragged");
 			if (curveSelected != null) {
 				Point2D.Double controlP = new Point2D.Double(m.getX(), m.getY());
 				curveSelected.updateCurve(curveSelected.getStartP(), curveSelected.getEndP(), controlP);
@@ -89,7 +105,7 @@ public class DrawingPane extends JComponent {
 		}
 
 		public void mouseMoved(MouseEvent m) {
-//			System.out.println("Mouse coords: " + m.getX() + ", " + m.getY());
+			// System.out.println("Mouse coords: " + m.getX() + ", " + m.getY());
 		}
 
 	} // End of MouseHandler class

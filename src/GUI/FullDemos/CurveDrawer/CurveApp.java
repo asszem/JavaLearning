@@ -18,22 +18,26 @@ public class CurveApp {
 		drawingPane = new DrawingPane(this); // passing the reference of this CurveApp object to the DrawingPane
 		window = new CurveDrawerFrame(this); // passing the reference of this CurverApp object to the CurveDrawerFrame
 
-//		Point2D.Double startP = new Point2D.Double(100, 100);
-//		Point2D.Double endP = new Point2D.Double(200, 200);
-//		Point2D.Double controlP = new Point2D.Double(230, 140);
-//		createNewCurve(startP, endP, controlP);
+		// Point2D.Double startP = new Point2D.Double(100, 100);
+		// Point2D.Double endP = new Point2D.Double(200, 200);
+		// Point2D.Double controlP = new Point2D.Double(230, 140);
+		// createNewCurve(startP, endP, controlP);
 
-//		startP = new Point2D.Double(300, 500);
-//		endP = new Point2D.Double(100, 600);
-//		controlP = new Point2D.Double(70, 520);
-//		createNewCurve(startP, endP, controlP);
 		drawingPane.repaint();
 	}
 
-	public Curve createNewCurve(Point2D.Double startP, Point2D.Double endP, Point2D.Double controlP) {
-		Curve newCurve = Curve.createQuadCurve(this, startP, endP, controlP);
-		//TODO add option to create Cube curve as well based on method parameter
-		return newCurve;
+	/**
+	 * Creates QUAD curve if 4th parameter is null Creates CUBE curve if 4th parameter is not null
+	 */
+	public Curve createNewCurve(Point2D.Double startP, Point2D.Double endP, Point2D.Double controlOne,
+			Point2D.Double controlTwo) {
+		if (controlTwo == null) {
+			Curve newCurve = Curve.createCurve(this, startP, endP, controlOne);
+			return newCurve;
+		} else {
+			Curve newCurve = Curve.createCurve(this, startP, endP, controlOne, controlTwo);
+			return newCurve;
+		}
 	}
 
 	public ArrayList<Curve> getCurves() {
