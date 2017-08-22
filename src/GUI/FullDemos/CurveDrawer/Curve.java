@@ -44,7 +44,6 @@ public class Curve {
 		}
 	}// End of QUAD constructor
 
-	// TODO complete constructor
 	// Constructor to create a CUBE - two control points
 	Curve(CurveApp appInstance, int curveType, Point2D.Double startP, Point2D.Double endP, Point2D.Double controlStart,
 			Point2D.Double controlEnd) {
@@ -74,13 +73,20 @@ public class Curve {
 	}
 
 	// This method can update the coordinates of a curve - to be called from the mouse adapter
-	// TODO update this method to be able to handle both Quad and Cube curves
-	public void updateCurve(Point2D.Double newStartP, Point2D.Double newEndP, Point2D.Double newControlP) {
+	public void updateCurve(Point2D.Double newStartP, Point2D.Double newEndP, Point2D.Double newControlOne,
+			Point2D.Double newControlTwo) {
 		startP.setLocation(newStartP);
 		endP.setLocation(newEndP);
-		controlOne.setLocation(newControlP);
-		getQuadCurve().setCurve(startP, controlOne, endP);
-		quadMarker.updateQuadMarker();
+		controlOne.setLocation(newControlOne);
+		if (curveType == QUAD) {
+			getQuadCurve().setCurve(startP, controlOne, endP);
+			quadMarker.updateQuadMarker();
+		}
+		if (curveType == CUBE) {
+			controlTwo.setLocation(newControlTwo);
+			getCubeCurve().setCurve(startP, controlOne, controlTwo, endP);
+			cubeMarker.updateCubeMarker();
+		}
 		// appInstance.getDrawingPane().repaint();
 	}
 
@@ -104,7 +110,7 @@ public class Curve {
 		return curveColor;
 	}
 
-	public int getCurveType(){
+	public int getCurveType() {
 		return curveType;
 	}
 
@@ -122,6 +128,14 @@ public class Curve {
 
 	public CubeMarker getCubeMarker() {
 		return cubeMarker;
+	}
+
+	public Point2D.Double getControlOne() {		// getter to get the ControlPoint's coordinates
+		return controlOne;
+	}
+
+	public Point2D.Double getControlTwo() {		// getter to get the ControlPoint's coordinates
+		return controlTwo;
 	}
 
 	// Inner class to have all info for a QUAD marker - the circle and the lines

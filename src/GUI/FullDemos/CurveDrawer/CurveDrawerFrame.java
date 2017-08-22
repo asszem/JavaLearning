@@ -37,7 +37,7 @@ public class CurveDrawerFrame extends JFrame {
 
 		// Create the buttons with different button name and button label text
 		JButton quadButton = new JButton(new CurveButton("Quad")); // "Quad" is to identify the action object
-		JButton cubeButton = new JButton(new CurveButton("Cubic"));
+		JButton cubeButton = new JButton(new CurveButton("Cubic")); // "Cubic" is to identify, not the buttonlabel text
 		quadButton.setText("Add Quad Curve");
 		cubeButton.setText("Add Cubic Curve");
 		buttonPanel.add(quadButton);
@@ -89,10 +89,6 @@ public class CurveDrawerFrame extends JFrame {
 			System.out.println("Button is pressed");
 			if (getValue(NAME).equals("Quad")) {
 				System.out.println("Quad button pressed");
-				// TODO generate random position considering the size of the panel
-//				Point2D.Double startP = new Point2D.Double(100, 100);
-//				Point2D.Double endP = new Point2D.Double(200, 200);
-//				Point2D.Double controlP = new Point2D.Double(230, 140);
 				ArrayList<Point2D.Double> newPositions = getRandomPosition();
 				Point2D.Double startP = newPositions.get(0);
 				Point2D.Double endP = newPositions.get(1);
