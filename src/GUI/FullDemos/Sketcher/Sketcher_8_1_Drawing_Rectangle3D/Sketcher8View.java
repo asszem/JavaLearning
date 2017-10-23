@@ -11,7 +11,7 @@ import java.awt.geom.Rectangle2D;
 @SuppressWarnings("serial")
 public class Sketcher8View extends JComponent implements Observer {
 
-	private Sketcher8 theApp; // The application object
+	private Sketcher8 theApp; // Instance variable that references the application object
 
 	public Sketcher8View(Sketcher8 theApp) {
 		this.theApp = theApp;

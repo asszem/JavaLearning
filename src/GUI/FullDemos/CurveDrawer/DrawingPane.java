@@ -50,7 +50,7 @@ public class DrawingPane extends JComponent {
 	@Override
 	public void paint(Graphics g) {									// Do the actual drawing
 		Graphics2D g2dcontext = (Graphics2D) g;
-		System.out.println("Paint method called");
+		// System.out.println("Paint method called");
 		// System.out.println(appInstance.getCurves().size());
 		// Draw all the curves that are stored in the appInstance
 		for (Curve curve : appInstance.getCurves()) {
@@ -91,12 +91,12 @@ public class DrawingPane extends JComponent {
 					if (curve.getCubeMarker().markerOneEllipse.contains(m.getX(), m.getY())) {
 						System.out.println("Marker One selected for curve: " + curve.toString());
 						curveSelected = curve;
-						markerSelected=1;
+						markerSelected = 1;
 					}
 					if (curve.getCubeMarker().markerTwoEllipse.contains(m.getX(), m.getY())) {
 						System.out.println("Marker Two selected for curve: " + curve.toString());
 						curveSelected = curve;
-						markerSelected=2;
+						markerSelected = 2;
 					}
 				}
 			}// end for walking through curves arraylist
