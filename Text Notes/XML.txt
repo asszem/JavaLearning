@@ -1,0 +1,130 @@
+XML General
+	Description
+		XML - Extensible Markup Language
+		XML is a system- and hardware-independent language for defining data and its structure within an XML document.
+		An XML document is a Unicode text file that contains data together with markup that defines the structure of the data.
+		XML is primarily for communicating data from one computer to another. 
+	A brief history lesson:
+		The term MARKUP derives from a time when the paper draft of a document to be printed was marked up by hand to indicate to the typesetter how the printed form of the document should look
+	 XML vs HTML
+		 XML:
+			 - An XML document defines the structure of the data it contains so a program that receives it can properly interpret it.
+			 - Purpose: data transfer (information and its structure)
+			 - New sets of tags and attributes can be defined
+		 HTML: 
+			 - A HTML is solely for describing how data should look when it is displayed or printed.
+			 - Purpose: data presentation
+			 - Fixed set of tags
+	DTD - Document Type Declaration
+		A DTD essentially defines a markup language for a given type of document and is identified in the DOCTYPE declaration in the document prolog
+	XML as Meta-Language
+		Because XML is extensible, it is often described as a meta-language: a language for defining new languages, in other words. 
+	Structure
+		Prolog - contains the XML type declaration and/or DTD. Both are optional so the Prolog itself is optional, The order is important to be well formed.
+			<?xml version=”1.0” encoding=”UTF-8” standalone=”No”?>
+				- XML type declaration
+				- Default is UTF-8. If no encoding provided, UTF-8 or UTF-16 is assumed. ASCII is a subset of UTF-8
+				- standalone means no external DTD sources. Default for standalone is No
+			<!DOCTYPE proverb SYSTEM “proverb.dtd”>
+				 The name that appears in the DOCTYPE declaration, in this case proverb, must always match that of the root element for the document
+		Body 
+			<proverb>Too many cooks spoil the broth.</proverb>
+				- contains the data in one or more ELEMENTS where each element is defined by an opening and closing TAG
+	Well formed & Valid
+		Well formed: it conforms to the rules for writing XML as defined by the XML specification. 
+		Valid: well formed AND has an associated DTD. 
+			There is nothing wrong with an XML document that is not valid. It may not be ideal, but it is a perfectly legal XML document. 
+		Never overlap: 
+			XML elements MUST never overlap
+			<address><zip>60603</address></zip>
+Terminology
+	Element TAG
+		XML markup divides the contents of a document into elements by enclosing segments of the data between tags.
+		Tag name / Element type name - the name of the element tag. Example: in <proverb> the tag name is 'proverb'. CASE SENSITIVE!
+		Elements can be empty
+		Example:
+			<elementname>element data</elementname>
+	Element ATTRIBUTE
+		An attribute is identified by an attribute name, and the value is specified as a string between single or double quotes. 
+		An element can have multiple attributes, separated with at least one space. Do not use comma, it s not valid
+		Offtopic note: 
+			In HTML use the data-* attribute to embed custom data
+			Source: https://www.w3schools.com/tags/att_global_data.asp
+				Example:
+				<ul>
+				  <li data-animal-type="bird">Owl</li>
+				  <li data-animal-type="fish">Salmon</li> 
+				  <li data-animal-type="spider">Tarantula</li> 
+				</ul>
+		Example:
+			<elementname attributename=”Attribute value”> ... </elementname>	
+			<color red=”255” green=”128” blue=”64” />
+	Element-Normal vs. Attribute Normal
+		Element Normal
+			All the data is part of element content and no attributes are involved is described as element-normal.
+			Best used when data needs to be structured, for example a family tree
+		Attribute Normal
+			All the data in a document is defined as attribute values, it is described as attribute-normal.
+			Best used for serial or tabular data without structure, for example temperature or height
+	Comments
+		<!-- This is an XML comment -->
+	Structure
+		Root element - There must be only ONE root element and it MUST enclose all other elements
+			Child - An element that is enclosed by another element is referred to as the child of the enclosing element
+			Parent - The enclosing element is referred to as the parent of the child element. 
+		Nodes - The items that appear within the tree structure — the elements and the data items — are referred to as nodes.
+			Leaf Nodes - Nodes at the extremities of a tree are referred to as leaf nodes.
+	PCDATA - Parsed Character Data. When an element contains plain text. 
+		Predefined Entity - markups to be used within PCDATA to escape special characters
+			CHARACTER PREDEFINED ENTITY
+				& 		&amp;
+				‘ 		&apos;
+				“ 		&quot;
+				< 		&lt;
+				> 		&gt;
+		General Entity
+			Entity Defintion
+				<!ENTITY documentDate “24th January 2011”>
+				<!ENTITY copyright “© 2011 Ivor Horton &documentDate;”>
+				<!ENTITY usefulstuff SYSTEM “http://www.some-server.com/inserts/stuff.txt”>
+			Entity Reference
+				&documentDate
+				&copyright
+				@usefulstuff
+	CDATA - Character Data that is NOT parsed. Any markup can be within.
+		Starts with:
+			<![CDATA[
+		Ends with:
+			]]>
+		The content within is not parsed
+			Example:
+				<explanation> A typical circle element is written as:
+					<![CDATA[
+						<circle diameter=”30”>
+						<position x=”40” y=”50”/>
+						</circle>
+					]]>
+				</explanation>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Learning sources
+	https://www.w3schools.com/xml/default.asp
+	jaxp.java.net
