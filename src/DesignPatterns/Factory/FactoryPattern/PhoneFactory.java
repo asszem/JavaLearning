@@ -11,7 +11,20 @@ public class PhoneFactory {
 			return new Samsung();
 		case "huawei":
 			return new Huawei();
-		default :
+		default:
+			return null;
+		}
+	}
+
+	public static Phone getPhoneStatic(String phoneType) {
+		switch (phoneType.toLowerCase()) {
+		case "iphone":
+			return new IPhone();
+		case "samsung":
+			return new Samsung();
+		case "huawei":
+			return new Huawei();
+		default:
 			return null;
 		}
 	}

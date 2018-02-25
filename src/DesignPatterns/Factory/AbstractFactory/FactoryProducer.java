@@ -5,7 +5,8 @@ import DesignPatterns.Factory.AbstractFactory.TabletFactory.TabletFactory;
 
 public class FactoryProducer {
 
-	public AbstractFactory getFactory(String factoryType) throws Exception {
+	//Static method
+	public static AbstractFactory getFactory(String factoryType) throws Exception {
 		switch (factoryType.toLowerCase()) {
 		case "phonefactory":
 			return new PhoneFactory();
