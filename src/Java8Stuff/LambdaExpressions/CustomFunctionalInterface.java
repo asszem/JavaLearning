@@ -2,7 +2,7 @@
  * Simple example sources
  * http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/Lambda-QuickStart/index.html
  * */
-package LambdaAndStream.LambdaExamples;
+package Java8Stuff.LambdaExpressions;
 
 public class CustomFunctionalInterface {
 

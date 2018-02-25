@@ -1,7 +1,7 @@
 /*
  * Source: https://www.programcreek.com/2014/01/5-different-syntax-of-lambda-expression/
  * */
-package LambdaAndStream.LambdaExamples;
+package Java8Stuff.LambdaExpressions;
 
 import java.util.Arrays;
 

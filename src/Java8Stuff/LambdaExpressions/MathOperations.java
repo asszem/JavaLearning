@@ -1,5 +1,5 @@
 //Source: https://www.tutorialspoint.com/java8/java8_lambda_expressions.htm
-package LambdaAndStream.LambdaExamples;
+package Java8Stuff.LambdaExpressions;
 
 public class MathOperations {
 	
