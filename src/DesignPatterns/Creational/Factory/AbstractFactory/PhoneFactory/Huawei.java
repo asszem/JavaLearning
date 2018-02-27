@@ -1,4 +1,4 @@
-package DesignPatterns.Factory.AbstractFactory.PhoneFactory;
+package DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory;
 
 public class Huawei implements Phone {
 

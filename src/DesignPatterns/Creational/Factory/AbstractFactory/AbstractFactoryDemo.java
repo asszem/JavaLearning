@@ -1,8 +1,8 @@
 //Source: https://www.tutorialspoint.com/design_pattern/abstract_factory_pattern.htm 
-package DesignPatterns.Factory.AbstractFactory;
+package DesignPatterns.Creational.Factory.AbstractFactory;
 
-import DesignPatterns.Factory.AbstractFactory.PhoneFactory.Phone;
-import DesignPatterns.Factory.AbstractFactory.TabletFactory.Tablet;
+import DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory.Phone;
+import DesignPatterns.Creational.Factory.AbstractFactory.TabletFactory.Tablet;
 
 public class AbstractFactoryDemo {
 

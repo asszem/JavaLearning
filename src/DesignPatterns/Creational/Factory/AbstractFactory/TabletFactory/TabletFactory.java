@@ -1,10 +1,10 @@
-package DesignPatterns.Factory.AbstractFactory.TabletFactory;
+package DesignPatterns.Creational.Factory.AbstractFactory.TabletFactory;
 
-import DesignPatterns.Factory.AbstractFactory.AbstractFactory;
-import DesignPatterns.Factory.AbstractFactory.PhoneFactory.Huawei;
-import DesignPatterns.Factory.AbstractFactory.PhoneFactory.IPhone;
-import DesignPatterns.Factory.AbstractFactory.PhoneFactory.Phone;
-import DesignPatterns.Factory.AbstractFactory.PhoneFactory.Samsung;
+import DesignPatterns.Creational.Factory.AbstractFactory.AbstractFactory;
+import DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory.Huawei;
+import DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory.IPhone;
+import DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory.Phone;
+import DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory.Samsung;
 
 //This class provides a method to return a Tablet object based on the argument of getTablet method
 public class TabletFactory extends AbstractFactory {

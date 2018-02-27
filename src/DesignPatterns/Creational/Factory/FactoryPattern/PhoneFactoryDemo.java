@@ -1,5 +1,5 @@
 //Source: https://www.tutorialspoint.com/design_pattern/factory_pattern.htm
-package DesignPatterns.Factory.FactoryPattern;
+package DesignPatterns.Creational.Factory.FactoryPattern;
 
 public class PhoneFactoryDemo {
 

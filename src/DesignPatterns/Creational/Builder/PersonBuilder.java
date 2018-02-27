@@ -1,5 +1,5 @@
 /*http://www.natpryce.com/articles/000714.html*/
-package DesignPatterns.BuilderPattern;
+package DesignPatterns.Creational.Builder;
 
 import java.util.Arrays;
 import java.util.List;

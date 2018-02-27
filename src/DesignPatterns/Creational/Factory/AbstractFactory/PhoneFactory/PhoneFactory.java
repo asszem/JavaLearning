@@ -1,7 +1,7 @@
-package DesignPatterns.Factory.AbstractFactory.PhoneFactory;
+package DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory;
 
-import DesignPatterns.Factory.AbstractFactory.AbstractFactory;
-import DesignPatterns.Factory.AbstractFactory.TabletFactory.Tablet;
+import DesignPatterns.Creational.Factory.AbstractFactory.AbstractFactory;
+import DesignPatterns.Creational.Factory.AbstractFactory.TabletFactory.Tablet;
 
 //This class provides a method to return a Phone object based on the argument of getPhone method
 public class PhoneFactory extends AbstractFactory {

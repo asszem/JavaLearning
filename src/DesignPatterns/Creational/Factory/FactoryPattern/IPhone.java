@@ -1,4 +1,4 @@
-package DesignPatterns.Factory.FactoryPattern;
+package DesignPatterns.Creational.Factory.FactoryPattern;
 
 public class IPhone implements Phone {
 

@@ -1,4 +1,4 @@
-package DesignPatterns.Factory.FactoryPattern;
+package DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory;
 
 public class Samsung implements Phone {
 

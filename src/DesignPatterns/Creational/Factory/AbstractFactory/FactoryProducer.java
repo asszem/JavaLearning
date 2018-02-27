@@ -1,7 +1,7 @@
-package DesignPatterns.Factory.AbstractFactory;
+package DesignPatterns.Creational.Factory.AbstractFactory;
 
-import DesignPatterns.Factory.AbstractFactory.PhoneFactory.PhoneFactory;
-import DesignPatterns.Factory.AbstractFactory.TabletFactory.TabletFactory;
+import DesignPatterns.Creational.Factory.AbstractFactory.PhoneFactory.PhoneFactory;
+import DesignPatterns.Creational.Factory.AbstractFactory.TabletFactory.TabletFactory;
 
 public class FactoryProducer {
 

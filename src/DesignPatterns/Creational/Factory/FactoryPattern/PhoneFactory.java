@@ -1,4 +1,4 @@
-package DesignPatterns.Factory.FactoryPattern;
+package DesignPatterns.Creational.Factory.FactoryPattern;
 
 //This class provides a method to return a Phone object based on the argument of getPhone method
 public class PhoneFactory {

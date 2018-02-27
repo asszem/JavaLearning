@@ -1,4 +1,4 @@
-package DesignPatterns.Factory.AbstractFactory.TabletFactory;
+package DesignPatterns.Creational.Factory.AbstractFactory.TabletFactory;
 
 
 public class GPad implements Tablet{
